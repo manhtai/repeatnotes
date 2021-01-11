@@ -1,7 +1,7 @@
 use Mix.Config
 
 # Configure your database
-config :repeatnotes, Repeatnotes.Repo,
+config :repeatnotes, RepeatNotes.Repo,
   username: "postgres",
   password: "postgres",
   database: "repeatnotes_dev",
@@ -16,7 +16,7 @@ config :repeatnotes, Repeatnotes.Repo,
 # The watchers configuration can be used to run external
 # watchers to your application. For example, we use it
 # with webpack to recompile .js and .css sources.
-config :repeatnotes, RepeatnotesWeb.Endpoint,
+config :repeatnotes, RepeatNotesWeb.Endpoint,
   http: [port: 4000],
   debug_errors: true,
   code_reloader: true,
@@ -60,7 +60,7 @@ config :repeatnotes, RepeatnotesWeb.Endpoint,
 # different ports.
 
 # Watch static and templates for browser reloading.
-config :repeatnotes, RepeatnotesWeb.Endpoint,
+config :repeatnotes, RepeatNotesWeb.Endpoint,
   live_reload: [
     patterns: [
       ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",

@@ -1,12 +1,12 @@
-defmodule RepeatnotesWeb do
+defmodule RepeatNotesWeb do
   @moduledoc """
   The entrypoint for defining your web interface, such
   as controllers, views, channels and so on.
 
   This can be used in your application as:
 
-      use RepeatnotesWeb, :controller
-      use RepeatnotesWeb, :view
+      use RepeatNotesWeb, :controller
+      use RepeatNotesWeb, :view
 
   The definitions below will be executed for every view,
   controller, etc, so keep them short and clean, focused
@@ -19,11 +19,11 @@ defmodule RepeatnotesWeb do
 
   def controller do
     quote do
-      use Phoenix.Controller, namespace: RepeatnotesWeb
+      use Phoenix.Controller, namespace: RepeatNotesWeb
 
       import Plug.Conn
-      import RepeatnotesWeb.Gettext
-      alias RepeatnotesWeb.Router.Helpers, as: Routes
+      import RepeatNotesWeb.Gettext
+      alias RepeatNotesWeb.Router.Helpers, as: Routes
     end
   end
 
@@ -31,7 +31,7 @@ defmodule RepeatnotesWeb do
     quote do
       use Phoenix.View,
         root: "lib/repeatnotes_web/templates",
-        namespace: RepeatnotesWeb
+        namespace: RepeatNotesWeb
 
       # Import convenience functions from controllers
       import Phoenix.Controller,
@@ -54,7 +54,7 @@ defmodule RepeatnotesWeb do
   def channel do
     quote do
       use Phoenix.Channel
-      import RepeatnotesWeb.Gettext
+      import RepeatNotesWeb.Gettext
     end
   end
 
@@ -66,9 +66,9 @@ defmodule RepeatnotesWeb do
       # Import basic rendering functionality (render, render_layout, etc)
       import Phoenix.View
 
-      import RepeatnotesWeb.ErrorHelpers
-      import RepeatnotesWeb.Gettext
-      alias RepeatnotesWeb.Router.Helpers, as: Routes
+      import RepeatNotesWeb.ErrorHelpers
+      import RepeatNotesWeb.Gettext
+      alias RepeatNotesWeb.Router.Helpers, as: Routes
     end
   end
 

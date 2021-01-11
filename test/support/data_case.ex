@@ -1,4 +1,4 @@
-defmodule Repeatnotes.DataCase do
+defmodule RepeatNotes.DataCase do
   @moduledoc """
   This module defines the setup for tests requiring
   access to the application's data layer.
@@ -10,7 +10,7 @@ defmodule Repeatnotes.DataCase do
   we enable the SQL sandbox, so changes done to the database
   are reverted at the end of every test. If you are using
   PostgreSQL, you can even run database tests asynchronously
-  by setting `use Repeatnotes.DataCase, async: true`, although
+  by setting `use RepeatNotes.DataCase, async: true`, although
   this option is not recommended for other databases.
   """
 
@@ -18,20 +18,20 @@ defmodule Repeatnotes.DataCase do
 
   using do
     quote do
-      alias Repeatnotes.Repo
+      alias RepeatNotes.Repo
 
       import Ecto
       import Ecto.Changeset
       import Ecto.Query
-      import Repeatnotes.DataCase
+      import RepeatNotes.DataCase
     end
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Repeatnotes.Repo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(RepeatNotes.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(Repeatnotes.Repo, {:shared, self()})
+      Ecto.Adapters.SQL.Sandbox.mode(RepeatNotes.Repo, {:shared, self()})
     end
 
     :ok

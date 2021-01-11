@@ -1,12 +1,20 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import "./index.css";
+import 'fontsource-nunito-sans';
+import {BrowserRouter} from 'react-router-dom';
+
+import {AuthProvider} from 'src/components/auth/AuthProvider';
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+import './css/main.css';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <AuthProvider>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </AuthProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );

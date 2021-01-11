@@ -1,5 +1,5 @@
-defmodule RepeatnotesWeb.PageControllerTest do
-  use RepeatnotesWeb.ConnCase
+defmodule RepeatNotesWeb.PageControllerTest do
+  use RepeatNotesWeb.ConnCase
 
   test "GET /", %{conn: conn} do
     conn = get(conn, "/")

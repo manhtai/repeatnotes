@@ -1,4 +1,4 @@
-defmodule Repeatnotes.Application do
+defmodule RepeatNotes.Application do
   # See https://hexdocs.pm/elixir/Application.html
   # for more information on OTP Applications
   @moduledoc false
@@ -8,27 +8,29 @@ defmodule Repeatnotes.Application do
   def start(_type, _args) do
     children = [
       # Start the Ecto repository
-      Repeatnotes.Repo,
+      RepeatNotes.Repo,
       # Start the Telemetry supervisor
-      RepeatnotesWeb.Telemetry,
+      RepeatNotesWeb.Telemetry,
       # Start the PubSub system
-      {Phoenix.PubSub, name: Repeatnotes.PubSub},
+      {Phoenix.PubSub, name: RepeatNotes.PubSub},
       # Start the Endpoint (http/https)
-      RepeatnotesWeb.Endpoint
-      # Start a worker by calling: Repeatnotes.Worker.start_link(arg)
-      # {Repeatnotes.Worker, arg}
+      RepeatNotesWeb.Endpoint,
+      # Start a worker by calling: RepeatNotes.Worker.start_link(arg)
+      # {RepeatNotes.Worker, arg}
+      # Clean expired token
+      {Pow.Postgres.Store.AutoDeleteExpired, [interval: :timer.hours(1)]}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
-    opts = [strategy: :one_for_one, name: Repeatnotes.Supervisor]
+    opts = [strategy: :one_for_one, name: RepeatNotes.Supervisor]
     Supervisor.start_link(children, opts)
   end
 
   # Tell Phoenix to update the endpoint configuration
   # whenever the application is updated.
   def config_change(changed, _new, removed) do
-    RepeatnotesWeb.Endpoint.config_change(changed, removed)
+    RepeatNotesWeb.Endpoint.config_change(changed, removed)
     :ok
   end
 end

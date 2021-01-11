@@ -1,4 +1,4 @@
-defmodule Repeatnotes.MixProject do
+defmodule RepeatNotes.MixProject do
   use Mix.Project
 
   def project do
@@ -19,7 +19,7 @@ defmodule Repeatnotes.MixProject do
   # Type `mix help compile.app` for more information.
   def application do
     [
-      mod: {Repeatnotes.Application, []},
+      mod: {RepeatNotes.Application, []},
       extra_applications: [:logger, :runtime_tools]
     ]
   end
@@ -44,7 +44,9 @@ defmodule Repeatnotes.MixProject do
       {:telemetry_poller, "~> 0.4"},
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
-      {:plug_cowboy, "~> 2.0"}
+      {:plug_cowboy, "~> 2.0"},
+      {:pow, "~> 1.0.21"},
+      {:pow_postgres_store, "~> 1.0.0-rc2"}
     ]
   end
 

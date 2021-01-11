@@ -1,4 +1,4 @@
-defmodule RepeatnotesWeb.Endpoint do
+defmodule RepeatNotesWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :repeatnotes
 
   # The session will be stored in the cookie and signed,
@@ -10,7 +10,7 @@ defmodule RepeatnotesWeb.Endpoint do
     signing_salt: "IkYkOEXd"
   ]
 
-  socket("/socket", RepeatnotesWeb.UserSocket,
+  socket("/socket", RepeatNotesWeb.UserSocket,
     websocket: true,
     longpoll: false
   )
@@ -54,5 +54,6 @@ defmodule RepeatnotesWeb.Endpoint do
   plug(Plug.MethodOverride)
   plug(Plug.Head)
   plug(Plug.Session, @session_options)
-  plug(RepeatnotesWeb.Router)
+  plug(Pow.Plug.Session, otp_app: :repeatnotes)
+  plug(RepeatNotesWeb.Router)
 end

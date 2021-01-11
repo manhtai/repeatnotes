@@ -1,25 +1,49 @@
-import React from "react";
-import logo from "./logo.svg";
-import "./App.css";
+import React from 'react';
+import {
+  RouteComponentProps,
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from 'react-router-dom';
+
+// Components
+import Home from 'src/components/Home';
+import Login from 'src/components/auth/Login';
+import Signup from 'src/components/auth/Signup';
+import {useAuth} from 'src/components/auth/AuthProvider';
 
 function App() {
+  const auth = useAuth();
+
+  if (auth.loading) {
+    return null;
+  }
+
+  if (!auth.isAuthenticated) {
+    return (
+      <Router>
+        <Switch>
+          <Route path={"/login"} component={Login} />
+          <Route path={"/signup"} component={Signup} />
+          <Route
+            path="*"
+            render={(props: RouteComponentProps<{}>) => (
+              <Redirect to={`/login?redirect=${props.location.pathname}`} />
+            )}
+          />
+        </Switch>
+      </Router>
+    );
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Switch>
+        <Route path={"/"} exact={true} component={Home} />
+        <Route path="*" render={() => <Redirect to={"/"} />} />
+      </Switch>
+    </Router>
   );
 }
 
