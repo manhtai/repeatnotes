@@ -33,6 +33,7 @@ defmodule RepeatNotesWeb.APIAuthPlug do
     token = Pow.UUID.generate()
     renew_token = Pow.UUID.generate()
 
+
     conn =
       conn
       |> Conn.put_private(:api_auth_token, sign_token(conn, token, config))

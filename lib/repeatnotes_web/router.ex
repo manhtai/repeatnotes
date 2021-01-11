@@ -11,6 +11,7 @@ defmodule RepeatNotesWeb.Router do
 
   pipeline :api do
     plug(:accepts, ["json"])
+    plug(RepeatNotesWeb.APIAuthPlug, otp_app: :repeatnotes)
   end
 
   pipeline :api_protected do

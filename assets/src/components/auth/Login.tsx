@@ -25,8 +25,8 @@ function Login(props: Props) {
     <main>
       <section className="absolute w-full h-full">
         <div className="container h-full px-3 mx-auto">
-          <div className="flex items-center content-center justify-center h-full">
-            <div className="relative flex flex-col items-center w-full max-w-sm my-6 break-words">
+          <div className="flex items-start content-center justify-center h-full">
+            <div className="relative flex flex-col items-center w-full max-w-sm mt-16 break-words">
               <Link to="/" className="mb-8">
                 <img className="w-24" src={Logo} alt="logo" />
               </Link>

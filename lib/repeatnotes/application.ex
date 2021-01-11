@@ -14,9 +14,11 @@ defmodule RepeatNotes.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: RepeatNotes.PubSub},
       # Start the Endpoint (http/https)
-      RepeatNotesWeb.Endpoint
+      RepeatNotesWeb.Endpoint,
       # Start a worker by calling: RepeatNotes.Worker.start_link(arg)
       # {RepeatNotes.Worker, arg}
+      # Clean expired token
+      {Pow.Postgres.Store.AutoDeleteExpired, [interval: :timer.hours(1)]}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
