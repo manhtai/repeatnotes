@@ -41,7 +41,7 @@ function App() {
     <Router>
       <Switch>
         <Route path={"/"} component={Home} />
-        <Route path="*" render={() => <Redirect to={"/notes"} />} />
+        <Route path="*" render={() => <Redirect to={"/"} />} />
       </Switch>
     </Router>
   );

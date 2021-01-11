@@ -1,8 +1,8 @@
-defmodule RepeatnotesWeb.UserSocket do
+defmodule RepeatNotesWeb.UserSocket do
   use Phoenix.Socket
 
   ## Channels
-  # channel "room:*", RepeatnotesWeb.RoomChannel
+  # channel "room:*", RepeatNotesWeb.RoomChannel
 
   # Socket params are passed from the client and can
   # be used to verify and authenticate a user. After
@@ -27,7 +27,7 @@ defmodule RepeatnotesWeb.UserSocket do
   # Would allow you to broadcast a "disconnect" event and terminate
   # all active sockets and channels for a given user:
   #
-  #     RepeatnotesWeb.Endpoint.broadcast("user_socket:#{user.id}", "disconnect", %{})
+  #     RepeatNotesWeb.Endpoint.broadcast("user_socket:#{user.id}", "disconnect", %{})
   #
   # Returning `nil` makes this socket anonymous.
   @impl true

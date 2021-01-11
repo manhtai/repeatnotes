@@ -1,3 +1,3 @@
-defmodule RepeatnotesWeb.PageViewTest do
-  use RepeatnotesWeb.ConnCase, async: true
+defmodule RepeatNotesWeb.PageViewTest do
+  use RepeatNotesWeb.ConnCase, async: true
 end

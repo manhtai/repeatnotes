@@ -1,5 +1,5 @@
-defmodule RepeatnotesWeb.ErrorView do
-  use RepeatnotesWeb, :view
+defmodule RepeatNotesWeb.ErrorView do
+  use RepeatNotesWeb, :view
 
   # If you want to customize a particular status code
   # for a certain format, you may uncomment below.

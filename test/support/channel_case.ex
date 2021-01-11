@@ -1,4 +1,4 @@
-defmodule RepeatnotesWeb.ChannelCase do
+defmodule RepeatNotesWeb.ChannelCase do
   @moduledoc """
   This module defines the test case to be used by
   channel tests.
@@ -11,7 +11,7 @@ defmodule RepeatnotesWeb.ChannelCase do
   we enable the SQL sandbox, so changes done to the database
   are reverted at the end of every test. If you are using
   PostgreSQL, you can even run database tests asynchronously
-  by setting `use RepeatnotesWeb.ChannelCase, async: true`, although
+  by setting `use RepeatNotesWeb.ChannelCase, async: true`, although
   this option is not recommended for other databases.
   """
 
@@ -21,18 +21,18 @@ defmodule RepeatnotesWeb.ChannelCase do
     quote do
       # Import conveniences for testing with channels
       import Phoenix.ChannelTest
-      import RepeatnotesWeb.ChannelCase
+      import RepeatNotesWeb.ChannelCase
 
       # The default endpoint for testing
-      @endpoint RepeatnotesWeb.Endpoint
+      @endpoint RepeatNotesWeb.Endpoint
     end
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Repeatnotes.Repo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(RepeatNotes.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(Repeatnotes.Repo, {:shared, self()})
+      Ecto.Adapters.SQL.Sandbox.mode(RepeatNotes.Repo, {:shared, self()})
     end
 
     :ok
