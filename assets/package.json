@@ -1,0 +1,74 @@
+{
+  "name": "repeatnotes",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@testing-library/jest-dom": "^5.11.4",
+    "@testing-library/react": "^11.1.0",
+    "@testing-library/user-event": "^12.1.10",
+    "@types/jest": "^26.0.15",
+    "@types/node": "^12.0.0",
+    "@types/react": "^16.9.53",
+    "@types/react-dom": "^16.9.8",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "react-scripts": "4.0.1",
+    "typescript": "^4.0.3",
+    "web-vitals": "^0.2.4"
+  },
+  "scripts": {
+    "start": "npm run watch:css && react-app-rewired start",
+    "build": "npm run build:css && react-app-rewired build",
+    "postbuild": "mkdirp ../priv/static && cpx \"./build/**\" \"../priv/static\" --clean",
+    "deploy": "NODE_ENV=production npm run build && npm run postbuild",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "watch:css": "postcss src/css/tailwind.css -o src/css/main.css",
+    "build:css": "postcss src/css/tailwind.css -o src/css/main.css"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "proxy": "http://localhost:4000",
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "src/**/*.{ts,tsx,json}": [
+      "prettier --write"
+    ],
+    "../**/*.{ex,exs}": [
+      "mix format"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "autoprefixer": "9.8.6",
+    "cpx": "^1.5.0",
+    "husky": "^4.3.0",
+    "lint-staged": "^10.5.1",
+    "mkdirp": "^1.0.4",
+    "postcss": "^8.1.8",
+    "postcss-cli": "^8.2.0",
+    "prettier": "^2.1.2",
+    "react-app-rewired": "^2.1.8",
+    "tailwindcss": "^2.0.2",
+    "wasm-loader": "^1.3.0"
+  }
+}
