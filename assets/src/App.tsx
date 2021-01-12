@@ -40,7 +40,7 @@ function App() {
   return (
     <Router>
       <Switch>
-        <Route path={"/"} exact={true} component={Home} />
+        <Route path={"/"} component={Home} />
         <Route path="*" render={() => <Redirect to={"/"} />} />
       </Switch>
     </Router>
