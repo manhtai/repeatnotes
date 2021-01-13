@@ -31,6 +31,8 @@ defmodule RepeatNotesWeb.Router do
   scope "/api", RepeatNotesWeb do
     pipe_through([:api, :api_protected])
 
+    resources("/cards", CardController)
+
     get("/me", SessionController, :me)
   end
 
