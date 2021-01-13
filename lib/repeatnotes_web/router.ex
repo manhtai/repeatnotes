@@ -33,6 +33,9 @@ defmodule RepeatNotesWeb.Router do
 
     resources("/cards", CardController)
 
+    get("/srs_config", SrsConfigController, :show)
+    put("/srs_config", SrsConfigController, :update)
+
     get("/me", SessionController, :me)
   end
 
