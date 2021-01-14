@@ -18,7 +18,8 @@ import {Transition} from '@headlessui/react';
 import {useAuth} from 'src/components/auth/AuthProvider';
 import {useGlobal, GlobalProvider} from 'src/components/global/GlobalProvider';
 import {SyncStatus} from 'src/libs/types';
-import Temp from './Temp';
+import Temp from 'src/components/Temp';
+import Card from 'src/components/card/Card'
 
 type MenuProps = {
   routes: Array<any>;
@@ -118,7 +119,7 @@ function HomePage() {
     {path: "/notes", name: 'Notes', Component: Temp},
     {path: "/random", name: 'Random', Component: Temp},
     {path: "/new", name: 'New', Component: Temp},
-    {path: "/review", name: 'Review', Component: Temp},
+    {path: "/review", name: 'Review', Component: Card},
     ...settingsRoutes,
   ];
 
