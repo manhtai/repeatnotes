@@ -56,12 +56,6 @@
     ],
     "../**/*.{ex,exs}": [
       "mix format"
-    ],
-    "../rslib/": [
-      "cargo test",
-      "cargo check",
-      "cargo clippy -- -D warnings",
-      "cargo fmt"
     ]
   },
   "browserslist": {
