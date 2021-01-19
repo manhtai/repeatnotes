@@ -1,40 +1,75 @@
-export default function Card() {
+import React, {useEffect, useState} from 'react';
+import {useCard, CardProvider} from './CardProvider';
+import {Choice} from 'src/libs/types';
+import logger from 'src/libs/logger';
 
-  const clickMe = async () => {
-    const wasm = await import('@repeatnotes/sm2')
-    const sm2 = new wasm.Sm2({
-      learn_steps: [1.0, 10.0],
-      relearn_steps: [10.0],
-      initial_ease: 2500,
-      easy_multiplier: 1.3,
-      hard_multiplier: 1.2,
-      lapse_multiplier: 0.0,
-      interval_multiplier: 1.0,
-      maximum_review_interval: 36500,
-      minimum_review_interval: 1,
-      graduating_interval_good: 1,
-      graduating_interval_easy: 4,
-      leech_threshold: 8,
-    }, BigInt(1611024541))
+function Card() {
+  const {sm2, loadSm2, loading} = useCard();
 
-    const card = {
-      card_type: 0,
-      card_queue: 0,
-      due: 0,
-      interval: 0,
-      ease_factor: 0,
-      reps: 0,
-      lapses: 0,
-      remaining_steps: 0,
-    }
+  useEffect(() => loadSm2(), [loadSm2]);
 
-    console.log("Next with 2", sm2.next_interval(card, 2))
-    console.log("Answer with 2", sm2.answer_card(card, 2))
-  }
+  const cardDefault = {
+    id: 1234,
+    card_type: 0,
+    card_queue: 0,
+    due: 0,
+    interval: 0,
+    ease_factor: 0,
+    reps: 0,
+    lapses: 0,
+    remaining_steps: 0,
+  };
+  const [card, setCard] = useState(cardDefault)
+
+  const answerCard = (choice: Choice) => {
+    logger.info("Answer with choice", choice);
+    sm2.answer_card(card, choice);
+    setCard({ ...card, id: Math.random() })
+  };
+
+  const nextInterval = (choice: Choice) => {
+    return sm2.next_interval_string(card, choice);
+  };
 
   return (
-    <div onClick={clickMe}>
-      Click me!
-    </div>
-  )
+    <>
+      {loading ? null : (
+        <div>
+          {`Card #${card.id}`}
+
+          <div className="flex text-center">
+            <button
+              className="flex-1 w-full px-3 py-1 mb-1 mr-1 font-bold text-gray-200 bg-red-700 rounded-full outline-none active:bg-red-500 hover:bg-red-600 focus:outline-none"
+              onClick={() => answerCard(Choice.Again)}>
+              Again ({nextInterval(Choice.Again)})
+            </button>
+            <button
+              className="flex-1 w-full px-3 py-1 mb-1 mr-1 font-bold text-gray-200 bg-yellow-700 rounded-full outline-none active:bg-yellow-500 hover:bg-yellow-600 focus:outline-none"
+              onClick={() => answerCard(Choice.Hard)}>
+              Hard ({nextInterval(Choice.Hard)})
+            </button>
+            <button
+              className="flex-1 w-full px-3 py-1 mb-1 mr-1 font-bold text-gray-100 bg-green-700 rounded-full outline-none active:bg-green-500 hover:bg-green-600 focus:outline-none"
+              onClick={() => answerCard(Choice.Ok)}>
+              Ok ({nextInterval(Choice.Ok)})
+            </button>
+            <button
+              className="flex-1 w-full px-3 py-1 mb-1 mr-1 font-bold text-gray-100 bg-blue-700 rounded-full outline-none active:bg-blue-500 hover:bg-blue-600 focus:outline-none"
+              onClick={() => answerCard(Choice.Easy)}
+            >
+              Easy ({nextInterval(Choice.Easy)})
+            </button>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
+
+export default function CardWithContext() {
+  return (
+    <CardProvider>
+      <Card />
+    </CardProvider>
+  );
 }
