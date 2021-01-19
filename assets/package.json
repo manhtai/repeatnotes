@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@headlessui/react": "^0.2.0",
+    "@repeatnotes/sm2": "^0.0.1",
     "@tailwindcss/forms": "^0.2.1",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
@@ -25,11 +26,10 @@
     "react-scripts": "4.0.1",
     "superagent": "^6.1.0",
     "typescript": "^4.0.3",
-    "@repeatnotes/sm2": "0.0.0-next2",
     "web-vitals": "^0.2.4"
   },
   "scripts": {
-    "start": "npm run watch:css && react-app-rewired start",
+    "start": "npm run watch:css && PORT=3333 react-app-rewired start",
     "build": "npm run build:css && react-app-rewired build",
     "postbuild": "mkdirp ../priv/static && cpx \"./build/**\" \"../priv/static\" --clean",
     "deploy": "NODE_ENV=production npm run build && npm run postbuild",
