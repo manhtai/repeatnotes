@@ -73,7 +73,7 @@
   "devDependencies": {
     "autoprefixer": "9.8.6",
     "cpx": "^1.5.0",
-    "husky": "^4.3.0",
+    "husky": "^4.3.8",
     "lint-staged": "^10.5.1",
     "mkdirp": "^1.0.4",
     "postcss": "^8.1.8",
