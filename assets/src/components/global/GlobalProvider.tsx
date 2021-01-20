@@ -1,5 +1,5 @@
 import React, {useContext} from 'react';
-import { SyncStatus } from 'src/libs/types';
+import {SyncStatus} from 'src/libs/types';
 
 export const GlobalContext = React.createContext<{
   sync: SyncStatus;
@@ -27,9 +27,9 @@ export class GlobalProvider extends React.Component<Props, State> {
     error: '',
   };
 
-  setSync(sync: SyncStatus, error: any) {
-    this.setState({ sync, error })
-  }
+  setSync = (sync: SyncStatus, error: any) => {
+    this.setState({sync, error});
+  };
 
   render() {
     const {sync, error} = this.state;

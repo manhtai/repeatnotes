@@ -2,7 +2,7 @@ import React, {useContext} from 'react';
 import * as API from 'src/libs/api';
 import logger from 'src/libs/logger';
 
-export const CardContext = React.createContext<{
+export const SrsContext = React.createContext<{
   loading: boolean;
   sm2: any;
   error: any;
@@ -14,7 +14,7 @@ export const CardContext = React.createContext<{
   loadSm2: () => Promise.resolve(),
 });
 
-export const useCard = () => useContext(CardContext);
+export const useSrs = () => useContext(SrsContext);
 
 type Props = React.PropsWithChildren<{}>;
 type State = {
@@ -23,7 +23,7 @@ type State = {
   sm2: any;
 };
 
-export class CardProvider extends React.Component<Props, State> {
+export class SrsProvider extends React.Component<Props, State> {
   state: State = {
     loading: true,
     sm2: null,
@@ -31,18 +31,19 @@ export class CardProvider extends React.Component<Props, State> {
   };
 
   loadSm2 = async () => {
-    this.setState({loading: true});
-
     try {
       if (!this.state.sm2) {
+        this.setState({loading: true});
         const config = await API.fetchSrsConfig();
         const wasm = await import('@repeatnotes/sm2');
         const sm2 = new wasm.Sm2(config);
-        this.setState({loading: false, sm2});
+        this.setState({sm2});
       }
     } catch (error) {
       logger.error(error);
-      this.setState({loading: false, error});
+      this.setState({error});
+    } finally {
+      this.setState({loading: false});
     }
   };
 
@@ -50,7 +51,7 @@ export class CardProvider extends React.Component<Props, State> {
     const {sm2, loading, error} = this.state;
 
     return (
-      <CardContext.Provider
+      <SrsContext.Provider
         value={{
           loading,
           error,
@@ -60,7 +61,7 @@ export class CardProvider extends React.Component<Props, State> {
         }}
       >
         {this.props.children}
-      </CardContext.Provider>
+      </SrsContext.Provider>
     );
   }
 }
