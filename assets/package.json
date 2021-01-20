@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@headlessui/react": "^0.2.0",
-    "@repeatnotes/sm2": "^0.0.2",
+    "@repeatnotes/sm2": "^0.0.4",
     "@tailwindcss/forms": "^0.2.1",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",

@@ -1529,10 +1529,10 @@
     schema-utils "^2.6.5"
     source-map "^0.7.3"
 
-"@repeatnotes/sm2@^0.0.2":
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/@repeatnotes/sm2/-/sm2-0.0.2.tgz#34a559ba6619c006ccb6bca115b82bc77473ef2a"
-  integrity sha512-8A/1qKvPG7X4zzKDEz8GpFI11RwuXdSvkxvdjTti9vb75mYDGSZCWZuHuga4mTtSELj9DyeLXmhVuFM7waL8Eg==
+"@repeatnotes/sm2@^0.0.4":
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/@repeatnotes/sm2/-/sm2-0.0.4.tgz#08e303190413ca7ba1e7fbff1f4177945b7864d7"
+  integrity sha512-QybZkePUtor3OqVXIezp8wCBF7O99bKRe4OdAJlcu0dDvbH/AvQ0t3BkVQflVAKDAJdT1+YUlsjP7QiJkNUXiA==
 
 "@rollup/plugin-node-resolve@^7.1.1":
   version "7.1.3"
