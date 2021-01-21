@@ -50,17 +50,18 @@ function CardReview() {
   };
 
   const fetchAllCards = () => {
-    API.fetchAllCards().then((cards) => {
-      setCards(cards);
-      if (cards.length) {
-        setCard(cards[0]);
-      }
-    });
+    sm2 &&
+      API.fetchAllCards(sm2.day_today()).then((cards) => {
+        setCards(cards);
+        if (cards.length) {
+          setCard(cards[0]);
+        }
+      });
   };
 
   useEffect(loadSm2, [loadSm2]);
 
-  useEffect(fetchAllCards, []);
+  useEffect(fetchAllCards, [sm2]);
 
   return (
     <>

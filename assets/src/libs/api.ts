@@ -129,13 +129,17 @@ export const updateSrsConfig = async (
 };
 
 // Card APIs
-export const fetchAllCards = async (token = getAccessToken()) => {
+export const fetchAllCards = async (
+  today: number,
+  token = getAccessToken()
+) => {
   if (!token) {
     throw new Error('Invalid token!');
   }
 
   return request
     .get('/api/cards')
+    .query({today})
     .set('Authorization', token)
     .then((res) => res.body.data);
 };

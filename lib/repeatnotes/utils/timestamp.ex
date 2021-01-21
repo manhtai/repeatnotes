@@ -13,6 +13,6 @@ defmodule RepeatNotes.Utils.Timestamp do
       DateTime.utc_now()
       |> DateTime.to_unix(unit)
 
-    round(s / 86_400)
+    trunc(s / 86_400)
   end
 end
