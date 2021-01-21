@@ -5,9 +5,14 @@ defmodule RepeatNotes.Cards do
   import Ecto.Query
 
   alias RepeatNotes.Repo
-  alias RepeatNotes.Cards.Card
+  alias RepeatNotes.Cards.{Card, Queues}
+  alias RepeatNotes.Utils.Timestamp
 
+  # TODO: Should we put this to srs config?
+  # Limit number of cards to learn at a time
   @max_limit 100
+  # Due in 20 minutes can be learned now
+  @collapse_time 60 * 20
 
   @spec list_cards(binary(), map) :: [Card.t()]
   def list_cards(user_id, params) do
@@ -17,9 +22,22 @@ defmodule RepeatNotes.Cards do
         _ -> @max_limit
       end
 
-    Card
+    today =
+      case params do
+        %{today: today} -> today
+        _ -> Timestamp.today()
+      end
+
+    now = Timestamp.now() + @collapse_time
+
+    from(c in Card,
+      where:
+        c.card_queue == ^Queues.new() or
+          (c.card_queue == ^Queues.learn() and c.due < ^now) or
+          (c.card_queue == ^Queues.review() and c.due <= ^today) or
+          (c.card_queue == ^Queues.day_learn() and c.due <= ^today)
+    )
     |> where(user_id: ^user_id)
-    |> where(^filter_where(params))
     |> order_by(desc: :inserted_at)
     |> limit(^limit)
     |> Repo.all()
