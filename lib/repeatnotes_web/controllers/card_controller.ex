@@ -10,7 +10,7 @@ defmodule RepeatNotesWeb.CardController do
   @spec index(Plug.Conn.t(), map) :: Plug.Conn.t()
   def index(conn, params) do
     with %User{id: user_id} <- conn.assigns.current_user do
-      cards = Cards.list_cards(user_id, params)
+      cards = Cards.due_cards(user_id, params)
       render(conn, "index.json", cards: cards)
     end
   end

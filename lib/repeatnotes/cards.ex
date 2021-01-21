@@ -11,11 +11,12 @@ defmodule RepeatNotes.Cards do
   # TODO: Should we put this to srs config?
   # Limit number of cards to learn at a time
   @max_limit 100
+
   # Due in 20 minutes can be learned now
   @collapse_time 60 * 20
 
-  @spec list_cards(binary(), map) :: [Card.t()]
-  def list_cards(user_id, params) do
+  @spec due_cards(binary(), map) :: [Card.t()]
+  def due_cards(user_id, params) do
     limit =
       case params do
         %{limit: limit} -> min(limit, @max_limit)
@@ -38,8 +39,16 @@ defmodule RepeatNotes.Cards do
           (c.card_queue == ^Queues.day_learn() and c.due <= ^today)
     )
     |> where(user_id: ^user_id)
-    |> order_by(desc: :inserted_at)
     |> limit(^limit)
+    |> Repo.all()
+  end
+
+  @spec list_cards(binary(), map) :: [Card.t()]
+  def list_cards(user_id, params) do
+    Card
+    |> where(^filter_where(params))
+    |> where(user_id: ^user_id)
+    |> limit(@max_limit)
     |> Repo.all()
   end
 
