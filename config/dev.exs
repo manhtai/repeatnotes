@@ -28,8 +28,7 @@ config :repeatnotes, RepeatNotesWeb.Endpoint,
       "src/css/main.css",
       cd: Path.expand("../assets", __DIR__)
     ],
-    node: [
-      "node_modules/react-app-rewired/bin/index.js",
+    yarn: [
       "start",
       cd: Path.expand("../assets", __DIR__)
     ]

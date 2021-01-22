@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@headlessui/react": "^0.2.0",
+    "@repeatnotes/sm2": "^0.0.5",
     "@tailwindcss/forms": "^0.2.1",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
@@ -28,7 +29,8 @@
     "web-vitals": "^0.2.4"
   },
   "scripts": {
-    "start": "npm run watch:css && react-app-rewired start",
+    "start": "npm run stop && npm run watch:css && PORT=3333 react-app-rewired start",
+    "stop": "lsof -ti :3333 | xargs kill",
     "build": "npm run build:css && react-app-rewired build",
     "postbuild": "mkdirp ../priv/static && cpx \"./build/**\" \"../priv/static\" --clean",
     "deploy": "NODE_ENV=production npm run build && npm run postbuild",
@@ -72,7 +74,7 @@
   "devDependencies": {
     "autoprefixer": "9.8.6",
     "cpx": "^1.5.0",
-    "husky": "^4.3.0",
+    "husky": "^4.3.8",
     "lint-staged": "^10.5.1",
     "mkdirp": "^1.0.4",
     "postcss": "^8.1.8",

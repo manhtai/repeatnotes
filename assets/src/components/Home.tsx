@@ -18,7 +18,8 @@ import {Transition} from '@headlessui/react';
 import {useAuth} from 'src/components/auth/AuthProvider';
 import {useGlobal, GlobalProvider} from 'src/components/global/GlobalProvider';
 import {SyncStatus} from 'src/libs/types';
-import Temp from './Temp';
+import Temp from 'src/components/Temp';
+import CardReview from 'src/components/card/CardReview';
 
 type MenuProps = {
   routes: Array<any>;
@@ -108,32 +109,32 @@ function HomePage() {
   const globalContext = useGlobal();
 
   const settingsRoutes = [
-    {path: "/settings/config", name: 'Configuration', Component: Temp},
-    {path: "/settings/account", name: 'Account', Component: Temp},
-    {path: "/settings/billing", name: 'Billing', Component: Temp},
-    {path: "/settings/about", name: 'About', Component: Temp},
+    {path: '/settings/config', name: 'Configuration', Component: Temp},
+    {path: '/settings/account', name: 'Account', Component: Temp},
+    {path: '/settings/billing', name: 'Billing', Component: Temp},
+    {path: '/settings/about', name: 'About', Component: Temp},
   ];
 
   const routes = [
-    {path: "/notes", name: 'Notes', Component: Temp},
-    {path: "/random", name: 'Random', Component: Temp},
-    {path: "/new", name: 'New', Component: Temp},
-    {path: "/review", name: 'Review', Component: Temp},
+    {path: '/notes', name: 'Notes', Component: Temp},
+    {path: '/random', name: 'Random', Component: Temp},
+    {path: '/new', name: 'New', Component: Temp},
+    {path: '/review', name: 'Review', Component: CardReview},
     ...settingsRoutes,
   ];
 
   const topNavBar = [
-    {path: "/review", name: 'Review', Icon: LightningBoltOutline},
-    {path: "/new", name: 'New', Icon: PlusCircleOutline},
-    {path: "/notes", name: 'Notes', Icon: ArchiveOutline},
-    {path: "/random", name: 'Random', Icon: LightBulbOutline},
+    {path: '/review', name: 'Review', Icon: LightningBoltOutline},
+    {path: '/new', name: 'New', Icon: PlusCircleOutline},
+    {path: '/notes', name: 'Notes', Icon: ArchiveOutline},
+    {path: '/random', name: 'Random', Icon: LightBulbOutline},
   ];
 
   const bottomNavBar = [
-    {path: "/review", name: 'Review', Icon: LightningBoltOutline},
-    {path: "/new", name: 'New', Icon: PlusCircleOutline},
-    {path: "/notes", name: 'Notes', Icon: ArchiveOutline},
-    {path: "/random", name: 'Random', Icon: LightBulbOutline},
+    {path: '/review', name: 'Review', Icon: LightningBoltOutline},
+    {path: '/new', name: 'New', Icon: PlusCircleOutline},
+    {path: '/notes', name: 'Notes', Icon: ArchiveOutline},
+    {path: '/random', name: 'Random', Icon: LightBulbOutline},
   ];
 
   return (
@@ -143,11 +144,7 @@ function HomePage() {
         <ul className="flex items-center flex-none text-gray-800">
           <li className="w-6 h-6 mr-4">
             <Link to="/">
-              <img
-                className="w-full h-full mx-auto"
-                src={Logo}
-                alt="logo"
-              />
+              <img className="w-full h-full mx-auto" src={Logo} alt="logo" />
             </Link>
           </li>
         </ul>
@@ -167,8 +164,7 @@ function HomePage() {
             <div
               className={
                 'flex flex-row items-center h-full px-4 focus:text-blue-500' +
-                (location.pathname &&
-                location.pathname.startsWith("/settings/")
+                (location.pathname && location.pathname.startsWith('/settings/')
                   ? ' text-blue-500'
                   : '')
               }
@@ -252,7 +248,7 @@ function HomePage() {
           onClick={() => setSideBarOpen(!isSideBarOpen)}
           className={
             'flex flex-col items-center justify-center flex-1 overflow-hidden whitespace-no-wrap transition-colors duration-100 ease-in-out hover:bg-gray-200 focus:text-blue-500' +
-            (location && location.pathname.startsWith("/settings/")
+            (location && location.pathname.startsWith('/settings/')
               ? ' text-blue-500'
               : '')
           }

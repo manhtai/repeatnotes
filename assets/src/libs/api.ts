@@ -100,3 +100,69 @@ export const attemptPasswordReset = async (
     })
     .then((res) => res.body.data);
 };
+
+// SRS config APIs
+export const fetchSrsConfig = async (token = getAccessToken()) => {
+  if (!token) {
+    throw new Error('Invalid token!');
+  }
+
+  return request
+    .get('/api/srs_config')
+    .set('Authorization', token)
+    .then((res) => res.body.data);
+};
+
+export const updateSrsConfig = async (
+  updates: any,
+  token = getAccessToken()
+) => {
+  if (!token) {
+    throw new Error('Invalid token!');
+  }
+
+  return request
+    .put('/api/srs_config')
+    .set('Authorization', token)
+    .send(updates)
+    .then((res) => res.body.data);
+};
+
+// Card APIs
+export const fetchAllCards = async (
+  today: number,
+  token = getAccessToken()
+) => {
+  if (!token) {
+    throw new Error('Invalid token!');
+  }
+
+  return request
+    .get('/api/cards')
+    .query({today})
+    .set('Authorization', token)
+    .then((res) => res.body.data);
+};
+
+export const fetchCardById = async (id: string, token = getAccessToken()) => {
+  return request
+    .get(`/api/cards/${id}`)
+    .set('Authorization', token || '')
+    .then((res) => res.body.data);
+};
+
+export const updateCard = async (
+  id: string,
+  updates: any,
+  token = getAccessToken()
+) => {
+  if (!token) {
+    throw new Error('Invalid token!');
+  }
+
+  return request
+    .put(`/api/cards/${id}`)
+    .set('Authorization', token)
+    .send(updates)
+    .then((res) => res.body.data);
+};
