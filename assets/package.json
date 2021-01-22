@@ -29,7 +29,8 @@
     "web-vitals": "^0.2.4"
   },
   "scripts": {
-    "start": "npm run watch:css && PORT=3333 react-app-rewired start",
+    "start": "npm run stop && npm run watch:css && PORT=3333 react-app-rewired start",
+    "stop": "lsof -ti :3333 | xargs kill",
     "build": "npm run build:css && react-app-rewired build",
     "postbuild": "mkdirp ../priv/static && cpx \"./build/**\" \"../priv/static\" --clean",
     "deploy": "NODE_ENV=production npm run build && npm run postbuild",

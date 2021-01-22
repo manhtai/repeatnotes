@@ -22,17 +22,16 @@ config :repeatnotes, RepeatNotesWeb.Endpoint,
   code_reloader: true,
   check_origin: false,
   watchers: [
-    # postcss: [
-    #   "src/css/tailwind.css",
-    #   "-o",
-    #   "src/css/main.css",
-    #   cd: Path.expand("../assets", __DIR__)
-    # ],
-    # node: [
-    #   "node_modules/react-app-rewired/bin/index.js",
-    #   "start",
-    #   cd: Path.expand("../assets", __DIR__)
-    # ]
+    postcss: [
+      "src/css/tailwind.css",
+      "-o",
+      "src/css/main.css",
+      cd: Path.expand("../assets", __DIR__)
+    ],
+    yarn: [
+      "start",
+      cd: Path.expand("../assets", __DIR__)
+    ]
   ]
 
 # ## SSL Support
