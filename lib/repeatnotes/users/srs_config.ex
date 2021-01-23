@@ -5,30 +5,28 @@ defmodule RepeatNotes.Users.SrsConfig do
   alias RepeatNotes.Users.User
 
   @srs_fields [
+    :maximum_per_session,
+    :learn_ahead_time,
     :learn_steps,
     :relearn_steps,
-
     :initial_ease,
-
     :easy_multiplier,
     :hard_multiplier,
     :lapse_multiplier,
     :interval_multiplier,
-
     :maximum_review_interval,
     :minimum_review_interval,
-
     :graduating_interval_good,
     :graduating_interval_easy,
-
-    :leech_threshold,
+    :leech_threshold
   ]
   @required_fields [:user_id]
-
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "srs_config" do
+    field(:maximum_per_session, :integer, default: 20)
+    field(:learn_ahead_time, :integer, default: 20)
 
     field(:learn_steps, {:array, :float}, default: [1.0, 10.0])
     field(:relearn_steps, {:array, :float}, default: [10.0])
@@ -59,4 +57,3 @@ defmodule RepeatNotes.Users.SrsConfig do
     |> validate_required(@required_fields)
   end
 end
-

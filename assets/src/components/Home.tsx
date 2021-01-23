@@ -18,8 +18,14 @@ import {Transition} from '@headlessui/react';
 import {useAuth} from 'src/components/auth/AuthProvider';
 import {useGlobal, GlobalProvider} from 'src/components/global/GlobalProvider';
 import {SyncStatus} from 'src/libs/types';
+
 import Temp from 'src/components/Temp';
 import CardReview from 'src/components/card/CardReview';
+
+import SrsConfig from 'src/components/settings/SrsConfig';
+import Account from 'src/components/settings/Account';
+import Billing from 'src/components/settings/Billing';
+import About from 'src/components/settings/About';
 
 type MenuProps = {
   routes: Array<any>;
@@ -109,10 +115,10 @@ function HomePage() {
   const globalContext = useGlobal();
 
   const settingsRoutes = [
-    {path: '/settings/config', name: 'Configuration', Component: Temp},
-    {path: '/settings/account', name: 'Account', Component: Temp},
-    {path: '/settings/billing', name: 'Billing', Component: Temp},
-    {path: '/settings/about', name: 'About', Component: Temp},
+    {path: '/settings/account', name: 'My Account', Component: Account},
+    {path: '/settings/config', name: 'SRS Configuration', Component: SrsConfig},
+    {path: '/settings/billing', name: 'Billing', Component: Billing},
+    {path: '/settings/about', name: 'About', Component: About},
   ];
 
   const routes = [
@@ -220,7 +226,7 @@ function HomePage() {
       </div>
 
       {/* Main components */}
-      <main className="relative w-full h-full text-base">
+      <main className="relative w-full h-full pb-10 text-base">
         {routes.map(({path, Component}) => (
           <Route key={path} exact path={path}>
             {({match}) => (

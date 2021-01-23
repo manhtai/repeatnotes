@@ -5,6 +5,9 @@ defmodule RepeatNotes.Repo.Migrations.CreateSrsConfig do
     create table(:srs_config, primary_key: false) do
       add(:id, :binary_id, primary_key: true)
 
+      add(:maximum_per_session, :integer, null: false)
+      add(:learn_ahead_time, :integer, null: false)
+
       add(:learn_steps, {:array, :float}, default: [], null: false)
       add(:relearn_steps, {:array, :float}, default: [], null: false)
 
