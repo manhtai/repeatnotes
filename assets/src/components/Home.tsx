@@ -25,7 +25,6 @@ import CardReview from 'src/components/card/CardReview';
 import SrsConfig from 'src/components/settings/SrsConfig';
 import Account from 'src/components/settings/Account';
 import Billing from 'src/components/settings/Billing';
-import About from 'src/components/settings/About';
 
 type MenuProps = {
   routes: Array<any>;
@@ -115,10 +114,9 @@ function HomePage() {
   const globalContext = useGlobal();
 
   const settingsRoutes = [
-    {path: '/settings/account', name: 'My Account', Component: Account},
-    {path: '/settings/config', name: 'SRS Configuration', Component: SrsConfig},
+    {path: '/settings/config', name: 'Configuration', Component: SrsConfig},
+    {path: '/settings/account', name: 'Account', Component: Account},
     {path: '/settings/billing', name: 'Billing', Component: Billing},
-    {path: '/settings/about', name: 'About', Component: About},
   ];
 
   const routes = [

@@ -9,7 +9,7 @@ export default function Billing() {
           <label className="block">
             <span className="text-sm text-gray-700">Billing address</span>
             <textarea
-              className="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+              className="block w-full mt-1 bg-gray-200 border-gray-300 cursor-not-allowed rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
               rows={5}
               disabled
             ></textarea>
