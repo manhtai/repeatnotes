@@ -7,6 +7,7 @@ defmodule RepeatNotes.Users.SrsConfig do
   @srs_fields [
     :maximum_per_session,
     :learn_ahead_time,
+    :show_next_due,
     :learn_steps,
     :relearn_steps,
     :initial_ease,
@@ -27,6 +28,7 @@ defmodule RepeatNotes.Users.SrsConfig do
   schema "srs_config" do
     field(:maximum_per_session, :integer, default: 20)
     field(:learn_ahead_time, :integer, default: 20)
+    field(:show_next_due, :boolean, default: false)
 
     field(:learn_steps, {:array, :float}, default: [1.0, 10.0])
     field(:relearn_steps, {:array, :float}, default: [10.0])

@@ -24,7 +24,7 @@ export default function Account() {
 
   return (
     <div className="max-w-lg mt-5 mb-16">
-      <h2 className="p-4 font-bold text-white bg-gray-700 rounded-t-lg shadow">
+      <h2 className="px-4 py-3 font-bold text-white bg-gray-700 rounded-t-lg shadow">
         Account
       </h2>
       <div className="p-4 bg-gray-100 rounded-b-lg shadow">
@@ -33,7 +33,7 @@ export default function Account() {
             <span className="text-sm text-gray-700">Email address</span>
             <input
               type="email"
-              className="block w-full mt-1 bg-gray-200 border-gray-300 rounded-md shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+              className="block w-full mt-1 bg-gray-200 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
               value={email}
               onChange={(e) => {
                 e.preventDefault();
@@ -47,7 +47,7 @@ export default function Account() {
           <button
             type="button"
             onClick={onSubmitUpdateEmail}
-            className="w-full px-4 py-2 text-sm btn-primary"
+            className="w-full px-4 py-2 btn-primary"
             disabled={emailChangeRequested}
           >
             {emailChangeRequested
@@ -59,7 +59,7 @@ export default function Account() {
           <button
             type="button"
             onClick={onSubmitChangePassword}
-            className="w-full px-4 py-2 text-sm btn-primary"
+            className="w-full px-4 py-2 btn-primary"
             disabled={passwordChangeRequested}
           >
             {passwordChangeRequested

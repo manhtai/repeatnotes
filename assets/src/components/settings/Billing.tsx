@@ -1,7 +1,7 @@
 export default function Billing() {
   return (
     <div className="max-w-lg mt-5 mb-16">
-      <h2 className="p-4 font-bold text-white bg-gray-700 rounded-t-lg shadow">
+      <h2 className="px-4 py-3 font-bold text-white bg-gray-700 rounded-t-lg shadow">
         Billing
       </h2>
       <div className="p-4 bg-gray-100 rounded-b-lg shadow">

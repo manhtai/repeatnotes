@@ -15,6 +15,7 @@ defmodule RepeatNotesWeb.SrsConfigView do
       id: config.id,
       maximum_per_session: config.maximum_per_session,
       learn_ahead_time: config.learn_ahead_time,
+      show_next_due: config.show_next_due,
       learn_steps: config.learn_steps,
       relearn_steps: config.relearn_steps,
       initial_ease: config.initial_ease,

@@ -52,7 +52,71 @@ function SrsConfigPage() {
   return (
     <div className="max-w-lg mb-16">
       <div className="mt-5">
-        <h2 className="p-4 font-bold text-white bg-gray-700 rounded-t-lg shadow">
+        <h2 className="px-4 py-3 font-bold text-white bg-gray-700 rounded-t-lg shadow">
+          Schedule
+        </h2>
+        <div className="p-4 pb-8 mb-5 bg-gray-100 rounded-b-lg shadow">
+          <div className="grid grid-cols-1 gap-6">
+            <label className="block">
+              <span className="text-sm text-gray-700">
+                Learn ahead time (minutes)
+              </span>
+              <input
+                type="number"
+                className="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                placeholder="20"
+                value={config.learn_ahead_time}
+                onChange={(e) => {
+                  e.preventDefault();
+                  const value = parseInt(e.target.value, 10);
+                  config.learn_ahead_time = !Number.isNaN(value) ? value : 20;
+                  setConfig({...config});
+                }}
+              />
+            </label>
+            <label className="block">
+              <span className="text-sm text-gray-700">
+                Maximum cards per session
+              </span>
+              <input
+                type="number"
+                className="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                placeholder="20"
+                value={config.maximum_per_session}
+                onChange={(e) => {
+                  e.preventDefault();
+                  const value = parseInt(e.target.value, 10);
+                  config.maximum_per_session = !Number.isNaN(value)
+                    ? value
+                    : 20;
+                  setConfig({...config});
+                }}
+              />
+            </label>
+            <div className="block">
+              <div className="mt-2">
+                <div>
+                  <label className="inline-flex items-center">
+                    <input
+                      type="checkbox"
+                      className="text-indigo-600 border-gray-300 rounded shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                      checked={config.show_next_due}
+                      onChange={(e) => {
+                        config.show_next_due = e.target.checked;
+                        setConfig({...config});
+                      }}
+                    />
+                    <span className="ml-2">Show next due in answer</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-5">
+        <h2 className="px-4 py-3 font-bold text-white bg-gray-700 rounded-t-lg shadow">
           Learn
         </h2>
         <div className="p-4 pb-8 mb-5 bg-gray-100 rounded-b-lg shadow">
@@ -137,7 +201,7 @@ function SrsConfigPage() {
       </div>
 
       <div className="mt-5">
-        <h2 className="p-4 font-bold text-white bg-gray-700 rounded-t-lg shadow">
+        <h2 className="px-4 py-3 font-bold text-white bg-gray-700 rounded-t-lg shadow">
           Review
         </h2>
         <div className="p-4 pb-8 mb-5 bg-gray-100 rounded-b-lg shadow">
@@ -249,7 +313,7 @@ function SrsConfigPage() {
       </div>
 
       <div className="mt-5">
-        <h2 className="p-4 font-bold text-white bg-gray-700 rounded-t-lg shadow">
+        <h2 className="px-4 py-3 font-bold text-white bg-gray-700 rounded-t-lg shadow">
           Relearn
         </h2>
         <div className="p-4 pb-8 mb-5 bg-gray-100 rounded-b-lg shadow">
@@ -289,52 +353,6 @@ function SrsConfigPage() {
                   e.preventDefault();
                   const value = parseInt(e.target.value, 10);
                   config.leech_threshold = !Number.isNaN(value) ? value : 8;
-                  setConfig({...config});
-                }}
-              />
-            </label>
-          </div>
-        </div>
-      </div>
-
-      <div className="mt-5">
-        <h2 className="p-4 font-bold text-white bg-gray-700 rounded-t-lg shadow">
-          Schedule
-        </h2>
-        <div className="p-4 pb-8 mb-5 bg-gray-100 rounded-b-lg shadow">
-          <div className="grid grid-cols-1 gap-6">
-            <label className="block">
-              <span className="text-sm text-gray-700">
-                Learn ahead time (minutes)
-              </span>
-              <input
-                type="number"
-                className="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                placeholder="20"
-                value={config.learn_ahead_time}
-                onChange={(e) => {
-                  e.preventDefault();
-                  const value = parseInt(e.target.value, 10);
-                  config.learn_ahead_time = !Number.isNaN(value) ? value : 20;
-                  setConfig({...config});
-                }}
-              />
-            </label>
-            <label className="block">
-              <span className="text-sm text-gray-700">
-                Maximum cards per session
-              </span>
-              <input
-                type="number"
-                className="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                placeholder="20"
-                value={config.maximum_per_session}
-                onChange={(e) => {
-                  e.preventDefault();
-                  const value = parseInt(e.target.value, 10);
-                  config.maximum_per_session = !Number.isNaN(value)
-                    ? value
-                    : 20;
                   setConfig({...config});
                 }}
               />
