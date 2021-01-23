@@ -4,12 +4,15 @@ import {SrsConfig, SyncStatus} from 'src/libs/types';
 import debounce from 'lodash/debounce';
 import logger from 'src/libs/logger';
 import {useGlobal} from 'src/components/global/GlobalProvider';
+import {useSrs, SrsProvider} from 'src/components/card/SrsProvider';
 
-export default function SrsConfigPage() {
+function SrsConfigPage() {
   const [config, setConfig] = useState<SrsConfig>();
   const [learnSteps, setLearnSteps] = useState('');
   const [relearnSteps, setRelearnSteps] = useState('');
+
   const {setSync} = useGlobal();
+  const {loadSm2} = useSrs();
 
   useEffect(() => {
     API.fetchSrsConfig().then((config) => {
@@ -26,6 +29,7 @@ export default function SrsConfigPage() {
       setSync(SyncStatus.Syncing);
       API.updateSrsConfig({srs_config}).then(
         () => {
+          loadSm2(srs_config);
           setSync(SyncStatus.Success);
         },
         (err) => {
@@ -339,5 +343,13 @@ export default function SrsConfigPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function Configuration() {
+  return (
+    <SrsProvider>
+      <SrsConfigPage />
+    </SrsProvider>
   );
 }
