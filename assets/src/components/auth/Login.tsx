@@ -1,11 +1,18 @@
 import React, {useState} from 'react';
 import Logo from 'src/img/logo.svg';
 
-import {Link} from 'react-router-dom';
+import {Link, useHistory, useLocation} from 'react-router-dom';
+import qs from 'query-string';
 import logger from 'src/libs/logger';
 import {parseResponseErrors} from 'src/libs/utils/error';
 
-import {Mail, LockClosed, Eye, EyeOff, ExclamationCircle} from 'heroicons-react';
+import {
+  Mail,
+  LockClosed,
+  Eye,
+  EyeOff,
+  ExclamationCircle,
+} from 'heroicons-react';
 
 import {useAuth} from './AuthProvider';
 
@@ -36,9 +43,9 @@ function Login(props: Props) {
               <p>{'Log in to your RepeatNotes account:'}</p>
               <div className="flex-auto w-full py-10">
                 <form
-                  onSubmit={(e) => {
+                  onSubmit={async (e) => {
                     e.preventDefault();
-                    onSubmit(email, password);
+                    await onSubmit(email, password);
                   }}
                 >
                   <div className="relative flex flex-row items-center content-center justify-center w-full mb-4">
@@ -77,7 +84,11 @@ function Login(props: Props) {
                       className="absolute inset-y-0 right-0 flex items-center pr-3"
                       onClick={() => setShowPassword(!showPassword)}
                     >
-                      {showPassword ? <EyeOff className="w-5" /> : <Eye className="w-5" />}
+                      {showPassword ? (
+                        <EyeOff className="w-5" />
+                      ) : (
+                        <Eye className="w-5" />
+                      )}
                     </div>
                   </div>
 
@@ -129,8 +140,13 @@ function Login(props: Props) {
 
 export default function LoginPage() {
   const auth = useAuth();
+  const history = useHistory();
+  const location = useLocation();
+
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
+
+  const {redirect = '/review'} = qs.parse(location.search);
 
   const onSubmit = async (email: string, password: string) => {
     setSubmitting(true);
@@ -138,15 +154,14 @@ export default function LoginPage() {
 
     try {
       await auth.login({email, password});
+      history.push(String(redirect));
     } catch (err) {
       logger.error('Error!', err);
       const [error] = parseResponseErrors(err);
       setError(error);
-    } finally {
       setSubmitting(false);
     }
   };
 
   return <Login onSubmit={onSubmit} submitting={submitting} error={error} />;
 }
-
