@@ -19,11 +19,12 @@ type Props = {
   onSubmit: (email: string, password: string) => Promise<void>;
   submitting: boolean;
   error: string;
+  redirect: string;
   setError: (e: string) => void;
 };
 
 function SignUp(props: Props) {
-  const {onSubmit, submitting, error, setError} = props;
+  const {onSubmit, submitting, error, setError, redirect} = props;
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -50,7 +51,7 @@ function SignUp(props: Props) {
     setError(getValidationError());
   };
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
 
     const error = getValidationError();
@@ -60,7 +61,7 @@ function SignUp(props: Props) {
       return;
     }
 
-    onSubmit(email, password);
+    await onSubmit(email, password);
   };
 
   return (
@@ -146,7 +147,7 @@ function SignUp(props: Props) {
               <p>
                 {'Already have an account?'}
                 <Link
-                  to="/login"
+                  to={{pathname: '/login', search: `redirect=${redirect}`}}
                   className="ml-1 font-bold text-blue-500 hover:text-blue-600"
                 >
                   Log In
@@ -167,7 +168,7 @@ export default function SignUpPage() {
 
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
-  const {redirect = '/review'} = qs.parse(location.search);
+  const {redirect = '/'} = qs.parse(location.search);
 
   const onSubmit = async (email: string, password: string) => {
     setSubmitting(true);
@@ -190,6 +191,7 @@ export default function SignUpPage() {
       submitting={submitting}
       error={error}
       setError={setError}
+      redirect={String(redirect)}
     />
   );
 }

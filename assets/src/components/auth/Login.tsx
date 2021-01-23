@@ -20,10 +20,11 @@ type Props = {
   onSubmit: (email: string, password: string) => Promise<void>;
   submitting: boolean;
   error: string;
+  redirect: string;
 };
 
 function Login(props: Props) {
-  const {onSubmit, submitting, error} = props;
+  const {onSubmit, submitting, error, redirect} = props;
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -124,7 +125,7 @@ function Login(props: Props) {
               <p className="mb-2">
                 {'No account?'}
                 <Link
-                  to="/signup"
+                  to={{pathname: '/signup', search: `redirect=${redirect}`}}
                   className="ml-1 font-bold text-blue-500 hover:text-blue-600"
                 >
                   Sign Up!
@@ -163,5 +164,12 @@ export default function LoginPage() {
     }
   };
 
-  return <Login onSubmit={onSubmit} submitting={submitting} error={error} />;
+  return (
+    <Login
+      onSubmit={onSubmit}
+      submitting={submitting}
+      error={error}
+      redirect={String(redirect)}
+    />
+  );
 }
