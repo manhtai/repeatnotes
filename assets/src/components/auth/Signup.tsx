@@ -85,7 +85,7 @@ function SignUp(props: Props) {
                     </div>
                     <input
                       type="email"
-                      className="flex-1 w-full px-3 py-2 text-gray-700 placeholder-gray-700 bg-white border border-gray-200 rounded-l-none rounded-r-sm appearance-none focus:outline-none focus:border-blue-500"
+                      className="flex-1 w-full px-3 py-2 text-gray-700 placeholder-gray-700 bg-white border border-gray-200 rounded-l-none rounded-r-sm appearance-none focus:outline-none focus:border-indigo-500"
                       placeholder="Email"
                       value={email}
                       onChange={(e) => {
@@ -102,7 +102,7 @@ function SignUp(props: Props) {
                     </div>
                     <input
                       type={showPassword ? 'text' : 'password'}
-                      className="flex-1 w-full px-3 py-2 text-gray-700 placeholder-gray-700 bg-white border border-gray-200 rounded-l-none rounded-r-sm appearance-none focus:outline-none focus:border-blue-500"
+                      className="flex-1 w-full px-3 py-2 text-gray-700 placeholder-gray-700 bg-white border border-gray-200 rounded-l-none rounded-r-sm appearance-none focus:outline-none focus:border-indigo-500"
                       placeholder="Password"
                       value={password}
                       onChange={(e) => {
@@ -145,7 +145,7 @@ function SignUp(props: Props) {
                 {'Already have an account?'}
                 <Link
                   to={{pathname: '/login', search: `redirect=${redirect}`}}
-                  className="ml-1 font-bold text-blue-500 hover:text-blue-600"
+                  className="ml-1 font-bold text-indigo-500 hover:text-indigo-600"
                 >
                   Log In
                 </Link>

@@ -8,6 +8,7 @@ export const SrsContext = React.createContext<{
   sm2: any;
   error: any;
   loadSm2: (config?: SrsConfig) => void;
+  config?: SrsConfig;
 }>({
   loading: false,
   sm2: null,
@@ -22,6 +23,7 @@ type State = {
   loading: boolean;
   error: any;
   sm2: any;
+  config?: SrsConfig;
 };
 
 export class SrsProvider extends React.Component<Props, State> {
@@ -31,16 +33,16 @@ export class SrsProvider extends React.Component<Props, State> {
     error: null,
   };
 
-  loadSm2 = async (config?: SrsConfig) => {
+  loadSm2 = async (srs_config?: SrsConfig) => {
     try {
       this.setState({loading: true});
-      let conf = config;
+      let config = srs_config;
       if (!config) {
-        conf = await API.fetchSrsConfig();
+        config = await API.fetchSrsConfig();
       }
       const wasm = await import('@repeatnotes/sm2');
-      const sm2 = new wasm.Sm2(conf);
-      this.setState({sm2});
+      const sm2 = new wasm.Sm2(config);
+      this.setState({sm2, config});
     } catch (error) {
       logger.error(error);
       this.setState({error});
@@ -50,7 +52,7 @@ export class SrsProvider extends React.Component<Props, State> {
   };
 
   render() {
-    const {sm2, loading, error} = this.state;
+    const {sm2, loading, error, config} = this.state;
 
     return (
       <SrsContext.Provider
@@ -58,6 +60,7 @@ export class SrsProvider extends React.Component<Props, State> {
           loading,
           error,
           sm2,
+          config,
 
           loadSm2: this.loadSm2,
         }}

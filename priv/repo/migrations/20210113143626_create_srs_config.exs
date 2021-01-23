@@ -7,6 +7,7 @@ defmodule RepeatNotes.Repo.Migrations.CreateSrsConfig do
 
       add(:maximum_per_session, :integer, null: false)
       add(:learn_ahead_time, :integer, null: false)
+      add(:show_next_due, :boolean, null: false)
 
       add(:learn_steps, {:array, :float}, default: [], null: false)
       add(:relearn_steps, {:array, :float}, default: [], null: false)

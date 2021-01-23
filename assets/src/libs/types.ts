@@ -48,6 +48,8 @@ export type Card = {
 export type SrsConfig = {
   learn_ahead_time: number;
   maximum_per_session: number;
+  show_next_due: boolean;
+
   learn_steps: number[];
   relearn_steps: number[];
   initial_ease: number;

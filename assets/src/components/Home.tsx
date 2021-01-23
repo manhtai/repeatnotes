@@ -84,8 +84,8 @@ function TopNavBarItem({path, name, children}: NavBarProps) {
   return (
     <li className="hidden h-full hover:bg-gray-200 lg:block">
       <NavLink
-        className="flex flex-row items-center h-full px-4 focus:text-blue-500"
-        activeClassName="text-blue-500"
+        className="flex flex-row items-center h-full px-4 focus:text-indigo-500"
+        activeClassName="text-indigo-500"
         to={path}
       >
         {children}
@@ -99,8 +99,8 @@ function BottomNavBarItem({path, children}: NavBarProps) {
   return (
     <NavLink
       to={path}
-      activeClassName="text-blue-500"
-      className="flex flex-col items-center justify-center flex-1 overflow-hidden whitespace-no-wrap transition-colors duration-100 ease-in-out hover:bg-gray-200 focus:text-blue-500"
+      activeClassName="text-indigo-500"
+      className="flex flex-col items-center justify-center flex-1 overflow-hidden whitespace-no-wrap transition-colors duration-100 ease-in-out hover:bg-gray-200 focus:text-indigo-500"
     >
       {children}
     </NavLink>
@@ -162,14 +162,14 @@ function HomePage() {
           })}
 
           <li
-            className="hidden h-full cursor-pointer hover:bg-gray-200 lg:block focus:text-blue-500"
+            className="hidden h-full cursor-pointer hover:bg-gray-200 lg:block focus:text-indigo-500"
             onClick={() => setMoreOpen(!isMoreOpen)}
           >
             <div
               className={
-                'flex flex-row items-center h-full px-4 focus:text-blue-500' +
+                'flex flex-row items-center h-full px-4 focus:text-indigo-500' +
                 (location.pathname && location.pathname.startsWith('/settings/')
-                  ? ' text-blue-500'
+                  ? ' text-indigo-500'
                   : '')
               }
             >
@@ -181,7 +181,7 @@ function HomePage() {
         <ul className="flex items-center flex-none ml-6">
           <li>
             {globalContext.sync === SyncStatus.Syncing ? (
-              <RefreshOutline className="text-blue-500 animate-reverse-spin" />
+              <RefreshOutline className="text-indigo-500 animate-reverse-spin" />
             ) : globalContext.sync === SyncStatus.Error ? (
               <ExclamationCircleOutline className="text-red-500" />
             ) : (
@@ -251,9 +251,9 @@ function HomePage() {
         <div
           onClick={() => setSideBarOpen(!isSideBarOpen)}
           className={
-            'flex flex-col items-center justify-center flex-1 overflow-hidden whitespace-no-wrap transition-colors duration-100 ease-in-out hover:bg-gray-200 focus:text-blue-500' +
+            'flex flex-col items-center justify-center flex-1 overflow-hidden whitespace-no-wrap transition-colors duration-100 ease-in-out hover:bg-gray-200 focus:text-indigo-500' +
             (location && location.pathname.startsWith('/settings/')
-              ? ' text-blue-500'
+              ? ' text-indigo-500'
               : '')
           }
         >
