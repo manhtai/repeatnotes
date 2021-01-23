@@ -31,7 +31,13 @@ module.exports = {
       },
     },
   },
-  variants: {},
+  variants: {
+    extend: {
+      opacity: ['disabled'],
+      backgroundColor: ['active'],
+      cursor: ['disabled'],
+    }
+  },
   plugins: [
     require('@tailwindcss/forms'),
     plugin(function({ addBase, config }) {

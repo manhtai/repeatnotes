@@ -6,22 +6,17 @@ defmodule RepeatNotes.Cards do
 
   alias RepeatNotes.Repo
   alias RepeatNotes.Cards.{Card, Queues}
+  alias RepeatNotes.Users
   alias RepeatNotes.Utils.Timestamp
 
-  # TODO: Should we put this to srs config?
-  # Limit number of cards to learn at a time
-  @max_limit 100
-
-  # Due in 20 minutes can be learned now
-  @collapse_time 60 * 20
+  @limit 100
 
   @spec due_cards(binary(), map) :: [Card.t()]
   def due_cards(user_id, params) do
-    limit =
-      case params do
-        %{limit: limit} -> min(limit, @max_limit)
-        _ -> @max_limit
-      end
+    srs_config = Users.get_srs_config(user_id)
+
+    limit = srs_config.maximum_per_session
+    collapse_time = srs_config.learn_ahead_time * 60
 
     today =
       case params do
@@ -29,7 +24,7 @@ defmodule RepeatNotes.Cards do
         _ -> Timestamp.today()
       end
 
-    now = Timestamp.now() + @collapse_time
+    now = Timestamp.now() + collapse_time
 
     from(c in Card,
       where:
@@ -48,7 +43,7 @@ defmodule RepeatNotes.Cards do
     Card
     |> where(^filter_where(params))
     |> where(user_id: ^user_id)
-    |> limit(@max_limit)
+    |> limit(@limit)
     |> Repo.all()
   end
 

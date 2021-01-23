@@ -45,6 +45,23 @@ export type Card = {
   remaining_steps: number;
 };
 
+export type SrsConfig = {
+  learn_ahead_time: number;
+  maximum_per_session: number;
+  learn_steps: number[];
+  relearn_steps: number[];
+  initial_ease: number;
+  easy_multiplier: number;
+  hard_multiplier: number;
+  lapse_multiplier: number;
+  interval_multiplier: number;
+  maximum_review_interval: number;
+  minimum_review_interval: number;
+  graduating_interval_good: number;
+  graduating_interval_easy: number;
+  leech_threshold: number;
+};
+
 export enum Choice {
   Again = 1,
   Hard = 2,

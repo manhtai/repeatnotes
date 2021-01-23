@@ -13,6 +13,8 @@ defmodule RepeatNotesWeb.SrsConfigView do
   def render("srs_config.json", %{srs_config: config}) do
     %{
       id: config.id,
+      maximum_per_session: config.maximum_per_session,
+      learn_ahead_time: config.learn_ahead_time,
       learn_steps: config.learn_steps,
       relearn_steps: config.relearn_steps,
       initial_ease: config.initial_ease,
@@ -24,7 +26,7 @@ defmodule RepeatNotesWeb.SrsConfigView do
       minimum_review_interval: config.minimum_review_interval,
       graduating_interval_good: config.graduating_interval_good,
       graduating_interval_easy: config.graduating_interval_easy,
-      leech_threshold: config.leech_threshold,
+      leech_threshold: config.leech_threshold
     }
   end
 end

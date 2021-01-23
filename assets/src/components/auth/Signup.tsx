@@ -130,12 +130,9 @@ function SignUp(props: Props) {
                     </div>
                   )}
 
-                  <div className="text-center">
+                  <div className="mb-1 mr-1 text-center">
                     <button
-                      className={
-                        'w-full px-6 py-2 mb-1 mr-1 font-bold text-white bg-blue-500 rounded-full outline-none active:bg-blue-400 hover:bg-blue-600 focus:outline-none' +
-                        (submitting ? ' opacity-50 cursor-not-allowed' : '')
-                      }
+                      className="w-full px-4 py-2 font-bold btn-primary"
                       type="submit"
                       disabled={submitting}
                     >
