@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useCallback} from 'react';
+import {useState, useEffect, useCallback} from 'react';
 import * as API from 'src/libs/api';
 import {SrsConfig, SyncStatus} from 'src/libs/types';
 import debounce from 'lodash/debounce';
@@ -19,6 +19,8 @@ export default function SrsConfigPage() {
     });
   }, []);
 
+  // FIXME: Why does this useCallback raise warning?
+  // eslint-disable-next-line
   const debounceUpdate = useCallback(
     debounce((srs_config) => {
       setSync(SyncStatus.Syncing);

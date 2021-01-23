@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import {useState, useEffect} from 'react';
 import * as API from 'src/libs/api';
 
 export default function Account() {

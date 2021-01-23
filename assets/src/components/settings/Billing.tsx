@@ -1,5 +1,3 @@
-import React from 'react';
-
 export default function Billing() {
   return (
     <div className="max-w-lg mt-5 mb-16">
