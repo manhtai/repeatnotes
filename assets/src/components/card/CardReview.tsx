@@ -79,7 +79,7 @@ function CardReview() {
       if (cards.length > 1) {
         setCard(cards[1]);
       } else {
-        setCard(null);
+        fetchAllCards();
       }
       setCards(cards.slice(1));
     } catch (error) {
@@ -100,6 +100,8 @@ function CardReview() {
           setCards(cards);
           if (cards.length) {
             setCard(cards[0]);
+          } else {
+            setCard(null);
           }
           setFetchingCards(false);
         },

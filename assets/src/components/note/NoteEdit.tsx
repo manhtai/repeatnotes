@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import {Note, EditorTab, SyncStatus} from 'src/libs/types';
 import * as API from 'src/libs/api';
 import logger from 'src/libs/logger';
@@ -71,6 +71,11 @@ export default function NoteEdit(props: Props) {
     setCurrentTab(tab);
     setSelectedTab && setSelectedTab(tab);
   };
+
+  useEffect(() => {
+    setId(noteId || '');
+    setContent(noteContent || '');
+  }, [noteId, noteContent]);
 
   return (
     <div
