@@ -5,6 +5,7 @@ defmodule RepeatNotes.Notes do
   alias RepeatNotes.Notes.Note
 
   @max_return 200
+  @random_return 10
 
   @spec list_notes(binary(), map) :: [Note.t()]
   def list_notes(user_id, _params) do
@@ -12,6 +13,15 @@ defmodule RepeatNotes.Notes do
     |> where(user_id: ^user_id)
     |> order_by(desc: :inserted_at)
     |> limit(@max_return)
+    |> Repo.all()
+  end
+
+  @spec random_notes(binary()) :: [Note.t()]
+  def random_notes(user_id) do
+    Note
+    |> where(user_id: ^user_id)
+    |> order_by(fragment("RANDOM()"))
+    |> limit(@random_return)
     |> Repo.all()
   end
 

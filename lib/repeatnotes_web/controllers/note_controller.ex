@@ -57,6 +57,14 @@ defmodule RepeatNotesWeb.NoteController do
     render(conn, "show.json", note: note)
   end
 
+  @spec random(Plug.Conn.t(), map) :: Plug.Conn.t()
+  def random(conn, _params) do
+    with %User{id: user_id} <- conn.assigns.current_user do
+      notes = Notes.random_notes(user_id)
+      render(conn, "index.json", notes: notes)
+    end
+  end
+
   @spec update(Plug.Conn.t(), map) :: Plug.Conn.t()
   def update(conn, %{"id" => id, "note" => note_params}) do
     with %User{id: user_id} <- conn.assigns.current_user do

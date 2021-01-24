@@ -83,7 +83,7 @@ export default function NoteEdit(props: Props) {
           upsertNote(id, newContent);
         }}
         selectedTab={currentTab}
-        setSelectedTab={setCurrentTab}
+        setSelectedTab={changeTab}
       />
     </div>
   );

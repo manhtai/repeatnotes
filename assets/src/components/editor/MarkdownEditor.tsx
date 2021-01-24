@@ -9,6 +9,7 @@ import 'src/css/editor.css';
 
 import gfm from 'remark-gfm';
 import math from 'remark-math';
+import breaks from 'remark-breaks';
 
 const renderers = {
   inlineMath: ({value}: {value: string}) => <Tex math={value} />,
@@ -59,7 +60,7 @@ export default function Editor(props: Props) {
       generateMarkdownPreview={(markdown) =>
         Promise.resolve(
           <ReactMarkdown
-            plugins={[gfm, math]}
+            plugins={[gfm, math, breaks]}
             renderers={renderers}
             source={markdown}
           />

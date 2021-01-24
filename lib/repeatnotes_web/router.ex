@@ -37,6 +37,7 @@ defmodule RepeatNotesWeb.Router do
 
     resources("/cards", CardController)
     resources("/notes", NoteController)
+    get("/random", NoteController, :random)
 
     get("/srs_config", SrsConfigController, :show)
     put("/srs_config", SrsConfigController, :update)

@@ -186,6 +186,13 @@ export const fetchNoteById = async (id: string, token = getAccessToken()) => {
     .then((res) => res.body.data);
 };
 
+export const fetchRandomNote = async (token = getAccessToken()) => {
+  return request
+    .get(`/api/random`)
+    .set('Authorization', token || '')
+    .then((res) => res.body.data);
+};
+
 export const createNote = async (data: any, token = getAccessToken()) => {
   if (!token) {
     throw new Error('Invalid token!');
