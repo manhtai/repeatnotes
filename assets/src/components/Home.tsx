@@ -23,6 +23,7 @@ import CardReview from 'src/components/card/CardReview';
 import NoteList from 'src/components/note/NoteList';
 import NoteNew from 'src/components/note/NoteNew';
 import NoteRandom from 'src/components/note/NoteRandom';
+import NoteHome from 'src/components/note/NoteHome';
 
 import SrsConfig from 'src/components/settings/SrsConfig';
 import Account from 'src/components/settings/Account';
@@ -126,7 +127,7 @@ function HomePage() {
     {path: '/random', name: 'Random', Component: NoteRandom},
     {path: '/new', name: 'New', Component: NoteNew},
     {path: '/review', name: 'Review', Component: CardReview},
-    {path: '/', name: 'Review', Component: CardReview},
+    {path: '/', name: 'Review', Component: NoteHome},
     ...settingsRoutes,
   ];
 

@@ -23,37 +23,6 @@ export default function NoteEdit(props: Props) {
   const [content, setContent] = useState(noteContent || '');
   const [id, setId] = useState(noteId || '');
 
-  const callUpdate = (newContent: string, oldNote: Note) => {
-    if (!id && content.trim()) {
-      API.createNote({note: {content: newContent}}).then(
-        (note: Note) => {
-          setId(note.id);
-        },
-        (error) => {
-          setContent(oldNote.content);
-          setNote && setNote(oldNote);
-
-          logger.error(error);
-          setSync(SyncStatus.Error);
-        }
-      );
-    } else if (id) {
-      API.updateNote(id, {note: {content}}).then(
-        () => {
-          setSync(SyncStatus.Success);
-        },
-        (error) => {
-          logger.error(error);
-
-          setContent(oldNote.content);
-          setNote && setNote(oldNote);
-
-          setSync(SyncStatus.Error);
-        }
-      );
-    }
-  };
-
   const upsertNote = (id: string, newContent: string) => {
     setSync(SyncStatus.Syncing);
 
@@ -64,7 +33,34 @@ export default function NoteEdit(props: Props) {
     setContent(newContent);
     setNote && setNote({id, content: newContent});
 
-    callUpdate(newContent, oldNote);
+    if (!id && newContent.trim()) {
+      API.createNote({note: {content: newContent}}).then(
+        (note: Note) => {
+          setSync(SyncStatus.Success);
+          setId(note.id);
+        },
+        (error) => {
+          setSync(SyncStatus.Error);
+          logger.error(error);
+
+          setContent(oldNote.content);
+          setNote && setNote(oldNote);
+        }
+      );
+    } else if (id) {
+      API.updateNote(id, {note: {content: newContent}}).then(
+        () => {
+          setSync(SyncStatus.Success);
+        },
+        (error) => {
+          setSync(SyncStatus.Error);
+          logger.error(error);
+
+          setContent(oldNote.content);
+          setNote && setNote(oldNote);
+        }
+      );
+    }
   };
 
   const changeTab = (tab: EditorTab) => {
