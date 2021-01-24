@@ -19,8 +19,10 @@ import {useAuth} from 'src/components/auth/AuthProvider';
 import {useGlobal, GlobalProvider} from 'src/components/global/GlobalProvider';
 import {SyncStatus} from 'src/libs/types';
 
-import Temp from 'src/components/Temp';
 import CardReview from 'src/components/card/CardReview';
+import NoteList from 'src/components/note/NoteList';
+import NoteNew from 'src/components/note/NoteNew';
+import NoteRandom from 'src/components/note/NoteRandom';
 
 import SrsConfig from 'src/components/settings/SrsConfig';
 import Account from 'src/components/settings/Account';
@@ -120,9 +122,9 @@ function HomePage() {
   ];
 
   const routes = [
-    {path: '/notes', name: 'Notes', Component: Temp},
-    {path: '/random', name: 'Random', Component: Temp},
-    {path: '/new', name: 'New', Component: Temp},
+    {path: '/notes', name: 'Notes', Component: NoteList},
+    {path: '/random', name: 'Random', Component: NoteRandom},
+    {path: '/new', name: 'New', Component: NoteNew},
     {path: '/review', name: 'Review', Component: CardReview},
     {path: '/', name: 'Review', Component: CardReview},
     ...settingsRoutes,
@@ -147,7 +149,7 @@ function HomePage() {
       {/* Top bar nav */}
       <nav className="flex flex-shrink-0 px-4 overflow-x-auto text-sm bg-gray-100 border-b h-14">
         <ul className="flex items-center flex-none text-gray-800">
-          <li className="w-6 h-6 mr-4">
+          <li className="w-8 h-8 mr-4">
             <Link to="/">
               <img className="w-full h-full mx-auto" src={Logo} alt="logo" />
             </Link>
@@ -238,7 +240,7 @@ function HomePage() {
                 leaveFrom="opacity-100"
                 leaveTo="opacity-0 absolute inset-0"
               >
-                <section className="max-w-3xl px-4 mx-auto">
+                <section className="max-w-2xl px-4 mx-auto">
                   <Component />
                 </section>
               </Transition>

@@ -1,6 +1,6 @@
 defmodule RepeatNotesWeb.CardView do
   use RepeatNotesWeb, :view
-  alias RepeatNotesWeb.CardView
+  alias RepeatNotesWeb.{CardView, NoteView}
 
   def render("index.json", %{cards: cards}) do
     %{data: render_many(cards, CardView, "expanded.json")}
@@ -41,7 +41,8 @@ defmodule RepeatNotesWeb.CardView do
       lapses: card.lapses,
       remaining_steps: card.remaining_steps,
       created_at: card.inserted_at,
-      updated_at: card.updated_at
+      updated_at: card.updated_at,
+      note: render_one(card.note, NoteView, "expanded.json")
     }
   end
 end

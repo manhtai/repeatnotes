@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import {useSrs, SrsProvider} from './SrsProvider';
 import {useGlobal} from 'src/components/global/GlobalProvider';
+import NoteEdit from 'src/components/note/NoteEdit';
+
 import {Choice, SyncStatus, SrsConfig, Card, EditorTab} from 'src/libs/types';
 import logger from 'src/libs/logger';
 import * as API from 'src/libs/api';
-
-import Editor from 'src/components/editor/MarkdownEditor';
 
 type AnswerProps = {
   card: Card;
@@ -18,7 +18,7 @@ function Answer(props: AnswerProps) {
   const {card, config, answerCard, nextInterval} = props;
 
   return (
-    <div className="flex items-center justify-center mt-2">
+    <div className="flex items-center justify-center p-2 mt-2">
       <button
         className="flex-1 w-full px-3 py-1 mb-1 mr-1 font-bold text-gray-200 bg-red-700 rounded-full outline-none active:bg-red-500 hover:bg-red-600 focus:outline-none"
         onClick={() => answerCard(card, Choice.Again)}
@@ -130,18 +130,13 @@ function CardReview() {
         </div>
       ) : (
         <div className="p-2 border rounded shadow">
-          <div
-            onClick={() => selectedTab === 'preview' && setSelectedTab('write')}
-          >
-            <Editor
-              content={card.id}
-              setContent={(s) => {
-                setCard({...card, id: s});
-              }}
-              selectedTab={selectedTab}
-              setSelectedTab={setSelectedTab}
-            />
-          </div>
+          <NoteEdit
+            noteId={card.note.id}
+            noteContent={card.note.content}
+            setNote={(note) => setCard({...card, note})}
+            selectedTab={selectedTab}
+            setSelectedTab={setSelectedTab}
+          />
 
           {selectedTab === 'preview' && (
             <Answer

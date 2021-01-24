@@ -36,6 +36,7 @@ defmodule RepeatNotes.Cards do
     |> where(user_id: ^user_id)
     |> limit(^limit)
     |> Repo.all()
+    |> Repo.preload([:note])
   end
 
   @spec list_cards(binary(), map) :: [Card.t()]
@@ -44,11 +45,12 @@ defmodule RepeatNotes.Cards do
     |> where(^filter_where(params))
     |> where(user_id: ^user_id)
     |> limit(@limit)
+    |> Repo.preload([:note])
     |> Repo.all()
   end
 
-  @spec count_new_cards(binary(), map) :: integer
-  def count_new_cards(user_id, _params \\ %{}) do
+  @spec count_cards(binary(), map) :: integer
+  def count_cards(user_id, _params \\ %{}) do
     Card
     |> where(user_id: ^user_id)
     |> Repo.aggregate(:count)
@@ -58,12 +60,14 @@ defmodule RepeatNotes.Cards do
   def get_card!(id) do
     Card
     |> Repo.get!(id)
+    |> Repo.preload([:note])
   end
 
   @spec get_card!(binary(), integer) :: Card.t() | nil
   def get_card!(id, user_id) do
     Card
     |> Repo.get_by!(id: id, user_id: user_id)
+    |> Repo.preload([:note])
   end
 
   @spec create_card(map()) :: {:ok, Card.t()} | {:error, Ecto.Changeset.t()}
