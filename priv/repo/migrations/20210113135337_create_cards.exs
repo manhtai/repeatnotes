@@ -26,11 +26,23 @@ defmodule RepeatNotes.Repo.Migrations.CreateCards do
         null: false
       )
 
+      add(
+        :note_id,
+        references(:notes,
+          column: :id,
+          on_delete: :delete_all,
+          type: :binary_id
+        ),
+        null: false
+      )
+
       timestamps()
     end
 
     create(index(:cards, [:card_type]))
     create(index(:cards, [:card_queue]))
+    create(index(:cards, [:due]))
     create(index(:cards, [:user_id]))
+    create(index(:cards, [:note_id]))
   end
 end

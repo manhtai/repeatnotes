@@ -147,7 +147,7 @@ function HomePage() {
       {/* Top bar nav */}
       <nav className="flex flex-shrink-0 px-4 overflow-x-auto text-sm bg-gray-100 border-b h-14">
         <ul className="flex items-center flex-none text-gray-800">
-          <li className="w-6 h-6 mr-4">
+          <li className="w-8 h-8 mr-4">
             <Link to="/">
               <img className="w-full h-full mx-auto" src={Logo} alt="logo" />
             </Link>

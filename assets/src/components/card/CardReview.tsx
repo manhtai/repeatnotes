@@ -18,7 +18,7 @@ function Answer(props: AnswerProps) {
   const {card, config, answerCard, nextInterval} = props;
 
   return (
-    <div className="flex items-center justify-center mt-2">
+    <div className="flex items-center justify-center p-2 mt-2">
       <button
         className="flex-1 w-full px-3 py-1 mb-1 mr-1 font-bold text-gray-200 bg-red-700 rounded-full outline-none active:bg-red-500 hover:bg-red-600 focus:outline-none"
         onClick={() => answerCard(card, Choice.Again)}
@@ -132,6 +132,7 @@ function CardReview() {
         <div className="p-2 border rounded shadow">
           <div
             onClick={() => selectedTab === 'preview' && setSelectedTab('write')}
+            className="cursor-pointer"
           >
             <Editor
               content={card.id}

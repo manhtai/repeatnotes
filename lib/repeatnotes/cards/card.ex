@@ -3,6 +3,7 @@ defmodule RepeatNotes.Cards.Card do
   import Ecto.Changeset
   alias RepeatNotes.Users.User
   alias RepeatNotes.Cards.{Types, Queues}
+  alias RepeatNotes.Notes.Note
 
   @srs_fields [
     :card_type,
@@ -14,7 +15,7 @@ defmodule RepeatNotes.Cards.Card do
     :lapses,
     :remaining_steps
   ]
-  @required_fields [:user_id]
+  @required_fields [:user_id, :note_id]
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
@@ -30,6 +31,7 @@ defmodule RepeatNotes.Cards.Card do
     field(:remaining_steps, :integer, default: 0)
 
     belongs_to(:user, User, foreign_key: :user_id, references: :id, type: :binary_id)
+    belongs_to(:note, Note, foreign_key: :note_id, references: :id, type: :binary_id)
 
     timestamps()
   end
