@@ -33,6 +33,17 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
+# Mailers
+sib_api_key = System.get_env("SENDINBLUE_API_KEY")
+
+if sib_api_key != nil do
+  config :repeatnotes, RepeatNotes.Mailers.Sendinblue,
+    adapter: Swoosh.Adapters.Sendinblue,
+    api_key: sib_api_key
+end
+
+config :repeatnotes, RepeatNotes.Mailers.Gmail, adapter: Swoosh.Adapters.Gmail
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env()}.exs"

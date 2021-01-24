@@ -21,10 +21,14 @@ defmodule RepeatNotesWeb.Router do
   end
 
   scope "/api", RepeatNotesWeb do
-    pipe_through :api
+    pipe_through(:api)
 
     resources("/registration", RegistrationController, singleton: true, only: [:create])
     resources("/session", SessionController, singleton: true, only: [:create, :delete])
+
+    post("/reset_password", UserController, :create_password_reset)
+    put("/reset_password", UserController, :reset_password)
+
     post("/session/renew", SessionController, :renew)
   end
 
@@ -56,9 +60,9 @@ defmodule RepeatNotesWeb.Router do
   end
 
   scope "/", RepeatNotesWeb do
-    pipe_through :browser
+    pipe_through(:browser)
 
-    get "/", PageController, :index
-    get "/*path", PageController, :index
+    get("/", PageController, :index)
+    get("/*path", PageController, :index)
   end
 end

@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   RouteComponentProps,
   BrowserRouter as Router,
@@ -11,6 +10,8 @@ import {
 import Home from 'src/components/Home';
 import Login from 'src/components/auth/Login';
 import Signup from 'src/components/auth/Signup';
+import ResetPasswordRequest from 'src/components/auth/ResetPasswordRequest';
+import ResetPasswordConfirm from 'src/components/auth/ResetPasswordConfirm';
 import {useAuth} from 'src/components/auth/AuthProvider';
 
 function App() {
@@ -24,8 +25,15 @@ function App() {
     return (
       <Router>
         <Switch>
-          <Route path={"/login"} component={Login} />
-          <Route path={"/signup"} component={Signup} />
+          <Route path={'/login'} component={Login} />
+          <Route path={'/signup'} component={Signup} />
+
+          <Route
+            path={'/reset-password/:token'}
+            component={ResetPasswordConfirm}
+          />
+          <Route path={'/reset-password'} component={ResetPasswordRequest} />
+
           <Route
             path="*"
             render={(props: RouteComponentProps<{}>) => (
@@ -40,8 +48,14 @@ function App() {
   return (
     <Router>
       <Switch>
-        <Route path={"/"} component={Home} />
-        <Route path="*" render={() => <Redirect to={"/"} />} />
+        <Route path={'/'} component={Home} />
+        <Route
+          path={'/reset-password/:token'}
+          component={ResetPasswordConfirm}
+        />
+        <Route path={'/reset-password'} component={ResetPasswordRequest} />
+
+        <Route path="*" render={() => <Redirect to={'/'} />} />
       </Switch>
     </Router>
   );

@@ -46,7 +46,10 @@ defmodule RepeatNotes.MixProject do
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
       {:pow, "~> 1.0.21"},
-      {:pow_postgres_store, "~> 1.0.0-rc2"}
+      {:pow_postgres_store, "~> 1.0.0-rc2"},
+      {:swoosh, "~> 1.0"},
+      {:hackney, "~> 1.16"},
+      {:mail, "~> 0.2"}
     ]
   end
 
