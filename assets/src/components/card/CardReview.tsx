@@ -1,9 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import {useSrs, SrsProvider} from './SrsProvider';
 import {useGlobal} from 'src/components/global/GlobalProvider';
-import {Choice, SyncStatus, Card} from 'src/libs/types';
+import {Choice, SyncStatus, Card, EditorTab} from 'src/libs/types';
 import logger from 'src/libs/logger';
 import * as API from 'src/libs/api';
+
+import Editor from 'src/components/editor/MarkdownEditor';
 
 function CardReview() {
   const {sm2, loadSm2, loading, config} = useSrs();
@@ -11,6 +13,7 @@ function CardReview() {
 
   const [card, setCard] = useState<Card | null>(null);
   const [cards, setCards] = useState([]);
+  const [selectedTab, setSelectedTab] = useState<EditorTab>('preview');
 
   const answerCard = async (card: Card, choice: Choice) => {
     const newCard = sm2.answer_card(card, choice);
@@ -51,16 +54,27 @@ function CardReview() {
   useEffect(fetchAllCards, [sm2]);
 
   return (
-    <div className="mt-5">
+    <div className="mt-10">
       {loading ? null : !card ? (
-        <div className="px-4 py-3 border border-gray-200 rounded shadow">
+        <div className="px-4 py-3 border rounded shadow">
           No card to learn for now, come back here later.
         </div>
       ) : (
-        <div className="p-2 mt-5 border border-gray-200 rounded shadow">
-          <div className="mb-5 font-bold">{`Card #${card.id}`}</div>
+        <div className="p-2 border rounded shadow">
+          <div
+            onClick={() => selectedTab === 'preview' && setSelectedTab('write')}
+          >
+            <Editor
+              content={card.id}
+              setContent={(s) => {
+                setCard({...card, id: s});
+              }}
+              selectedTab={selectedTab}
+              setSelectedTab={setSelectedTab}
+            />
+          </div>
 
-          <div className="flex items-center justify-center">
+          <div className="flex items-center justify-center mt-2">
             <button
               className="flex-1 w-full px-3 py-1 mb-1 mr-1 font-bold text-gray-200 bg-red-700 rounded-full outline-none active:bg-red-500 hover:bg-red-600 focus:outline-none"
               onClick={() => answerCard(card, Choice.Again)}

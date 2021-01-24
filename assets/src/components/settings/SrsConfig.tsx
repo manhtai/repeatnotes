@@ -50,7 +50,7 @@ function SrsConfigPage() {
   }
 
   return (
-    <div className="max-w-lg mb-16">
+    <div className="max-w-lg mx-auto mb-16">
       <div className="mt-5">
         <h2 className="px-4 py-3 font-bold text-white bg-gray-700 rounded-t-lg shadow">
           Schedule

@@ -144,7 +144,7 @@ export default function LoginPage() {
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
-  const {redirect = '/review'} = qs.parse(location.search);
+  const {redirect = '/'} = qs.parse(location.search);
 
   const onSubmit = async (email: string, password: string) => {
     setSubmitting(true);

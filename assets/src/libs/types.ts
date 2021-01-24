@@ -70,3 +70,5 @@ export enum Choice {
   Ok = 3,
   Easy = 4,
 }
+
+export type EditorTab = 'write' | 'preview';
