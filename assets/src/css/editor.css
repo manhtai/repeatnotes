@@ -12,15 +12,16 @@
   flex-direction: row;
 }
 .mde-header .mde-tabs button {
-  border-radius: 2px;
-  margin: 6px 5px;
-  padding: 5px 5px;
-  background-color: transparent;
-  border: 1px solid transparent;
+  border-radius: 9999px;
+  margin: 7px 5px;
+  padding: 4px 10px;
+  background-color: rgb(99, 102, 241);
+  color: white;
+  border: 1px solid rgb(99, 102, 241);
   cursor: pointer;
 }
-.mde-header .mde-tabs button.selected {
-  border: 1px solid #c8ccd0;
+.mde-header .mde-tabs button:hover {
+  opacity: 0.9;
 }
 .mde-header .svg-icon {
   width: 1em;
