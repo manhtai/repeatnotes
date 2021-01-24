@@ -18,7 +18,10 @@ defmodule RepeatNotes.Repo.Migrations.CreateUsers do
       timestamps()
     end
 
-    create unique_index(:users, [:email])
-    create index(:users, [:account_id])
+    create(unique_index(:users, [:email]))
+    create(unique_index(:users, [:email_confirmation_token]))
+    create(unique_index(:users, [:password_reset_token]))
+
+    create(index(:users, [:account_id]))
   end
 end

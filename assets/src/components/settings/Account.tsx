@@ -1,26 +1,20 @@
 import {useState, useEffect} from 'react';
 import * as API from 'src/libs/api';
+import {User} from 'src/libs/types';
+import {formatDate} from 'src/libs/utils/datetime';
 
 export default function Account() {
-  const [email, setEmail] = useState('');
-  const [emailChangeRequested, setEmailChangeRequested] = useState(false);
-  const [passwordChangeRequested, setPasswordChangeRequested] = useState(false);
+  const [user, setUser] = useState<User>();
 
   useEffect(() => {
-    API.me().then((user) => {
-      setEmail(user.email);
+    API.me().then((u: User) => {
+      setUser(u);
     });
   }, []);
 
-  const onSubmitUpdateEmail = (e: any) => {
-    e.preventDefault();
-    setEmailChangeRequested(true);
-  };
-
-  const onSubmitChangePassword = (e: any) => {
-    e.preventDefault();
-    setPasswordChangeRequested(true);
-  };
+  if (!user) {
+    return null;
+  }
 
   return (
     <div className="max-w-lg mt-5 mb-16">
@@ -33,39 +27,20 @@ export default function Account() {
             <span className="text-sm text-gray-700">Email address</span>
             <input
               type="email"
-              className="block w-full mt-1 bg-gray-200 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-              value={email}
-              onChange={(e) => {
-                e.preventDefault();
-                setEmail(e.target.value);
-              }}
+              className="mt-0 block w-full px-0.5 border-0 border-b-2 bg-gray-100 border-gray-200 cursor-not-allowed focus:ring-0 focus:border-black"
+              value={user.email}
               disabled
             />
           </label>
-        </div>
-        <div className="mt-5">
-          <button
-            type="button"
-            onClick={onSubmitUpdateEmail}
-            className="w-full px-4 py-2 btn-primary"
-            disabled={emailChangeRequested}
-          >
-            {emailChangeRequested
-              ? 'Change email requested'
-              : 'Request change email'}
-          </button>
-        </div>
-        <div className="mt-5 mb-5">
-          <button
-            type="button"
-            onClick={onSubmitChangePassword}
-            className="w-full px-4 py-2 btn-primary"
-            disabled={passwordChangeRequested}
-          >
-            {passwordChangeRequested
-              ? 'Change password requested'
-              : 'Request change password'}
-          </button>
+          <label className="block">
+            <span className="text-sm text-gray-700">Member since</span>
+            <input
+              type="text"
+              className="mt-0 block w-full px-0.5 border-0 border-b-2 bg-gray-100 border-gray-200 focus:ring-0 focus:border-black"
+              value={formatDate(user.inserted_at)}
+              disabled
+            />
+          </label>
         </div>
       </div>
     </div>
