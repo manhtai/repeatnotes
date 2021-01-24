@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import {useSrs, SrsProvider} from './SrsProvider';
 import {useGlobal} from 'src/components/global/GlobalProvider';
+import NoteEdit from 'src/components/note/NoteEdit';
+
 import {Choice, SyncStatus, SrsConfig, Card, EditorTab} from 'src/libs/types';
 import logger from 'src/libs/logger';
 import * as API from 'src/libs/api';
-
-import Editor from 'src/components/editor/MarkdownEditor';
 
 type AnswerProps = {
   card: Card;
@@ -130,19 +130,13 @@ function CardReview() {
         </div>
       ) : (
         <div className="p-2 border rounded shadow">
-          <div
-            onClick={() => selectedTab === 'preview' && setSelectedTab('write')}
-            className="cursor-pointer"
-          >
-            <Editor
-              content={card.id}
-              setContent={(s) => {
-                setCard({...card, id: s});
-              }}
-              selectedTab={selectedTab}
-              setSelectedTab={setSelectedTab}
-            />
-          </div>
+          <NoteEdit
+            noteId={card.note.id}
+            noteContent={card.note.content}
+            setNote={(note) => setCard({...card, note})}
+            selectedTab={selectedTab}
+            setSelectedTab={setSelectedTab}
+          />
 
           {selectedTab === 'preview' && (
             <Answer

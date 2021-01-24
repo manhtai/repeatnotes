@@ -21,6 +21,8 @@ import {SyncStatus} from 'src/libs/types';
 
 import Temp from 'src/components/Temp';
 import CardReview from 'src/components/card/CardReview';
+import NoteList from 'src/components/note/NoteList';
+import NoteNew from 'src/components/note/NoteNew';
 
 import SrsConfig from 'src/components/settings/SrsConfig';
 import Account from 'src/components/settings/Account';
@@ -120,9 +122,9 @@ function HomePage() {
   ];
 
   const routes = [
-    {path: '/notes', name: 'Notes', Component: Temp},
+    {path: '/notes', name: 'Notes', Component: NoteList},
     {path: '/random', name: 'Random', Component: Temp},
-    {path: '/new', name: 'New', Component: Temp},
+    {path: '/new', name: 'New', Component: NoteNew},
     {path: '/review', name: 'Review', Component: CardReview},
     {path: '/', name: 'Review', Component: CardReview},
     ...settingsRoutes,

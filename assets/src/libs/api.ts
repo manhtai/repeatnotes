@@ -166,3 +166,50 @@ export const updateCard = async (
     .send(updates)
     .then((res) => res.body.data);
 };
+
+// Note APIs
+export const fetchAllNotes = async (token = getAccessToken()) => {
+  if (!token) {
+    throw new Error('Invalid token!');
+  }
+
+  return request
+    .get('/api/notes')
+    .set('Authorization', token)
+    .then((res) => res.body.data);
+};
+
+export const fetchNoteById = async (id: string, token = getAccessToken()) => {
+  return request
+    .get(`/api/notes/${id}`)
+    .set('Authorization', token || '')
+    .then((res) => res.body.data);
+};
+
+export const createNote = async (data: any, token = getAccessToken()) => {
+  if (!token) {
+    throw new Error('Invalid token!');
+  }
+
+  return request
+    .post('/api/notes')
+    .set('Authorization', token)
+    .send(data)
+    .then((res) => res.body.data);
+};
+
+export const updateNote = async (
+  id: string,
+  updates: any,
+  token = getAccessToken()
+) => {
+  if (!token) {
+    throw new Error('Invalid token!');
+  }
+
+  return request
+    .put(`/api/notes/${id}`)
+    .set('Authorization', token)
+    .send(updates)
+    .then((res) => res.body.data);
+};

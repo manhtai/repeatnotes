@@ -33,8 +33,14 @@ export enum CardQueue {
   Buried = -2,
 }
 
+export type Note = {
+  id: string;
+  content: string;
+};
+
 export type Card = {
   id: string;
+  note: Note;
   card_type: CardType;
   card_queue: CardQueue;
   due: number;
