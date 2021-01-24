@@ -70,6 +70,13 @@ export default function Editor(props: Props) {
         toolbar:
           selectedTab === 'write' ? 'border-b rounded' : 'border rounded',
       }}
+      l18n={{
+        write: 'Write',
+        preview: 'Done',
+        uploadingImage: 'Uploading image...',
+        pasteDropSelect:
+          'Attach files by dragging & dropping, selecting or pasting them.',
+      }}
       childProps={{
         previewButton: {
           className: selectedTab === 'preview' ? 'hidden' : 'mde-tabs',
