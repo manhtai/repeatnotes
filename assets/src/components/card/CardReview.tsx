@@ -53,8 +53,8 @@ function CardReview() {
   return (
     <div className="mt-5">
       {loading ? null : !card ? (
-        <div className="px-4 py-3 text-lg border border-gray-200 rounded shadow">
-          No card to learn for now
+        <div className="px-4 py-3 border border-gray-200 rounded shadow">
+          No card to learn for now, come back here later.
         </div>
       ) : (
         <div className="p-2 mt-5 border border-gray-200 rounded shadow">
@@ -65,36 +65,36 @@ function CardReview() {
               className="flex-1 w-full px-3 py-1 mb-1 mr-1 font-bold text-gray-200 bg-red-700 rounded-full outline-none active:bg-red-500 hover:bg-red-600 focus:outline-none"
               onClick={() => answerCard(card, Choice.Again)}
             >
-              Again{' '}
+              Again
               {config?.show_next_due && (
-                <span>({nextInterval(Choice.Again)})</span>
+                <span> ({nextInterval(Choice.Again)})</span>
               )}
             </button>
             <button
               className="flex-1 w-full px-3 py-1 mb-1 mr-1 font-bold text-gray-200 bg-yellow-700 rounded-full outline-none active:bg-yellow-500 hover:bg-yellow-600 focus:outline-none"
               onClick={() => answerCard(card, Choice.Hard)}
             >
-              Hard{' '}
+              Hard
               {config?.show_next_due && (
-                <span>({nextInterval(Choice.Hard)})</span>
+                <span> ({nextInterval(Choice.Hard)})</span>
               )}
             </button>
             <button
               className="flex-1 w-full px-3 py-1 mb-1 mr-1 font-bold text-gray-100 bg-green-700 rounded-full outline-none active:bg-green-500 hover:bg-green-600 focus:outline-none"
               onClick={() => answerCard(card, Choice.Ok)}
             >
-              Good{' '}
+              Good
               {config?.show_next_due && (
-                <span>({nextInterval(Choice.Ok)})</span>
+                <span> ({nextInterval(Choice.Ok)})</span>
               )}
             </button>
             <button
               className="flex-1 w-full px-3 py-1 mb-1 mr-1 font-bold text-gray-100 bg-blue-700 rounded-full outline-none active:bg-blue-500 hover:bg-blue-600 focus:outline-none"
               onClick={() => answerCard(card, Choice.Easy)}
             >
-              Easy{' '}
+              Easy
               {config?.show_next_due && (
-                <span>({nextInterval(Choice.Easy)})</span>
+                <span> ({nextInterval(Choice.Easy)})</span>
               )}
             </button>
           </div>
