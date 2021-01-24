@@ -124,6 +124,7 @@ function HomePage() {
     {path: '/random', name: 'Random', Component: Temp},
     {path: '/new', name: 'New', Component: Temp},
     {path: '/review', name: 'Review', Component: CardReview},
+    {path: '/', name: 'Review', Component: CardReview},
     ...settingsRoutes,
   ];
 
@@ -237,7 +238,7 @@ function HomePage() {
                 leaveFrom="opacity-100"
                 leaveTo="opacity-0 absolute inset-0"
               >
-                <section className="max-w-xl px-4 mx-auto">
+                <section className="max-w-3xl px-4 mx-auto">
                   <Component />
                 </section>
               </Transition>
