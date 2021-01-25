@@ -17,6 +17,9 @@ defmodule RepeatNotes.Users.User do
     field(:email_confirmation_token, :string)
     field(:email_confirmed_at, :utc_datetime)
 
+    field(:encrypted_key, :string)
+    field(:encrypted_salt, :string)
+
     field(:role, :string, default: Roles.member())
     belongs_to(:account, Account, type: :binary_id)
 
