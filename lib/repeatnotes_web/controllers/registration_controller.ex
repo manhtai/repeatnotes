@@ -36,8 +36,12 @@ defmodule RepeatNotesWeb.RegistrationController do
       Accounts.create_account(%{name: params["email"]})
     end)
     |> Ecto.Multi.run(:conn, fn _repo, %{account: account} ->
-      # Default admin role
-      user = Enum.into(params, %{"account_id" => account.id, "role" => Roles.admin()})
+      # Default to admin role
+      user =
+        Enum.into(params, %{
+          "account_id" => account.id,
+          "role" => Roles.admin()
+        })
 
       case Pow.Plug.create_user(conn, user) do
         {:ok, _user, conn} ->
