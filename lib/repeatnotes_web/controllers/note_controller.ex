@@ -7,13 +7,16 @@ defmodule RepeatNotesWeb.NoteController do
   alias RepeatNotes.Notes.Note
   alias RepeatNotes.Encryption.AES
   alias RepeatNotesWeb.ErrorHelpers
+  alias RepeatNotes.Utils.StringUtil
 
   @spec index(Plug.Conn.t(), map) :: Plug.Conn.t()
-  def index(conn, params) do
+  def index(conn, %{"encrypted_key" => encrypted_key} = params) do
     with %User{id: user_id} <- conn.assigns.current_user do
+      IO.puts(encrypted_key)
+
       notes =
         Notes.list_notes(user_id, params)
-        |> decrypt_notes_content(params["encrypted_key"])
+        |> decrypt_notes_content(encrypted_key)
 
       render(conn, "index.json", notes: notes)
     end
@@ -72,7 +75,7 @@ defmodule RepeatNotesWeb.NoteController do
     with %User{id: user_id} <- conn.assigns.current_user do
       notes =
         Notes.random_notes(user_id)
-        |> decrypt_notes_content(params)
+        |> decrypt_notes_content(params["encrypted_key"])
 
       render(conn, "index.json", notes: notes)
     end
@@ -102,18 +105,20 @@ defmodule RepeatNotesWeb.NoteController do
 
   @spec encrypt_note_content(map, String.t()) :: map()
   defp encrypt_note_content(note, encrypted_key) do
-    if encrypted_key != nil do
+    if StringUtil.blank?(encrypted_key) do
+      note
+    else
       secret_key = AES.decrypt(encrypted_key)
       content = AES.encrypt(note["content"], secret_key)
       note |> Map.merge(%{"content" => content})
-    else
-      note
     end
   end
 
   @spec decrypt_notes_content([Note.t()], String.t()) :: [Note.t()]
   defp decrypt_notes_content(notes, encrypted_key) do
-    if encrypted_key != nil do
+    if StringUtil.blank?(encrypted_key) do
+      notes
+    else
       secret_key = AES.decrypt(encrypted_key)
 
       notes
@@ -121,19 +126,17 @@ defmodule RepeatNotesWeb.NoteController do
         content = AES.decrypt(note.content, secret_key)
         struct(note, %{content: content})
       end)
-    else
-      notes
     end
   end
 
   @spec decrypt_note_content(Note.t(), String.t()) :: Note.t()
   defp decrypt_note_content(note, encrypted_key) do
-    if encrypted_key != nil do
+    if StringUtil.blank?(encrypted_key) do
+      note
+    else
       secret_key = AES.decrypt(encrypted_key)
       content = AES.decrypt(note.content, secret_key)
       struct(note, %{content: content})
-    else
-      note
     end
   end
 end
