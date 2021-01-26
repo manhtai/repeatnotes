@@ -3,7 +3,7 @@ defmodule RepeatNotesWeb.RegistrationController do
   alias Ecto.Changeset
   alias RepeatNotesWeb.ErrorHelpers
 
-  alias RepeatNotes.{Accounts, Users.Roles}
+  alias RepeatNotes.{Accounts, Users.Roles, Encryption.Pbkdf2, Encryption.AES}
 
   alias Plug.Conn
 
@@ -36,19 +36,28 @@ defmodule RepeatNotesWeb.RegistrationController do
       Accounts.create_account(%{name: params["email"]})
     end)
     |> Ecto.Multi.run(:conn, fn _repo, %{account: account} ->
-      # Default to admin role
-      user =
-        Enum.into(params, %{
-          "account_id" => account.id,
-          "role" => Roles.admin()
-        })
+      with %{
+             :secret_key => secret_key,
+             :secret_hash => secret_hash
+           } = Pbkdf2.generate_secret_hash(params["password"]) do
+        user =
+          Enum.into(params, %{
+            "account_id" => account.id,
+            "role" => Roles.admin(),
+            "secret_hash" => secret_hash
+          })
 
-      case Pow.Plug.create_user(conn, user) do
-        {:ok, _user, conn} ->
-          {:ok, conn}
+        case Pow.Plug.create_user(conn, user) do
+          {:ok, _user, conn} ->
+            conn =
+              conn
+              |> Conn.put_private(:encrypted_key, AES.encrypt(secret_key))
 
-        {:error, reason, _conn} ->
-          {:error, reason}
+            {:ok, conn}
+
+          {:error, reason, _conn} ->
+            {:error, reason}
+        end
       end
     end)
   end
@@ -57,7 +66,8 @@ defmodule RepeatNotesWeb.RegistrationController do
     json(conn, %{
       data: %{
         token: conn.private[:api_auth_token],
-        renew_token: conn.private[:api_renew_token]
+        renew_token: conn.private[:api_renew_token],
+        encrypted_key: conn.private[:encrypted_key]
       }
     })
   end

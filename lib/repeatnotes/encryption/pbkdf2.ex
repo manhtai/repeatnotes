@@ -6,6 +6,7 @@ defmodule RepeatNotes.Encryption.Pbkdf2 do
   @iterations 100_000
   @digest :sha512
 
+  @spec generate_secret_hash(String.t()) :: map()
   def generate_secret_hash(password) do
     secret_key = :crypto.strong_rand_bytes(@key_length)
     salt = :crypto.strong_rand_bytes(@salt_length)
@@ -18,6 +19,7 @@ defmodule RepeatNotes.Encryption.Pbkdf2 do
     }
   end
 
+  @spec get_secret_key(String.t(), String.t()) :: String.t()
   def get_secret_key(password, secret_hash) do
     [_, _, salt, surrogate_key] = decode(secret_hash)
     derived_key = Pbkdf2.generate(password, salt, @iterations, @key_length, @digest)
@@ -25,8 +27,8 @@ defmodule RepeatNotes.Encryption.Pbkdf2 do
   end
 
   defp encode(digest, iterations, salt, hash) do
-    salt = Base.encode64(salt)
-    hash = Base.encode64(hash)
+    salt = :base64.encode(salt)
+    hash = :base64.encode(hash)
 
     "$pbkdf2-#{digest}$#{iterations}$#{salt}$#{hash}"
   end
@@ -34,8 +36,8 @@ defmodule RepeatNotes.Encryption.Pbkdf2 do
   defp decode(hash) do
     case String.split(hash, "$", trim: true) do
       ["pbkdf2-" <> digest, iterations, salt, hash] ->
-        {:ok, salt} = Base.decode64(salt)
-        {:ok, hash} = Base.decode64(hash)
+        salt = :base64.decode(salt)
+        hash = :base64.decode(hash)
         digest = String.to_existing_atom(digest)
         iterations = String.to_integer(iterations)
 
