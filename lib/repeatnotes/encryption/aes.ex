@@ -2,7 +2,7 @@ defmodule RepeatNotes.Encryption.AES do
   # Use AES 256 Bit Keys for Encryption.
   @aad "AES256GCM"
 
-  @spec encrypt(any, String.t()) :: String.t()
+  @spec encrypt(String.t(), String.t()) :: String.t()
   def encrypt(plaintext, key) do
     key = :base64.decode(key)
     # create random Initialisation Vector
@@ -12,8 +12,9 @@ defmodule RepeatNotes.Encryption.AES do
     :base64.encode(iv <> tag <> ciphertext)
   end
 
-  @spec decrypt(any, String.t()) :: String.t()
+  @spec decrypt(String.t(), String.t()) :: String.t()
   def decrypt(ciphertext, key) do
+    ciphertext = :base64.decode(ciphertext)
     key = :base64.decode(key)
     <<iv::binary-16, tag::binary-16, ciphertext::binary>> = ciphertext
     :crypto.block_decrypt(:aes_gcm, key, iv, {@aad, ciphertext, tag})

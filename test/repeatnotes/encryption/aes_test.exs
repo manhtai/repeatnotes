@@ -24,6 +24,17 @@ defmodule RepeatNotes.Encryption.AESTest do
     assert plaintext != "hello"
   end
 
+  test ".decrypt/1 end .encrypt/1" do
+    plaintext =
+      "hello"
+      |> AES.encrypt(get_key())
+      |> AES.decrypt(get_key())
+      |> AES.encrypt(get_key())
+      |> AES.decrypt(get_key())
+
+    assert plaintext == "hello"
+  end
+
   defp get_key do
     "bbYebcvPI5DkpGr0JvJqEzo77kUCFCL8euhukTbxQRA="
   end
