@@ -13,19 +13,19 @@ defmodule RepeatNotesWeb.NoteController do
     with %User{id: user_id} <- conn.assigns.current_user do
       notes =
         Notes.list_notes(user_id, params)
-        |> decrypt_notes_content(params)
+        |> decrypt_notes_content(params["encrypted_key"])
 
       render(conn, "index.json", notes: notes)
     end
   end
 
   @spec create(Plug.Conn.t(), map) :: Plug.Conn.t()
-  def create(conn, %{"note" => params}) do
+  def create(conn, %{"note" => params, "encrypted_key" => encrypted_key}) do
     with %User{id: user_id} <- conn.assigns.current_user do
       note_params =
         params
         |> Map.merge(%{"user_id" => user_id})
-        |> encrypt_note_content()
+        |> encrypt_note_content(encrypted_key)
 
       conn
       |> note_with_card_transaction(note_params)
@@ -59,10 +59,10 @@ defmodule RepeatNotesWeb.NoteController do
   end
 
   @spec show(Plug.Conn.t(), map) :: Plug.Conn.t()
-  def show(conn, note_params = %{"id" => id}) do
+  def show(conn, %{"id" => id, "encrypted_key" => encrypted_key}) do
     note =
       Notes.get_note!(id)
-      |> decrypt_note_content(note_params)
+      |> decrypt_note_content(encrypted_key)
 
     render(conn, "show.json", note: note)
   end
@@ -79,10 +79,10 @@ defmodule RepeatNotesWeb.NoteController do
   end
 
   @spec update(Plug.Conn.t(), map) :: Plug.Conn.t()
-  def update(conn, %{"id" => id, "note" => note_params}) do
+  def update(conn, %{"id" => id, "note" => note_params, "encrypted_key" => encrypted_key}) do
     with %User{id: user_id} <- conn.assigns.current_user do
       note = Notes.get_note!(id, user_id)
-      note_params = note_params |> encrypt_note_content()
+      note_params = note_params |> encrypt_note_content(encrypted_key)
 
       case Notes.update_note(note, note_params) do
         {:ok, %Note{} = note} ->
@@ -100,46 +100,40 @@ defmodule RepeatNotesWeb.NoteController do
     end
   end
 
-  @spec encrypt_note_content(map) :: map()
-  defp encrypt_note_content(note_params) do
-    case note_params do
-      %{"encrypted_key" => encrypted_key, "content" => content} ->
-        secret_key = AES.decrypt(encrypted_key)
-        content = AES.encrypt(content, secret_key)
-        note_params |> Map.merge(%{"content" => content})
-
-      _ ->
-        note_params
+  @spec encrypt_note_content(map, String.t()) :: map()
+  defp encrypt_note_content(note, encrypted_key) do
+    if encrypted_key != nil do
+      secret_key = AES.decrypt(encrypted_key)
+      content = AES.encrypt(note["content"], secret_key)
+      note |> Map.merge(%{"content" => content})
+    else
+      note
     end
   end
 
-  @spec decrypt_notes_content([Note.t()], map) :: [Note.t()]
-  defp decrypt_notes_content(notes, params) do
-    case params do
-      %{"encrypted_key" => encrypted_key} ->
-        secret_key = AES.decrypt(encrypted_key)
+  @spec decrypt_notes_content([Note.t()], String.t()) :: [Note.t()]
+  defp decrypt_notes_content(notes, encrypted_key) do
+    if encrypted_key != nil do
+      secret_key = AES.decrypt(encrypted_key)
 
-        notes
-        |> Enum.map(fn note ->
-          content = AES.decrypt(note.content, secret_key)
-          struct(note, %{content: content})
-        end)
-
-      _ ->
-        notes
-    end
-  end
-
-  @spec decrypt_note_content(Note.t(), map) :: Note.t()
-  defp decrypt_note_content(note, params) do
-    case params do
-      %{"encrypted_key" => encrypted_key} ->
-        secret_key = AES.decrypt(encrypted_key)
+      notes
+      |> Enum.map(fn note ->
         content = AES.decrypt(note.content, secret_key)
         struct(note, %{content: content})
+      end)
+    else
+      notes
+    end
+  end
 
-      _ ->
-        note
+  @spec decrypt_note_content(Note.t(), String.t()) :: Note.t()
+  defp decrypt_note_content(note, encrypted_key) do
+    if encrypted_key != nil do
+      secret_key = AES.decrypt(encrypted_key)
+      content = AES.decrypt(note.content, secret_key)
+      struct(note, %{content: content})
+    else
+      note
     end
   end
 end

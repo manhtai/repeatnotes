@@ -35,14 +35,8 @@ defmodule RepeatNotesWeb.SessionController do
   end
 
   @spec renew(Conn.t(), map()) :: Conn.t()
-  def renew(conn, %{"data" => params}) do
+  def renew(conn, %{"encrypted_key" => encrypted_key}) do
     config = Pow.Plug.fetch_config(conn)
-
-    encrypted_key =
-      case params do
-        %{"encrypted_key" => encrypted_key} -> AES.encrypt(AES.decrypt(encrypted_key))
-        _ -> ''
-      end
 
     conn
     |> APIAuthPlug.renew(config)
@@ -59,7 +53,7 @@ defmodule RepeatNotesWeb.SessionController do
             email: user.email,
             token: conn.private[:api_auth_token],
             renew_token: conn.private[:api_renew_token],
-            encrypted_key: encrypted_key
+            encrypted_key: AES.encrypt(AES.decrypt(encrypted_key))
           }
         })
     end
