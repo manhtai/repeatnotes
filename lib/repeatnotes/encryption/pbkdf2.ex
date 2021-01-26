@@ -1,8 +1,8 @@
 defmodule RepeatNotes.Encryption.Pbkdf2 do
   alias Pow.Ecto.Schema.Password.Pbkdf2
 
-  @key_length 64
-  @salt_length 16
+  @key_length 32
+  @salt_length 32
   @iterations 100_000
   @digest :sha512
 
@@ -14,7 +14,7 @@ defmodule RepeatNotes.Encryption.Pbkdf2 do
     surrogate_key = :crypto.exor(secret_key, derived_key)
 
     %{
-      :secret_key => secret_key,
+      :secret_key => :base64.encode(secret_key),
       :secret_hash => encode(@digest, @iterations, salt, surrogate_key)
     }
   end
@@ -23,7 +23,8 @@ defmodule RepeatNotes.Encryption.Pbkdf2 do
   def get_secret_key(password, secret_hash) do
     [_, _, salt, surrogate_key] = decode(secret_hash)
     derived_key = Pbkdf2.generate(password, salt, @iterations, @key_length, @digest)
-    :crypto.exor(surrogate_key, derived_key)
+    secret_key = :crypto.exor(surrogate_key, derived_key)
+    :base64.encode(secret_key)
   end
 
   defp encode(digest, iterations, salt, hash) do

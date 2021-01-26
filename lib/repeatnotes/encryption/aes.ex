@@ -2,6 +2,7 @@ defmodule RepeatNotes.Encryption.AES do
   # Use AES 256 Bit Keys for Encryption.
   @aad "AES256GCM"
 
+  # Return cipher text in base64
   @spec encrypt(String.t(), String.t()) :: String.t()
   def encrypt(plaintext, key) do
     key = :base64.decode(key)
@@ -12,6 +13,7 @@ defmodule RepeatNotes.Encryption.AES do
     :base64.encode(iv <> tag <> ciphertext)
   end
 
+  # Return plain text
   @spec decrypt(String.t(), String.t()) :: String.t()
   def decrypt(ciphertext, key) do
     ciphertext = :base64.decode(ciphertext)
