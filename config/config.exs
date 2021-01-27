@@ -68,17 +68,6 @@ end
 
 config :repeatnotes, RepeatNotes.Mailers.Gmail, adapter: Swoosh.Adapters.Gmail
 
-# Set the Encryption Keys as an "Application Variable" accessible in aes.ex
-encryption_keys = System.get_env("ENCRYPTION_KEYS")
-
-if encryption_keys != nil do
-  config :repeatnotes, Encryption.AES,
-    keys:
-      encryption_keys
-      |> String.replace("'", "")
-      |> String.split(",")
-end
-
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env()}.exs"
