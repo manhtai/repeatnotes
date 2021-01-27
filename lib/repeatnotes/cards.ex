@@ -7,6 +7,7 @@ defmodule RepeatNotes.Cards do
   alias RepeatNotes.Repo
   alias RepeatNotes.Cards.{Card, Queues}
   alias RepeatNotes.Users
+  alias RepeatNotes.Encryption.AES
   alias RepeatNotes.Utils.Timestamp
 
   @limit 100
@@ -96,6 +97,16 @@ defmodule RepeatNotes.Cards do
       {_, _}, dynamic ->
         # Not a where parameter
         dynamic
+    end)
+  end
+
+  @spec decrypt_notes_content([Card.t()], String.t()) :: [Card.t()]
+  def decrypt_notes_content(cards, secret_key) do
+    cards
+    |> Enum.map(fn card ->
+      note = card.note
+      content = AES.decrypt(note.content, secret_key)
+      struct(card, %{note: struct(note, %{content: content})})
     end)
   end
 end

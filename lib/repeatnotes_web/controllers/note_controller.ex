@@ -10,7 +10,10 @@ defmodule RepeatNotesWeb.NoteController do
   @spec index(Plug.Conn.t(), map) :: Plug.Conn.t()
   def index(conn, params) do
     with %User{id: user_id} <- conn.assigns.current_user do
-      notes = Notes.list_notes(user_id, params)
+      notes =
+        Notes.list_notes(user_id, params)
+        |> Notes.decrypt_notes_content(conn.private[:secret_key])
+
       render(conn, "index.json", notes: notes)
     end
   end
@@ -18,7 +21,10 @@ defmodule RepeatNotesWeb.NoteController do
   @spec create(Plug.Conn.t(), map) :: Plug.Conn.t()
   def create(conn, %{"note" => params}) do
     with %User{id: user_id} <- conn.assigns.current_user do
-      note_params = params |> Map.merge(%{"user_id" => user_id})
+      note_params =
+        params
+        |> Map.merge(%{"user_id" => user_id})
+        |> Notes.encrypt_note_content(conn.private[:secret_key])
 
       conn
       |> note_with_card_transaction(note_params)
@@ -53,14 +59,20 @@ defmodule RepeatNotesWeb.NoteController do
 
   @spec show(Plug.Conn.t(), map) :: Plug.Conn.t()
   def show(conn, %{"id" => id}) do
-    note = Notes.get_note!(id)
+    note =
+      Notes.get_note!(id)
+      |> Notes.decrypt_note_content(conn.private[:secret_key])
+
     render(conn, "show.json", note: note)
   end
 
   @spec random(Plug.Conn.t(), map) :: Plug.Conn.t()
   def random(conn, _params) do
     with %User{id: user_id} <- conn.assigns.current_user do
-      notes = Notes.random_notes(user_id)
+      notes =
+        Notes.random_notes(user_id)
+        |> Notes.decrypt_notes_content(conn.private[:secret_key])
+
       render(conn, "index.json", notes: notes)
     end
   end
@@ -69,6 +81,7 @@ defmodule RepeatNotesWeb.NoteController do
   def update(conn, %{"id" => id, "note" => note_params}) do
     with %User{id: user_id} <- conn.assigns.current_user do
       note = Notes.get_note!(id, user_id)
+      note_params = note_params |> Notes.encrypt_note_content(conn.private[:secret_key])
 
       case Notes.update_note(note, note_params) do
         {:ok, %Note{} = note} ->

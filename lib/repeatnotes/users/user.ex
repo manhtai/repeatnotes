@@ -17,6 +17,9 @@ defmodule RepeatNotes.Users.User do
     field(:email_confirmation_token, :string)
     field(:email_confirmed_at, :utc_datetime)
 
+    field(:secret_hash, :string)
+    field(:backup_hash, :string)
+
     field(:role, :string, default: Roles.member())
     belongs_to(:account, Account, type: :binary_id)
 
@@ -28,7 +31,7 @@ defmodule RepeatNotes.Users.User do
   def changeset(user_or_changeset, attrs) do
     user_or_changeset
     |> pow_changeset(attrs)
-    |> cast(attrs, [:account_id, :role])
+    |> cast(attrs, [:account_id, :role, :secret_hash, :backup_hash])
     |> validate_required([:account_id])
   end
 

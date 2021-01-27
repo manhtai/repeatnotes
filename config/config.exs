@@ -33,6 +33,30 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
+# run shell command to "source .env" to load the environment variables.
+# wrap in "try do"
+try do
+  # in case .env file does not exist.
+  File.stream!("./.env")
+  # remove excess whitespace
+  |> Stream.map(&String.trim_trailing/1)
+  # loop through each line
+  |> Enum.each(fn line ->
+    line
+    # remove "export" from line
+    |> String.replace("export ", "")
+    # split on *first* "=" (equals sign)
+    |> String.split("=", parts: 2)
+    # stackoverflow.com/q/33055834/1148249
+    |> Enum.reduce(fn value, key ->
+      # set each environment variable
+      System.put_env(key, value)
+    end)
+  end)
+rescue
+  _ -> IO.puts("no .env file found!")
+end
+
 # Mailers
 sib_api_key = System.get_env("SENDINBLUE_API_KEY")
 

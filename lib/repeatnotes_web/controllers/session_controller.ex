@@ -7,6 +7,7 @@ defmodule RepeatNotesWeb.SessionController do
   @spec create(Conn.t(), map()) :: Conn.t()
   def create(conn, %{"user" => user_params}) do
     conn
+    |> Conn.put_private(:password, user_params["password"])
     |> Pow.Plug.authenticate_user(user_params)
     |> case do
       {:ok, conn} ->

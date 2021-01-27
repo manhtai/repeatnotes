@@ -5,6 +5,7 @@ defmodule RepeatNotesWeb.APIAuthPlug do
   alias Plug.Conn
   alias Pow.{Config, Plug, Store.CredentialsCache}
   alias PowPersistentSession.Store.PersistentSessionCache
+  alias RepeatNotes.{Encryption.Pbkdf2, Encryption.AES}
 
   @impl true
   @spec fetch(Conn.t(), Config.t()) :: {Conn.t(), map() | nil}
@@ -21,8 +22,15 @@ defmodule RepeatNotesWeb.APIAuthPlug do
     |> store_config()
     |> CredentialsCache.get(token)
     |> case do
-      :not_found -> {conn, nil}
-      {user, _metadata} -> {conn, user}
+      :not_found ->
+        {conn, nil}
+
+      {user, metadata} ->
+        case metadata do
+          [secret_key: secret_key] ->
+            conn = conn |> Conn.put_private(:secret_key, secret_key)
+            {conn, user}
+        end
     end
   end
 
@@ -33,14 +41,38 @@ defmodule RepeatNotesWeb.APIAuthPlug do
     token = Pow.UUID.generate()
     renew_token = Pow.UUID.generate()
 
+    # Check for :secret_key first, then :password
+    secret_key =
+      case conn.private[:secret_key] do
+        nil ->
+          case Pbkdf2.generate_secret_hash(conn.private[:password]) do
+            %{:secret_key => secret_key} -> secret_key
+          end
+
+        key ->
+          key
+      end
+
+    encrypt_key = Pbkdf2.generate_encrypt_key_from_token(renew_token, signing_salt())
+    encrypted_key = AES.encrypt(secret_key, encrypt_key)
 
     conn =
       conn
       |> Conn.put_private(:api_auth_token, sign_token(conn, token, config))
       |> Conn.put_private(:api_renew_token, sign_token(conn, renew_token, config))
+      |> Conn.put_private(:secret_key, secret_key)
 
-    CredentialsCache.put(store_config, token, {user, []})
-    PersistentSessionCache.put(store_config, renew_token, {[id: user.id], []})
+    CredentialsCache.put(
+      store_config,
+      token,
+      {user, [secret_key: secret_key]}
+    )
+
+    PersistentSessionCache.put(
+      store_config,
+      renew_token,
+      {[id: user.id], [encrypted_key: encrypted_key]}
+    )
 
     {conn, user}
   end
@@ -70,8 +102,21 @@ defmodule RepeatNotesWeb.APIAuthPlug do
     PersistentSessionCache.delete(store_config, renew_token)
 
     case res do
-      :not_found -> {conn, nil}
-      res -> load_and_create_session(conn, res, config)
+      :not_found ->
+        {conn, nil}
+
+      res ->
+        conn =
+          case res do
+            {_clauses, [encrypted_key: encrypted_key]} ->
+              encrypt_key = Pbkdf2.generate_encrypt_key_from_token(renew_token, signing_salt())
+              Conn.put_private(conn, :secret_key, AES.decrypt(encrypted_key, encrypt_key))
+
+            _ ->
+              conn
+          end
+
+        load_and_create_session(conn, res, config)
     end
   end
 

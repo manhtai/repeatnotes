@@ -65,7 +65,7 @@
       "prettier --write"
     ],
     "../**/*.{ex,exs}": [
-      "mix format"
+      "mix format && mix test"
     ]
   },
   "browserslist": {
