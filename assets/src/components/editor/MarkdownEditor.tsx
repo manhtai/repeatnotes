@@ -85,6 +85,9 @@ export default function Editor(props: Props) {
         writeButton: {
           className: 'hidden',
         },
+        textArea: {
+          onBlur: () => setSelectedTab('preview'),
+        },
       }}
       paste={{
         saveImage: save,

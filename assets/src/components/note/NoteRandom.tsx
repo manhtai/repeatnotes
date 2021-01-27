@@ -26,7 +26,7 @@ export default function NoteRandom() {
   }
 
   return (
-    <div className="mt-5 border rounded shadow">
+    <div className="max-w-xl m-5 mx-auto border rounded shadow min-w-1/4">
       <NoteEdit
         noteId={note.id}
         noteContent={note.content}

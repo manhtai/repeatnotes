@@ -125,7 +125,7 @@ function CardReview() {
   }
 
   return (
-    <div className="mt-5">
+    <div className="max-w-xl mx-auto mt-5">
       {!card ? (
         <div className="px-4 py-3 border rounded shadow">
           No card to learn for now, come back here later.
