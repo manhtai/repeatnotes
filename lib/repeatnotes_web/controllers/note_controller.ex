@@ -112,8 +112,10 @@ defmodule RepeatNotesWeb.NoteController do
         conn
         |> put_status(:ok)
         |> json(%{
-          file_name: file_name,
-          file_path: FileUploader.url({file_name, scope})
+          data: %{
+            file_name: file_name,
+            file_path: FileUploader.url({file_name, scope})
+          }
         })
 
       {:error, errors} ->

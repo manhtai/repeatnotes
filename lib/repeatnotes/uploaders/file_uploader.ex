@@ -5,7 +5,7 @@ defmodule RepeatNotes.FileUploader do
   # use Waffle.Ecto.Definition
 
   @versions [:original]
-  @extensions_whitelist ~w(.jpg .jpeg .gif .png .svg .mp3)
+  @extensions_whitelist ~w(.jpg .jpeg .gif .png .svg)
 
   # To add a thumbnail version:
   # @versions [:original, :thumb]

@@ -220,3 +220,11 @@ export const updateNote = async (
     .send(updates)
     .then((res) => res.body.data);
 };
+
+export const uploadFile = async (file: File, token = getAccessToken()) => {
+  return request
+    .post(`/api/upload`)
+    .set('Authorization', token || '')
+    .attach('file', file)
+    .then((res) => res.body.data);
+};
