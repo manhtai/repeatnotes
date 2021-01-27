@@ -51,10 +51,6 @@ defmodule RepeatNotesWeb.RegistrationController do
 
         case Pow.Plug.create_user(conn, user) do
           {:ok, _user, conn} ->
-            conn =
-              conn
-              |> Conn.put_private(:secret_key, secret_key)
-
             {:ok, conn}
 
           {:error, reason, _conn} ->

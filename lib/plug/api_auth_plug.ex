@@ -45,9 +45,7 @@ defmodule RepeatNotesWeb.APIAuthPlug do
     secret_key =
       case conn.private[:secret_key] do
         nil ->
-          case Pbkdf2.generate_secret_hash(conn.private[:password]) do
-            %{:secret_key => secret_key} -> secret_key
-          end
+          Pbkdf2.get_secret_key(conn.private[:password], user.secret_hash)
 
         key ->
           key
