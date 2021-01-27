@@ -19,6 +19,12 @@ defmodule RepeatNotes.Encryption.Pbkdf2 do
     }
   end
 
+  @spec generate_encrypt_key_from_token(String.t(), String.t()) :: String.t()
+  def generate_encrypt_key_from_token(token, salt) do
+    key = Pbkdf2.generate(token, salt, @iterations, @key_length, @digest)
+    :base64.encode(key)
+  end
+
   @spec get_secret_key(String.t(), String.t()) :: String.t()
   def get_secret_key(password, secret_hash) do
     [_, _, salt, surrogate_key] = decode(secret_hash)

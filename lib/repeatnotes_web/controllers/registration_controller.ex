@@ -3,7 +3,7 @@ defmodule RepeatNotesWeb.RegistrationController do
   alias Ecto.Changeset
   alias RepeatNotesWeb.ErrorHelpers
 
-  alias RepeatNotes.{Accounts, Users.Roles, Encryption.Pbkdf2, Encryption.AES}
+  alias RepeatNotes.{Accounts, Users.Roles, Encryption.Pbkdf2}
 
   alias Plug.Conn
 
@@ -47,11 +47,13 @@ defmodule RepeatNotesWeb.RegistrationController do
             "secret_hash" => secret_hash
           })
 
+        conn = conn |> Conn.put_private(:secret_key, secret_key)
+
         case Pow.Plug.create_user(conn, user) do
           {:ok, _user, conn} ->
             conn =
               conn
-              |> Conn.put_private(:encrypted_key, AES.encrypt(secret_key))
+              |> Conn.put_private(:secret_key, secret_key)
 
             {:ok, conn}
 
@@ -66,8 +68,7 @@ defmodule RepeatNotesWeb.RegistrationController do
     json(conn, %{
       data: %{
         token: conn.private[:api_auth_token],
-        renew_token: conn.private[:api_renew_token],
-        encrypted_key: conn.private[:encrypted_key]
+        renew_token: conn.private[:api_renew_token]
       }
     })
   end
