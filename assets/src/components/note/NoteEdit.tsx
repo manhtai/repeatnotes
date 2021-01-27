@@ -25,6 +25,7 @@ export default function NoteEdit(props: Props) {
   const [id, setId] = useState(noteId || '');
 
   const upsertFunc = (oldNote: Note, newContent: string) => {
+    setSync(SyncStatus.Syncing);
     if (!id && newContent.trim()) {
       API.createNote({note: {content: newContent}}).then(
         (note: Note) => {
@@ -59,8 +60,6 @@ export default function NoteEdit(props: Props) {
   const debounceUpsert = useCallback(debounce(upsertFunc, 500), []);
 
   const upsertNote = (id: string, newContent: string) => {
-    setSync(SyncStatus.Syncing);
-
     // For revert if things go wrong
     const oldNote = {id, content};
 
