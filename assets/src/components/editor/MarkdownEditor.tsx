@@ -73,7 +73,7 @@ export default function Editor(props: Props) {
       }}
       l18n={{
         write: 'Write',
-        preview: 'Done',
+        preview: 'Preview',
         uploadingImage: 'Uploading image...',
         pasteDropSelect:
           'Attach files by dragging & dropping, selecting or pasting them.',

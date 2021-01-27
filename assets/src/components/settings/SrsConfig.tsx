@@ -22,24 +22,22 @@ function SrsConfigPage() {
     });
   }, []);
 
-  // FIXME: Why does this useCallback raise warning?
+  const updateFunc = (srs_config: any) => {
+    setSync(SyncStatus.Syncing);
+    API.updateSrsConfig({srs_config}).then(
+      () => {
+        loadSm2(srs_config);
+        setSync(SyncStatus.Success);
+      },
+      (err) => {
+        logger.error(err);
+        setSync(SyncStatus.Error);
+      }
+    );
+  };
+
   // eslint-disable-next-line
-  const debounceUpdate = useCallback(
-    debounce((srs_config) => {
-      setSync(SyncStatus.Syncing);
-      API.updateSrsConfig({srs_config}).then(
-        () => {
-          loadSm2(srs_config);
-          setSync(SyncStatus.Success);
-        },
-        (err) => {
-          logger.error(err);
-          setSync(SyncStatus.Error);
-        }
-      );
-    }, 500),
-    [setSync]
-  );
+  const debounceUpdate = useCallback(debounce(updateFunc, 500), []);
 
   useEffect(() => {
     debounceUpdate(config);

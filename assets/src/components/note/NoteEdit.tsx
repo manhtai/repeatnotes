@@ -1,9 +1,10 @@
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useCallback} from 'react';
 import {Note, EditorTab, SyncStatus} from 'src/libs/types';
 import * as API from 'src/libs/api';
 import logger from 'src/libs/logger';
 import Editor from 'src/components/editor/MarkdownEditor';
 import {useGlobal} from 'src/components/global/GlobalProvider';
+import debounce from 'lodash/debounce';
 
 type Props = {
   noteId?: string;
@@ -23,16 +24,7 @@ export default function NoteEdit(props: Props) {
   const [content, setContent] = useState(noteContent || '');
   const [id, setId] = useState(noteId || '');
 
-  const upsertNote = (id: string, newContent: string) => {
-    setSync(SyncStatus.Syncing);
-
-    // For revert if things go wrong
-    const oldNote = {id, content};
-
-    // Optimistically set forward
-    setContent(newContent);
-    setNote && setNote({id, content: newContent});
-
+  const upsertFunc = (oldNote: Note, newContent: string) => {
     if (!id && newContent.trim()) {
       API.createNote({note: {content: newContent}}).then(
         (note: Note) => {
@@ -61,6 +53,22 @@ export default function NoteEdit(props: Props) {
         }
       );
     }
+  };
+
+  // eslint-disable-next-line
+  const debounceUpsert = useCallback(debounce(upsertFunc, 500), []);
+
+  const upsertNote = (id: string, newContent: string) => {
+    setSync(SyncStatus.Syncing);
+
+    // For revert if things go wrong
+    const oldNote = {id, content};
+
+    // Optimistically set forward
+    setContent(newContent);
+    setNote && setNote({id, content: newContent});
+
+    debounceUpsert(oldNote, newContent);
   };
 
   const changeTab = (tab: EditorTab) => {

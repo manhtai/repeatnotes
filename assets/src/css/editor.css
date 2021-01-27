@@ -15,8 +15,7 @@
   border-radius: 9999px;
   margin: 7px 5px;
   padding: 4px 10px;
-  background-color: rgb(99, 102, 241);
-  color: white;
+  color: rgb(99, 102, 241);
   border: 1px solid rgb(99, 102, 241);
   cursor: pointer;
 }

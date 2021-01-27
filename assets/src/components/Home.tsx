@@ -241,7 +241,7 @@ function HomePage() {
                 leaveFrom="opacity-100"
                 leaveTo="opacity-0 absolute inset-0"
               >
-                <section className="max-w-2xl px-4 mx-auto">
+                <section className="px-4 mx-auto max-w-screen-xl">
                   <Component />
                 </section>
               </Transition>

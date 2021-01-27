@@ -26,12 +26,15 @@ export default function NoteList() {
   }
 
   return (
-    <>
+    <div className="flex flex-wrap">
       {notes.map((note: Note) => (
-        <div className="mt-5 border rounded shadow" key={note.id}>
+        <div
+          className="max-w-xl m-2 border rounded shadow min-w-sm space-x-2 space-y-2"
+          key={note.id}
+        >
           <NoteEdit noteId={note.id} noteContent={note.content} />
         </div>
       ))}
-    </>
+    </div>
   );
 }
