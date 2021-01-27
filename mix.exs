@@ -45,11 +45,18 @@ defmodule RepeatNotes.MixProject do
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
+      # Auth
       {:pow, "~> 1.0.21"},
       {:pow_postgres_store, "~> 1.0.0-rc2"},
+      # Send email
       {:swoosh, "~> 1.0"},
       {:hackney, "~> 1.16"},
-      {:mail, "~> 0.2"}
+      {:mail, "~> 0.2"},
+      # S3 upload
+      {:waffle, "~> 1.1"},
+      {:ex_aws, "~> 2.1"},
+      {:ex_aws_s3, "~> 2.1"},
+      {:sweet_xml, "~> 0.6"}
     ]
   end
 

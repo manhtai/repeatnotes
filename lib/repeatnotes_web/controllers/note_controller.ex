@@ -5,6 +5,7 @@ defmodule RepeatNotesWeb.NoteController do
   alias RepeatNotes.Users.User
   alias RepeatNotes.Notes
   alias RepeatNotes.Notes.Note
+  alias RepeatNotes.FileUploader
   alias RepeatNotesWeb.ErrorHelpers
 
   @spec index(Plug.Conn.t(), map) :: Plug.Conn.t()
@@ -96,6 +97,29 @@ defmodule RepeatNotesWeb.NoteController do
           |> put_status(400)
           |> json(%{error: %{status: 400, message: "Couldn't update note", errors: errors}})
       end
+    end
+  end
+
+  @spec upload(Plug.Conn.t(), map) :: Plug.Conn.t()
+  def upload(conn, %{"file" => file}) do
+    scope = %{
+      file_name: Ecto.UUID.generate(),
+      id: conn.assigns.current_user.id
+    }
+
+    case FileUploader.store({file, scope}) do
+      {:ok, file_name} ->
+        conn
+        |> put_status(:ok)
+        |> json(%{
+          file_name: file_name,
+          file_path: FileUploader.url({file_name, scope})
+        })
+
+      {:error, errors} ->
+        conn
+        |> put_status(400)
+        |> json(%{error: %{status: 400, message: "Couldn't upload file", errors: errors}})
     end
   end
 end
