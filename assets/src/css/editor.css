@@ -15,9 +15,8 @@
   border-radius: 9999px;
   margin: 7px 5px;
   padding: 4px 10px;
-  background-color: rgb(99, 102, 241);
-  color: white;
-  border: 1px solid rgb(99, 102, 241);
+  color: #242729;
+  border: 1px solid #242729;
   cursor: pointer;
 }
 .mde-header .mde-tabs button:hover {

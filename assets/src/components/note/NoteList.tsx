@@ -28,7 +28,10 @@ export default function NoteList() {
   return (
     <>
       {notes.map((note: Note) => (
-        <div className="mt-5 border rounded shadow" key={note.id}>
+        <div
+          className="max-w-xl m-5 mx-auto border rounded shadow min-w-1/4"
+          key={note.id}
+        >
           <NoteEdit noteId={note.id} noteContent={note.content} />
         </div>
       ))}

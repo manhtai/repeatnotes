@@ -2,7 +2,10 @@ import ReactMde from 'react-mde';
 import ReactMarkdown from 'react-markdown';
 import {getDefaultToolbarCommands} from 'react-mde';
 import {EditorTab} from 'src/libs/types';
+import * as API from 'src/libs/api';
+import logger from 'src/libs/logger';
 import Tex from '@matejmazur/react-katex';
+
 import 'katex/dist/katex.min.css';
 
 import 'src/css/editor.css';
@@ -27,25 +30,16 @@ export default function Editor(props: Props) {
   const {content, setContent, selectedTab, setSelectedTab} = props;
 
   const save = async function* (data: any) {
-    // Promise that waits for "time" milliseconds
-    const wait = function (time: number) {
-      return new Promise((a: any, r) => {
-        setTimeout(() => a(), time);
-      });
-    };
-
-    // Upload "data" to your server
-    // Use XMLHttpRequest.send to send a FormData object containing
-    // "data"
-    // Check this question: https://stackoverflow.com/questions/18055422/how-to-receive-php-image-data-over-copy-n-paste-javascript-with-xmlhttprequest
-
-    await wait(2000);
-    // yields the URL that should be inserted in the markdown
-    yield 'https://picsum.photos/300';
-    await wait(2000);
-
-    // returns true meaning that the save was successful
-    return true;
+    // FIXME: Change file name here
+    const file = new File([data], 'image.jpg', {type: 'image/jpeg'});
+    try {
+      const res = await API.uploadFile(file);
+      yield res.file_path;
+      return true;
+    } catch (err) {
+      logger.error(err);
+      return false;
+    }
   };
 
   return (
@@ -73,7 +67,7 @@ export default function Editor(props: Props) {
       }}
       l18n={{
         write: 'Write',
-        preview: 'Done',
+        preview: 'Preview',
         uploadingImage: 'Uploading image...',
         pasteDropSelect:
           'Attach files by dragging & dropping, selecting or pasting them.',
