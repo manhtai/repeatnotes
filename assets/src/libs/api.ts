@@ -27,12 +27,6 @@ export const getRefreshToken = (): string | null => {
   return (tokens && tokens.renew_token) || null;
 };
 
-export const getEncryptedKey = (): string | null => {
-  const tokens = getAuthTokens();
-
-  return (tokens && tokens.encrypted_key) || null;
-};
-
 export const register = async ({email, password}: RegisterParams) => {
   return request
     .post(`/api/registration`)
@@ -72,7 +66,6 @@ export const renew = async (token = getRefreshToken()) => {
   return request
     .post(`/api/session/renew`)
     .set('Authorization', token)
-    .send({encrypted_key: getEncryptedKey()})
     .then((res) => res.body.data);
 };
 
@@ -182,7 +175,6 @@ export const fetchAllNotes = async (token = getAccessToken()) => {
 
   return request
     .get('/api/notes')
-    .query({encrypted_key: getEncryptedKey()})
     .set('Authorization', token)
     .then((res) => res.body.data);
 };
@@ -190,7 +182,6 @@ export const fetchAllNotes = async (token = getAccessToken()) => {
 export const fetchNoteById = async (id: string, token = getAccessToken()) => {
   return request
     .get(`/api/notes/${id}`)
-    .query({encrypted_key: getEncryptedKey()})
     .set('Authorization', token || '')
     .then((res) => res.body.data);
 };
@@ -198,7 +189,6 @@ export const fetchNoteById = async (id: string, token = getAccessToken()) => {
 export const fetchRandomNote = async (token = getAccessToken()) => {
   return request
     .get(`/api/random`)
-    .query({encrypted_key: getEncryptedKey()})
     .set('Authorization', token || '')
     .then((res) => res.body.data);
 };
@@ -211,7 +201,7 @@ export const createNote = async (data: any, token = getAccessToken()) => {
   return request
     .post('/api/notes')
     .set('Authorization', token)
-    .send({...data, encrypted_key: getEncryptedKey()})
+    .send(data)
     .then((res) => res.body.data);
 };
 
@@ -227,6 +217,6 @@ export const updateNote = async (
   return request
     .put(`/api/notes/${id}`)
     .set('Authorization', token)
-    .send({...updates, encrypted_key: getEncryptedKey()})
+    .send(updates)
     .then((res) => res.body.data);
 };

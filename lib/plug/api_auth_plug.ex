@@ -22,8 +22,15 @@ defmodule RepeatNotesWeb.APIAuthPlug do
     |> store_config()
     |> CredentialsCache.get(token)
     |> case do
-      :not_found -> {conn, nil}
-      {user, _metadata} -> {conn, user}
+      :not_found ->
+        {conn, nil}
+
+      {user, metadata} ->
+        case metadata do
+          [secret_key: secret_key] ->
+            conn = conn |> Conn.put_private(:secret_key, secret_key)
+            {conn, user}
+        end
     end
   end
 
@@ -53,6 +60,7 @@ defmodule RepeatNotesWeb.APIAuthPlug do
       conn
       |> Conn.put_private(:api_auth_token, sign_token(conn, token, config))
       |> Conn.put_private(:api_renew_token, sign_token(conn, renew_token, config))
+      |> Conn.put_private(:secret_key, secret_key)
 
     CredentialsCache.put(
       store_config,

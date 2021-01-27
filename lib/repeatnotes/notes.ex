@@ -3,6 +3,7 @@ defmodule RepeatNotes.Notes do
 
   alias RepeatNotes.Repo
   alias RepeatNotes.Notes.Note
+  alias RepeatNotes.Encryption.AES
 
   @max_return 200
   @random_return 10
@@ -49,5 +50,26 @@ defmodule RepeatNotes.Notes do
     note
     |> Note.changeset(attrs)
     |> Repo.update()
+  end
+
+  @spec encrypt_note_content(map, String.t()) :: map()
+  def encrypt_note_content(note, secret_key) do
+    content = AES.encrypt(note["content"], secret_key)
+    note |> Map.merge(%{"content" => content})
+  end
+
+  @spec decrypt_notes_content([Note.t()], String.t()) :: [Note.t()]
+  def decrypt_notes_content(notes, secret_key) do
+    notes
+    |> Enum.map(fn note ->
+      content = AES.decrypt(note.content, secret_key)
+      struct(note, %{content: content})
+    end)
+  end
+
+  @spec decrypt_note_content(Note.t(), String.t()) :: Note.t()
+  def decrypt_note_content(note, secret_key) do
+    content = AES.decrypt(note.content, secret_key)
+    struct(note, %{content: content})
   end
 end

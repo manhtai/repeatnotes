@@ -5,30 +5,26 @@ defmodule RepeatNotesWeb.NoteController do
   alias RepeatNotes.Users.User
   alias RepeatNotes.Notes
   alias RepeatNotes.Notes.Note
-  alias RepeatNotes.Encryption.AES
   alias RepeatNotesWeb.ErrorHelpers
-  alias RepeatNotes.Utils.StringUtil
 
   @spec index(Plug.Conn.t(), map) :: Plug.Conn.t()
-  def index(conn, %{"encrypted_key" => encrypted_key} = params) do
+  def index(conn, params) do
     with %User{id: user_id} <- conn.assigns.current_user do
-      IO.puts(encrypted_key)
-
       notes =
         Notes.list_notes(user_id, params)
-        |> decrypt_notes_content(encrypted_key)
+        |> Notes.decrypt_notes_content(conn.private[:secret_key])
 
       render(conn, "index.json", notes: notes)
     end
   end
 
   @spec create(Plug.Conn.t(), map) :: Plug.Conn.t()
-  def create(conn, %{"note" => params, "encrypted_key" => encrypted_key}) do
+  def create(conn, %{"note" => params}) do
     with %User{id: user_id} <- conn.assigns.current_user do
       note_params =
         params
         |> Map.merge(%{"user_id" => user_id})
-        |> encrypt_note_content(encrypted_key)
+        |> Notes.encrypt_note_content(conn.private[:secret_key])
 
       conn
       |> note_with_card_transaction(note_params)
@@ -62,30 +58,30 @@ defmodule RepeatNotesWeb.NoteController do
   end
 
   @spec show(Plug.Conn.t(), map) :: Plug.Conn.t()
-  def show(conn, %{"id" => id, "encrypted_key" => encrypted_key}) do
+  def show(conn, %{"id" => id}) do
     note =
       Notes.get_note!(id)
-      |> decrypt_note_content(encrypted_key)
+      |> Notes.decrypt_note_content(conn.private[:secret_key])
 
     render(conn, "show.json", note: note)
   end
 
   @spec random(Plug.Conn.t(), map) :: Plug.Conn.t()
-  def random(conn, params) do
+  def random(conn, _params) do
     with %User{id: user_id} <- conn.assigns.current_user do
       notes =
         Notes.random_notes(user_id)
-        |> decrypt_notes_content(params["encrypted_key"])
+        |> Notes.decrypt_notes_content(conn.private[:secret_key])
 
       render(conn, "index.json", notes: notes)
     end
   end
 
   @spec update(Plug.Conn.t(), map) :: Plug.Conn.t()
-  def update(conn, %{"id" => id, "note" => note_params, "encrypted_key" => encrypted_key}) do
+  def update(conn, %{"id" => id, "note" => note_params}) do
     with %User{id: user_id} <- conn.assigns.current_user do
       note = Notes.get_note!(id, user_id)
-      note_params = note_params |> encrypt_note_content(encrypted_key)
+      note_params = note_params |> Notes.encrypt_note_content(conn.private[:secret_key])
 
       case Notes.update_note(note, note_params) do
         {:ok, %Note{} = note} ->
@@ -100,43 +96,6 @@ defmodule RepeatNotesWeb.NoteController do
           |> put_status(400)
           |> json(%{error: %{status: 400, message: "Couldn't update note", errors: errors}})
       end
-    end
-  end
-
-  @spec encrypt_note_content(map, String.t()) :: map()
-  defp encrypt_note_content(note, encrypted_key) do
-    if StringUtil.blank?(encrypted_key) do
-      note
-    else
-      secret_key = AES.decrypt(encrypted_key)
-      content = AES.encrypt(note["content"], secret_key)
-      note |> Map.merge(%{"content" => content})
-    end
-  end
-
-  @spec decrypt_notes_content([Note.t()], String.t()) :: [Note.t()]
-  defp decrypt_notes_content(notes, encrypted_key) do
-    if StringUtil.blank?(encrypted_key) do
-      notes
-    else
-      secret_key = AES.decrypt(encrypted_key)
-
-      notes
-      |> Enum.map(fn note ->
-        content = AES.decrypt(note.content, secret_key)
-        struct(note, %{content: content})
-      end)
-    end
-  end
-
-  @spec decrypt_note_content(Note.t(), String.t()) :: Note.t()
-  defp decrypt_note_content(note, encrypted_key) do
-    if StringUtil.blank?(encrypted_key) do
-      note
-    else
-      secret_key = AES.decrypt(encrypted_key)
-      content = AES.decrypt(note.content, secret_key)
-      struct(note, %{content: content})
     end
   end
 end
