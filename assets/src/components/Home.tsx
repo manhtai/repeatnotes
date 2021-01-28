@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {
+  CogOutline,
   TrashOutline,
   TagOutline,
   ClockOutline,
@@ -150,7 +151,6 @@ function HomePage() {
   const globalContext = useGlobal();
 
   const settingsRoutes = [
-    {path: '/settings/config', name: 'Configuration', Component: SrsConfig},
     {path: '/settings/account', name: 'Account', Component: Account},
     {path: '/settings/billing', name: 'Billing', Component: Billing},
   ];
@@ -161,6 +161,7 @@ function HomePage() {
     {path: '/stats', name: 'Stats', Component: NoteRandom},
     {path: '/new', name: 'New', Component: NoteNew},
     {path: '/review', name: 'Review', Component: CardReview},
+    {path: '/config', name: 'Configuration', Component: SrsConfig},
     {path: '/', name: 'Review', Component: NoteHome},
     ...settingsRoutes,
   ];
@@ -168,25 +169,27 @@ function HomePage() {
   const topNavBar = [
     {path: '/review', name: 'Review', Icon: ClockOutline},
     {path: '/random', name: 'Random', Icon: LightningBoltOutline},
-    {path: '/stats', name: 'Stats', Icon: ChartBarOutline},
+    {path: '/random', name: 'Stats', Icon: ChartBarOutline},
+    {path: '/config', name: 'Config', Icon: CogOutline},
   ];
 
   const bottomNavBar = [
-    {path: '/review', name: 'Review', Icon: LightningBoltOutline},
+    {path: '/review', name: 'Review', Icon: ClockOutline},
     {path: '/new', name: 'New', Icon: PlusCircleOutline},
-    {path: '/notes', name: 'Notes', Icon: ArchiveOutline},
-    {path: '/random', name: 'Random', Icon: LightBulbOutline},
+    {path: '/random', name: 'Stats', Icon: ChartBarOutline},
+    {path: '/config', name: 'Config', Icon: CogOutline},
   ];
 
   return (
     <div className="flex flex-col w-full mx-auto sm:text-sm">
       {/* Top bar nav */}
-      <nav className="fixed flex flex-shrink-0 w-full px-4 mb-16 overflow-x-auto text-sm bg-gray-100 border-b h-14">
+      <nav className="fixed z-10 flex flex-shrink-0 w-full px-4 mb-16 overflow-x-auto text-sm bg-gray-100 border-b h-14">
         <ul className="flex items-center px-2">
           <li>
             {globalContext.sync === SyncStatus.Syncing ? (
               <span className="flex items-end text-indigo-500">
-                <RefreshOutline className="mr-1 animate-reverse-spin" /> Saving
+                <RefreshOutline className="mr-1 animate-reverse-spin" />{' '}
+                Syncing...
               </span>
             ) : globalContext.sync === SyncStatus.Error ? (
               <span className="flex items-end text-red-500">
@@ -194,7 +197,7 @@ function HomePage() {
               </span>
             ) : (
               <span className="flex items-end text-green-500">
-                <CheckCircleOutline className="mr-1" /> Saved
+                <CheckCircleOutline className="mr-1" /> Synced
               </span>
             )}
           </li>
@@ -226,7 +229,7 @@ function HomePage() {
 
         {/* Main components */}
         <main
-          className="relative w-full mt-16 mb-16 overflow-y-auto "
+          className="relative w-full mt-16 mb-16 overflow-y-auto"
           style={{height: 'calc(100% - 4rem)'}}
         >
           {routes.map(({path, Component}) => (
