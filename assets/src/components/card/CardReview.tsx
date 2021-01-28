@@ -14,46 +14,42 @@ type AnswerProps = {
   nextInterval: (card: Card, choice: Choice) => string;
 };
 
+const getAnswerButtonClass = (color: string) => {
+  return `flex-0 w-full px-1 py-0 mb-1 mr-1 font-bold text-${color}-700 border-2 border-${color}-700 rounded-full outline-none hover:text-${color}-600 hover:border-${color}-600 active:text-${color}-500 active:border-${color}-500 focus:outline-none`;
+};
+
 function Answer(props: AnswerProps) {
   const {card, config, answerCard, nextInterval} = props;
 
   return (
-    <div className="flex items-center justify-center p-2 mt-2">
+    <div className="flex items-center justify-center p-2 mt-2 text-xs md:text-sm">
       <button
-        className="flex-1 w-full px-3 py-1 mb-1 mr-1 font-bold text-gray-200 bg-red-700 rounded-full outline-none active:bg-red-500 hover:bg-red-600 focus:outline-none"
+        className={getAnswerButtonClass('red')}
         onClick={() => answerCard(card, Choice.Again)}
       >
-        Again
-        {config?.show_next_due && (
-          <span> ({nextInterval(card, Choice.Again)})</span>
-        )}
+        Forgot
+        {config?.show_next_due && <p> ({nextInterval(card, Choice.Again)})</p>}
       </button>
       <button
-        className="flex-1 w-full px-3 py-1 mb-1 mr-1 font-bold text-gray-200 bg-yellow-700 rounded-full outline-none active:bg-yellow-500 hover:bg-yellow-600 focus:outline-none"
+        className={getAnswerButtonClass('yellow')}
         onClick={() => answerCard(card, Choice.Hard)}
       >
         Hard
-        {config?.show_next_due && (
-          <span> ({nextInterval(card, Choice.Hard)})</span>
-        )}
+        {config?.show_next_due && <p> ({nextInterval(card, Choice.Hard)})</p>}
       </button>
       <button
-        className="flex-1 w-full px-3 py-1 mb-1 mr-1 font-bold text-gray-100 bg-green-700 rounded-full outline-none active:bg-green-500 hover:bg-green-600 focus:outline-none"
+        className={getAnswerButtonClass('green')}
         onClick={() => answerCard(card, Choice.Ok)}
       >
         Good
-        {config?.show_next_due && (
-          <span> ({nextInterval(card, Choice.Ok)})</span>
-        )}
+        {config?.show_next_due && <p> ({nextInterval(card, Choice.Ok)})</p>}
       </button>
       <button
-        className="flex-1 w-full px-3 py-1 mb-1 mr-1 font-bold text-gray-100 bg-blue-700 rounded-full outline-none active:bg-blue-500 hover:bg-blue-600 focus:outline-none"
+        className={getAnswerButtonClass('indigo')}
         onClick={() => answerCard(card, Choice.Easy)}
       >
         Easy
-        {config?.show_next_due && (
-          <span> ({nextInterval(card, Choice.Easy)})</span>
-        )}
+        {config?.show_next_due && <p> ({nextInterval(card, Choice.Easy)})</p>}
       </button>
     </div>
   );
@@ -128,7 +124,7 @@ function CardReview() {
     <div className="max-w-xl mx-auto mt-5">
       {!card ? (
         <div className="px-4 py-3 border rounded shadow">
-          No card to learn for now, come back here later.
+          No card to review for now, come back later.
         </div>
       ) : (
         <div className="p-2 border rounded shadow">

@@ -44,7 +44,7 @@ function MenuItems(props: MenuProps) {
           role="menuitem"
         >
           <p>Signed in as</p>
-          <p className="font-semibold truncate">{auth.tokens.email}</p>
+          <p className="font-bold truncate">{auth.tokens.email}</p>
         </span>
       </div>
       <div className="border-t border-gray-200"></div>

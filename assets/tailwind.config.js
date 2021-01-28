@@ -55,7 +55,7 @@ module.exports = {
     require('@tailwindcss/forms'),
     plugin(function({ addBase, config }) {
       addBase({
-        'body': { color: config('theme.colors.gray.800') },
+        'body': { color: config('theme.colors.gray.700') },
       })
     }),
   ],

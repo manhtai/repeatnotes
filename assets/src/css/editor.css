@@ -13,10 +13,10 @@
 }
 .mde-header .mde-tabs button {
   border-radius: 9999px;
-  margin: 7px 5px;
+  margin: 8px 10px;
   padding: 4px 10px;
   color: #242729;
-  border: 1px solid #242729;
+  border: 1px solid #c8ccd0;
   cursor: pointer;
 }
 .mde-header .mde-tabs button:hover {
@@ -162,7 +162,7 @@
 }
 .mde-preview .mde-preview-content ul,
 .mde-preview .mde-preview-content ol {
-  padding-left: 2em;
+  padding-left: 1em;
 }
 .mde-preview .mde-preview-content blockquote {
   margin-left: 0;
@@ -251,8 +251,12 @@
   padding: 6px 13px;
   border: 1px solid #c8ccd0;
 }
-.mde-preview input {
+.mde-preview .mde-preview-content input {
   margin-right: 0.5em;
+}
+.mde-preview .mde-preview-content img {
+  margin: auto;
+  text-align: center;
 }
 
 .react-mde {

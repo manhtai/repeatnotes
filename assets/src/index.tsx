@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import '@fontsource/comic-mono';
+import '@fontsource/comic-mono/400.css';
+import '@fontsource/comic-mono/700.css';
 import {BrowserRouter} from 'react-router-dom';
 
 import {AuthProvider} from 'src/components/auth/AuthProvider';

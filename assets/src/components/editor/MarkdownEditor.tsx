@@ -5,6 +5,7 @@ import {EditorTab} from 'src/libs/types';
 import * as API from 'src/libs/api';
 import logger from 'src/libs/logger';
 import Tex from '@matejmazur/react-katex';
+import FileType from 'file-type/browser';
 
 import 'katex/dist/katex.min.css';
 
@@ -26,12 +27,25 @@ type Props = {
   setSelectedTab: (t: EditorTab) => void;
 };
 
+const supportedTypes = new Set(['jpg', 'jpeg', 'gif', 'png', 'xml']);
+
 export default function Editor(props: Props) {
   const {content, setContent, selectedTab, setSelectedTab} = props;
 
   const save = async function* (data: any) {
-    // FIXME: Change file name here
-    const file = new File([data], 'image.jpg', {type: 'image/jpeg'});
+    const fileType = await FileType.fromBuffer(data);
+    if (!fileType || !supportedTypes.has(fileType.ext)) {
+      return false;
+    }
+    // Treat xml as svg for now
+    let ext = `${fileType.ext}`;
+    let mime = `${fileType.mime}`;
+
+    if (ext === 'xml') {
+      ext = 'svg';
+      mime = 'image/svg';
+    }
+    const file = new File([data], `image.${ext}`, {type: mime});
     try {
       const res = await API.uploadFile(file);
       yield res.file_path;
@@ -72,7 +86,7 @@ export default function Editor(props: Props) {
         preview: 'Preview',
         uploadingImage: 'Uploading image...',
         pasteDropSelect:
-          'Attach files by dragging & dropping, selecting or pasting them.',
+          'Attach images by dragging & dropping, selecting or pasting them here.',
       }}
       childProps={{
         previewButton: {
