@@ -8,7 +8,6 @@ defmodule RepeatNotes.Tags.Tag do
   @foreign_key_type :binary_id
   schema "tags" do
     field(:name, :string, null: false)
-    field(:color, :string)
 
     belongs_to(:user, User, foreign_key: :user_id, references: :id, type: :binary)
 
@@ -21,7 +20,7 @@ defmodule RepeatNotes.Tags.Tag do
   @doc false
   def changeset(tag, attrs) do
     tag
-    |> cast(attrs, [:name, :color, :user_id])
+    |> cast(attrs, [:name, :user_id])
     |> validate_required([:name, :user_id])
   end
 end

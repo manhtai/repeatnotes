@@ -7,6 +7,11 @@ defmodule RepeatNotes.Repo.Migrations.CreateNotes do
 
       add(:content, :text, null: false)
 
+      add(:color, :string, null: false)
+      add(:pin, :boolean, null: false)
+      add(:archive, :boolean, null: false)
+      add(:trash, :boolean, null: false)
+
       add(
         :user_id,
         references(:users,
