@@ -226,7 +226,7 @@ function HomePage() {
 
         {/* Main components */}
         <main
-          className="w-full mt-16 mb-16 overflow-y-auto "
+          className="relative w-full mt-16 mb-16 overflow-y-auto "
           style={{height: 'calc(100% - 4rem)'}}
         >
           {routes.map(({path, Component}) => (
