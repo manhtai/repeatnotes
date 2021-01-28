@@ -1,11 +1,11 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import 'fontsource-nunito-sans';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import '@fontsource/comic-mono';
 import {BrowserRouter} from 'react-router-dom';
 
 import {AuthProvider} from 'src/components/auth/AuthProvider';
-import App from "./App";
-import reportWebVitals from "./reportWebVitals";
+import App from './App';
+import reportWebVitals from './reportWebVitals';
 import './css/main.css';
 
 ReactDOM.render(
@@ -16,7 +16,7 @@ ReactDOM.render(
       </BrowserRouter>
     </AuthProvider>
   </React.StrictMode>,
-  document.getElementById("root")
+  document.getElementById('root')
 );
 
 // If you want to start measuring performance in your app, pass a function

@@ -24,7 +24,7 @@ export default function NoteEdit(props: Props) {
   const [content, setContent] = useState(noteContent || '');
   const [id, setId] = useState(noteId || '');
 
-  const upsertFunc = (oldNote: Note, newContent: string) => {
+  const upsertFunc = (id: string, newContent: string, oldNote: Note) => {
     setSync(SyncStatus.Syncing);
     if (!id && newContent.trim()) {
       API.createNote({note: {content: newContent}}).then(
@@ -67,7 +67,7 @@ export default function NoteEdit(props: Props) {
     setContent(newContent);
     setNote && setNote({id, content: newContent});
 
-    debounceUpsert(oldNote, newContent);
+    debounceUpsert(id, newContent, oldNote);
   };
 
   const changeTab = (tab: EditorTab) => {
