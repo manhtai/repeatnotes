@@ -63,7 +63,9 @@ export default function Editor(props: Props) {
       classes={{
         reactMde: selectedTab === 'write' ? 'border rounded' : '',
         toolbar:
-          selectedTab === 'write' ? 'border-b rounded' : 'border rounded',
+          selectedTab === 'write'
+            ? 'border-b rounded text-sm'
+            : 'border rounded text-sm',
       }}
       l18n={{
         write: 'Write',

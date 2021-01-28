@@ -251,6 +251,9 @@
   padding: 6px 13px;
   border: 1px solid #c8ccd0;
 }
+.mde-preview input {
+  margin-right: 0.5em;
+}
 
 .react-mde {
   /* border: 1px solid #c8ccd0; */
