@@ -1,6 +1,9 @@
 import React, {useState} from 'react';
-import Logo from 'src/img/logo.svg';
 import {
+  TrashOutline,
+  TagOutline,
+  ClockOutline,
+  ChartBarOutline,
   LightBulbOutline,
   PlusCircleOutline,
   ArchiveOutline,
@@ -33,19 +36,50 @@ type MenuProps = {
   routes: Array<any>;
 };
 
+const getMenuItemClass = () => {
+  return 'flex items-end justify-start block py-2 px-6 text-gray-700 rounded-r-full cursor-pointer hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-indigo-500';
+};
+
+const tags = Array.from({length: 20}, (_, i) => `Tag ${i}`);
+
 function MenuItems(props: MenuProps) {
   const auth = useAuth();
 
   return (
     <>
       <div className="py-1">
-        <span
-          className="block px-4 py-2 text-gray-700 leading-5"
-          role="menuitem"
+        <NavLink
+          className={getMenuItemClass()}
+          activeClassName="text-indigo-500"
+          to={'/notes'}
         >
-          <p>Signed in as</p>
-          <p className="font-bold truncate">{auth.tokens.email}</p>
-        </span>
+          <LightBulbOutline className="mr-2" /> Notes
+        </NavLink>
+      </div>
+      <div className="border-t border-gray-200"></div>
+      <div className="py-1">
+        {tags.map((tag) => (
+          <span className={getMenuItemClass()} role="menuitem" key={tag}>
+            <TagOutline className="mr-2" /> {tag}
+          </span>
+        ))}
+      </div>
+      <div className="border-t border-gray-200"></div>
+      <div className="py-1">
+        <NavLink
+          className={getMenuItemClass()}
+          activeClassName="text-indigo-500"
+          to={'/archives'}
+        >
+          <ArchiveOutline className="mr-2" /> Archive
+        </NavLink>
+        <NavLink
+          className={getMenuItemClass()}
+          activeClassName="text-indigo-500"
+          to={'/archives'}
+        >
+          <TrashOutline className="mr-2" /> Trash
+        </NavLink>
       </div>
       <div className="border-t border-gray-200"></div>
       <div className="py-1">
@@ -54,7 +88,7 @@ function MenuItems(props: MenuProps) {
             return (
               <Link
                 to={route.path}
-                className="block px-4 py-2 text-gray-700 leading-5 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900"
+                className={getMenuItemClass()}
                 role="menuitem"
                 key={route.path}
               >
@@ -64,9 +98,9 @@ function MenuItems(props: MenuProps) {
           })}
       </div>
       <div className="border-t border-gray-200"></div>
-      <div className="py-1">
+      <div className="py-1 pb-8">
         <span
-          className="block px-4 py-2 text-gray-700 cursor-pointer leading-5 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900"
+          className={getMenuItemClass()}
           role="menuitem"
           onClick={auth.logout}
         >
@@ -111,7 +145,6 @@ function BottomNavBarItem({path, children}: NavBarProps) {
 }
 
 function HomePage() {
-  const [isMoreOpen, setMoreOpen] = useState(false);
   const [isSideBarOpen, setSideBarOpen] = useState(false);
   const location = useLocation();
   const globalContext = useGlobal();
@@ -125,6 +158,7 @@ function HomePage() {
   const routes = [
     {path: '/notes', name: 'Notes', Component: NoteList},
     {path: '/random', name: 'Random', Component: NoteRandom},
+    {path: '/stats', name: 'Stats', Component: NoteRandom},
     {path: '/new', name: 'New', Component: NoteNew},
     {path: '/review', name: 'Review', Component: CardReview},
     {path: '/', name: 'Review', Component: NoteHome},
@@ -132,10 +166,9 @@ function HomePage() {
   ];
 
   const topNavBar = [
-    {path: '/review', name: 'Review', Icon: LightningBoltOutline},
-    {path: '/new', name: 'New', Icon: PlusCircleOutline},
-    {path: '/notes', name: 'Notes', Icon: ArchiveOutline},
-    {path: '/random', name: 'Random', Icon: LightBulbOutline},
+    {path: '/review', name: 'Review', Icon: ClockOutline},
+    {path: '/random', name: 'Random', Icon: LightningBoltOutline},
+    {path: '/stats', name: 'Stats', Icon: ChartBarOutline},
   ];
 
   const bottomNavBar = [
@@ -148,12 +181,22 @@ function HomePage() {
   return (
     <div className="flex flex-col w-full mx-auto sm:text-sm">
       {/* Top bar nav */}
-      <nav className="flex flex-shrink-0 px-4 overflow-x-auto text-sm bg-gray-100 border-b h-14">
-        <ul className="flex items-center flex-none text-gray-800">
-          <li className="w-8 h-8 mr-4">
-            <Link to="/">
-              <img className="w-full h-full mx-auto" src={Logo} alt="logo" />
-            </Link>
+      <nav className="fixed flex flex-shrink-0 w-full px-4 mb-16 overflow-x-auto text-sm bg-gray-100 border-b h-14">
+        <ul className="flex items-center px-2">
+          <li>
+            {globalContext.sync === SyncStatus.Syncing ? (
+              <span className="flex items-end text-indigo-500">
+                <RefreshOutline className="mr-1 animate-reverse-spin" /> Saving
+              </span>
+            ) : globalContext.sync === SyncStatus.Error ? (
+              <span className="flex items-end text-red-500">
+                <ExclamationCircleOutline className="mr-1" /> Error
+              </span>
+            ) : (
+              <span className="flex items-end text-green-500">
+                <CheckCircleOutline className="mr-1" /> Saved
+              </span>
+            )}
           </li>
         </ul>
         <ul className="flex items-center justify-end flex-grow text-gray-800">
@@ -164,93 +207,51 @@ function HomePage() {
               </TopNavBarItem>
             );
           })}
-
-          <li
-            className="hidden h-full cursor-pointer hover:bg-gray-200 lg:block focus:text-indigo-500"
-            onClick={() => setMoreOpen(!isMoreOpen)}
-          >
-            <div
-              className={
-                'flex flex-row items-center h-full px-4 focus:text-indigo-500' +
-                (location.pathname && location.pathname.startsWith('/settings/')
-                  ? ' text-indigo-500'
-                  : '')
-              }
-            >
-              <MenuAlt2Outline />
-              <span className="ml-1 capitalize">Settings</span>
-            </div>
-          </li>
-        </ul>
-        <ul className="flex items-center flex-none ml-6">
-          <li>
-            {globalContext.sync === SyncStatus.Syncing ? (
-              <RefreshOutline className="text-indigo-500 animate-reverse-spin" />
-            ) : globalContext.sync === SyncStatus.Error ? (
-              <ExclamationCircleOutline className="text-red-500" />
-            ) : (
-              <CheckCircleOutline className="text-green-500" />
-            )}
-          </li>
         </ul>
       </nav>
 
-      {/* Top bar menu */}
-      <div
-        className={
-          (isMoreOpen ? 'block' : 'hidden') +
-          ' z-10 mt-12 top-0 mr-16 absolute right-0 w-56 shadow origin-top-right rounded-lg text-sm'
-        }
-      >
-        <div
-          className="fixed inset-0 opacity-0"
-          onClick={() => setMoreOpen(!isMoreOpen)}
-        ></div>
-        <div
-          className="relative z-20 bg-white shadow rounded-md"
-          role="menu"
-          aria-orientation="vertical"
-          aria-labelledby="options-menu"
-          onClick={() => setMoreOpen(!isMoreOpen)}
-        >
-          <Transition
-            show={isMoreOpen}
-            enter="transition ease-out duration-100"
-            enterFrom="transform opacity-0 scale-95"
-            enterTo="transform opacity-100 scale-100"
-            leave="transition ease-in duration-75"
-            leaveFrom="transform opacity-100 scale-100"
-            leaveTo="transform opacity-0 scale-9"
+      <section className="flex">
+        {/* Sidebar menu */}
+        <div className="hidden w-full max-w-xs lg:block">
+          <div
+            className="fixed flex flex-col flex-none w-full max-w-xs mt-16 overflow-y-scroll"
+            role="menu"
+            aria-orientation="vertical"
+            aria-labelledby="options-menu"
+            style={{height: 'calc(100% - 4rem)'}}
           >
             <MenuItems routes={settingsRoutes} />
-          </Transition>
+          </div>
         </div>
-      </div>
 
-      {/* Main components */}
-      <main className="relative w-full h-full pb-10 text-base">
-        {routes.map(({path, Component}) => (
-          <Route key={path} exact path={path}>
-            {({match}) => (
-              <Transition
-                show={match != null}
-                enter="transition-all ease-in-out duration-50"
-                enterFrom="opacity-0 absolute inset-0"
-                enterTo="opacity-100"
-                leave="transition-all ease-in-out duration-50"
-                leaveFrom="opacity-100"
-                leaveTo="opacity-0 absolute inset-0"
-              >
-                <section className="px-4 mx-auto max-w-screen-xl">
-                  <Component />
-                </section>
-              </Transition>
-            )}
-          </Route>
-        ))}
-      </main>
+        {/* Main components */}
+        <main
+          className="w-full mt-16 mb-16 overflow-y-auto "
+          style={{height: 'calc(100% - 4rem)'}}
+        >
+          {routes.map(({path, Component}) => (
+            <Route key={path} exact path={path}>
+              {({match}) => (
+                <Transition
+                  show={match != null}
+                  enter="transition-all ease-in-out duration-50"
+                  enterFrom="opacity-0 absolute inset-0"
+                  enterTo="opacity-100"
+                  leave="transition-all ease-in-out duration-50"
+                  leaveFrom="opacity-100"
+                  leaveTo="opacity-0 absolute inset-0"
+                >
+                  <section className="px-4 mx-auto max-w-screen-xl">
+                    <Component />
+                  </section>
+                </Transition>
+              )}
+            </Route>
+          ))}
+        </main>
+      </section>
 
-      {/* Side bar nav */}
+      {/* Bottom bar nav */}
       <nav className="fixed bottom-0 flex w-full h-16 text-sm bg-white border lg:hidden">
         <div
           onClick={() => setSideBarOpen(!isSideBarOpen)}
