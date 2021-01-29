@@ -99,7 +99,7 @@ function MenuItems(props: MenuProps) {
           })}
       </div>
       <div className="border-t border-gray-200"></div>
-      <div className="py-1 pb-8">
+      <div className="py-1 pb-2">
         <span
           className={getMenuItemClass()}
           role="menuitem"
@@ -169,7 +169,7 @@ function HomePage() {
   const topNavBar = [
     {path: '/review', name: 'Review', Icon: ClockOutline},
     {path: '/random', name: 'Random', Icon: LightningBoltOutline},
-    {path: '/random', name: 'Stats', Icon: ChartBarOutline},
+    {path: '/stats', name: 'Stats', Icon: ChartBarOutline},
     {path: '/config', name: 'Config', Icon: CogOutline},
   ];
 
@@ -181,9 +181,9 @@ function HomePage() {
   ];
 
   return (
-    <div className="flex flex-col w-full mx-auto sm:text-sm">
+    <div className="absolute inset-0 flex flex-col overflow-hidden sm:text-sm">
       {/* Top bar nav */}
-      <nav className="fixed z-10 flex flex-shrink-0 w-full px-4 mb-16 overflow-x-auto text-sm bg-gray-100 border-b h-14">
+      <header className="flex px-4 text-sm bg-gray-100 border-b flex-0 h-14">
         <ul className="flex items-center px-2">
           <li>
             {globalContext.sync === SyncStatus.Syncing ? (
@@ -211,74 +211,50 @@ function HomePage() {
             );
           })}
         </ul>
-      </nav>
+      </header>
 
-      <section className="flex">
-        {/* Sidebar menu */}
-        <div className="hidden w-full max-w-xs lg:block">
+      {/* Main */}
+      <main className="relative flex flex-1 min-h-0">
+        {/* Left sidebar */}
+        <nav className="flex flex-col hidden w-1/4 overflow-x-hidden overflow-y-auto lg:block">
           <div
-            className="fixed flex flex-col flex-none w-full max-w-xs mt-16 overflow-y-scroll"
+            className=""
             role="menu"
-            aria-orientation="vertical"
+            aria-orientation="horizontal"
             aria-labelledby="options-menu"
-            style={{height: 'calc(100% - 4rem)'}}
           >
             <MenuItems routes={settingsRoutes} />
           </div>
-        </div>
+        </nav>
 
-        {/* Main components */}
-        <main
-          className="relative w-full mt-16 mb-16 overflow-y-auto"
-          style={{height: 'calc(100% - 4rem)'}}
-        >
-          {routes.map(({path, Component}) => (
-            <Route key={path} exact path={path}>
-              {({match}) => (
-                <Transition
-                  show={match != null}
-                  enter="transition-all ease-in-out duration-50"
-                  enterFrom="opacity-0 absolute inset-0"
-                  enterTo="opacity-100"
-                  leave="transition-all ease-in-out duration-50"
-                  leaveFrom="opacity-100"
-                  leaveTo="opacity-0 absolute inset-0"
-                >
-                  <section className="px-4 mx-auto max-w-screen-xl">
-                    <Component />
-                  </section>
-                </Transition>
-              )}
-            </Route>
-          ))}
-        </main>
-      </section>
-
-      {/* Bottom bar nav */}
-      <nav className="fixed bottom-0 flex w-full h-16 text-sm bg-white border lg:hidden">
-        <div
-          onClick={() => setSideBarOpen(!isSideBarOpen)}
-          className={
-            'flex flex-col items-center justify-center flex-1 overflow-hidden whitespace-no-wrap transition-colors duration-100 ease-in-out hover:bg-gray-200 focus:text-indigo-500' +
-            (location && location.pathname.startsWith('/settings/')
-              ? ' text-indigo-500'
-              : '')
-          }
-        >
-          <MenuAlt2Outline />
-        </div>
-
-        {bottomNavBar.map(({path, Icon}) => {
-          return (
-            <BottomNavBarItem path={path} key={path}>
-              <Icon />
-            </BottomNavBarItem>
-          );
-        })}
-      </nav>
+        {/* Middle content */}
+        <section className="flex flex-col w-full">
+          <div className="overflow-x-hidden overflow-y-auto">
+            {routes.map(({path, Component}) => (
+              <Route key={path} exact path={path}>
+                {({match}) => (
+                  <Transition
+                    show={match != null}
+                    enter="transition-all ease-in-out duration-50"
+                    enterFrom="opacity-0 absolute inset-0"
+                    enterTo="opacity-100"
+                    leave="transition-all ease-in-out duration-50"
+                    leaveFrom="opacity-100"
+                    leaveTo="opacity-0 absolute inset-0"
+                  >
+                    <section className="px-4 mx-auto max-w-screen-xl">
+                      <Component />
+                    </section>
+                  </Transition>
+                )}
+              </Route>
+            ))}
+          </div>
+        </section>
+      </main>
 
       {/* Side bar menu */}
-      <div
+      <aside
         className={(isSideBarOpen ? '' : 'hidden ') + 'relative z-10 text-sm'}
       >
         <Transition
@@ -314,7 +290,30 @@ function HomePage() {
             </div>
           </nav>
         </Transition>
-      </div>
+      </aside>
+
+      {/* Bottom bar nav */}
+      <section className="bottom-0 flex w-full h-16 text-sm bg-white border flex-0 lg:hidden">
+        <div
+          onClick={() => setSideBarOpen(!isSideBarOpen)}
+          className={
+            'flex flex-col items-center justify-center flex-1 overflow-hidden whitespace-no-wrap transition-colors duration-100 ease-in-out hover:bg-gray-200 focus:text-indigo-500' +
+            (location && location.pathname.startsWith('/settings/')
+              ? ' text-indigo-500'
+              : '')
+          }
+        >
+          <MenuAlt2Outline />
+        </div>
+
+        {bottomNavBar.map(({path, Icon}) => {
+          return (
+            <BottomNavBarItem path={path} key={path}>
+              <Icon />
+            </BottomNavBarItem>
+          );
+        })}
+      </section>
     </div>
   );
 }

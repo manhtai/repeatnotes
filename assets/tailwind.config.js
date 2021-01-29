@@ -18,7 +18,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["\"Comic Mono\"", ...defaultTheme.fontFamily.sans]
+        sans: ["\"Comic Mono\"", "sans-serif"]
       },
       animation: {
         'reverse-spin': 'reverse-spin 1s linear infinite',
