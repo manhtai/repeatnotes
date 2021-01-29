@@ -5,6 +5,7 @@ import logger from 'src/libs/logger';
 import Editor from 'src/components/editor/MarkdownEditor';
 import {useGlobal} from 'src/components/global/GlobalProvider';
 import debounce from 'lodash/debounce';
+import {TrashOutline, SaveOutline, BookmarkOutline} from 'heroicons-react';
 
 type Props = {
   noteId?: string;
@@ -81,18 +82,30 @@ export default function NoteEdit(props: Props) {
   }, [noteId, noteContent]);
 
   return (
-    <div
-      onClick={() => currentTab === 'preview' && changeTab('write')}
-      className="cursor-pointer"
-    >
-      <Editor
-        content={content}
-        setContent={(newContent) => {
-          upsertNote(id, newContent);
-        }}
-        selectedTab={currentTab}
-        setSelectedTab={changeTab}
-      />
-    </div>
+    <>
+      <div
+        onClick={() => currentTab === 'preview' && changeTab('write')}
+        className="cursor-pointer"
+      >
+        <Editor
+          content={content}
+          setContent={(newContent) => {
+            upsertNote(id, newContent);
+          }}
+          selectedTab={currentTab}
+          setSelectedTab={changeTab}
+        />
+      </div>
+      {currentTab === 'preview' && (
+        <div className="flex flex-col px-2 py-2">
+          <div className="flex flex-1 mt-4">Tag1, Tag2</div>
+          <div className="flex justify-between mt-4 opacity-30 hover:opacity-100 transition-opacity duration-100 ease-out">
+            <BookmarkOutline className="w-5 h-5 cursor-pointer" />
+            <TrashOutline className="w-5 h-5 cursor-pointer" />
+            <SaveOutline className="w-5 h-5 cursor-pointer" />
+          </div>
+        </div>
+      )}
+    </>
   );
 }

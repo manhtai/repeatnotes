@@ -1,3 +1,4 @@
+import {useRef, useEffect} from 'react';
 import ReactMde from 'react-mde';
 import ReactMarkdown from 'react-markdown';
 import {getDefaultToolbarCommands} from 'react-mde';
@@ -28,6 +29,7 @@ type Props = {
 };
 
 const supportedTypes = new Set(['jpg', 'jpeg', 'gif', 'png', 'xml']);
+const initialEditorHeight = 128;
 
 export default function Editor(props: Props) {
   const {content, setContent, selectedTab, setSelectedTab} = props;
@@ -56,10 +58,33 @@ export default function Editor(props: Props) {
     }
   };
 
+  const ref = useRef<ReactMde>(null);
+
+  const fitContent = () => {
+    const textArea = ref.current?.finalRefs.textarea?.current;
+    if (textArea) {
+      textArea.style.overflow = 'hidden';
+      textArea.style.height = 'auto';
+      textArea.style.height = `${Math.max(
+        50 + textArea.scrollHeight,
+        initialEditorHeight
+      )}px`;
+    }
+  };
+
+  const onTextChange = (text: string) => {
+    fitContent();
+    setContent(text);
+  };
+
+  useEffect(() => fitContent(), [selectedTab]);
+
   return (
     <ReactMde
+      ref={ref}
+      initialEditorHeight={initialEditorHeight}
       value={content}
-      onChange={setContent}
+      onChange={onTextChange}
       selectedTab={selectedTab}
       onTabChange={setSelectedTab}
       toolbarCommands={
@@ -83,7 +108,7 @@ export default function Editor(props: Props) {
       }}
       l18n={{
         write: 'Write',
-        preview: 'Preview',
+        preview: 'Done',
         uploadingImage: 'Uploading image...',
         pasteDropSelect:
           'Attach images by dragging & dropping, selecting or pasting them here.',

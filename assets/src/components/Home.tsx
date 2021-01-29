@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {
   CogOutline,
   TrashOutline,
+  PencilOutline,
   TagOutline,
   ClockOutline,
   ChartBarOutline,
@@ -13,7 +14,6 @@ import {
   MenuAlt2Outline,
   ExclamationCircleOutline,
   RefreshOutline,
-  XOutline,
 } from 'heroicons-react';
 
 import {Route, Link, NavLink, useLocation} from 'react-router-dom';
@@ -48,7 +48,7 @@ function MenuItems(props: MenuProps) {
 
   return (
     <>
-      <div className="py-2">
+      <div className="py-1">
         <NavLink
           className={getMenuItemClass()}
           activeClassName="text-indigo-800 bg-indigo-200"
@@ -58,15 +58,20 @@ function MenuItems(props: MenuProps) {
         </NavLink>
       </div>
       <div className="border-t border-gray-200"></div>
-      <div className="py-2">
+      <div className="py-1">
         {tags.map((tag) => (
           <span className={getMenuItemClass()} role="menuitem" key={tag}>
             <TagOutline className="mr-2" /> {tag}
           </span>
         ))}
       </div>
+      <div className="py-1">
+        <span className={getMenuItemClass()} role="menuitem">
+          <PencilOutline className="mr-2" /> Edit tags
+        </span>
+      </div>
       <div className="border-t border-gray-200"></div>
-      <div className="py-2">
+      <div className="py-1">
         <NavLink
           className={getMenuItemClass()}
           activeClassName="text-indigo-800 bg-indigo-200"
@@ -77,13 +82,13 @@ function MenuItems(props: MenuProps) {
         <NavLink
           className={getMenuItemClass()}
           activeClassName="text-indigo-800 bg-indigo-200"
-          to={'/archives'}
+          to={'/trash'}
         >
           <TrashOutline className="mr-2" /> Trash
         </NavLink>
       </div>
       <div className="border-t border-gray-200"></div>
-      <div className="py-2">
+      <div className="py-1">
         {props.routes &&
           props.routes.map((route) => {
             return (
@@ -99,7 +104,7 @@ function MenuItems(props: MenuProps) {
           })}
       </div>
       <div className="border-t border-gray-200"></div>
-      <div className="py-2 pb-2">
+      <div className="py-1 pb-2">
         <span
           className={getMenuItemClass()}
           role="menuitem"
