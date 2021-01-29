@@ -6,6 +6,7 @@ import Editor from 'src/components/editor/MarkdownEditor';
 import {useGlobal} from 'src/components/global/GlobalProvider';
 import debounce from 'lodash/debounce';
 import {TrashOutline, SaveOutline, BookmarkOutline} from 'heroicons-react';
+import ReactTags, {Tag} from 'react-tag-autocomplete';
 
 type Props = {
   noteId?: string;
@@ -81,6 +82,17 @@ export default function NoteEdit(props: Props) {
     setContent(noteContent || '');
   }, [noteId, noteContent]);
 
+  const tags: Tag[] = [
+    {id: 1, name: 'Apples'},
+    {id: 2, name: 'Pears'},
+  ];
+  const suggestions = [
+    {id: 3, name: 'Bananas'},
+    {id: 4, name: 'Mangos'},
+    {id: 5, name: 'Lemons'},
+    {id: 6, name: 'Apricots'},
+  ];
+
   return (
     <>
       <div
@@ -96,16 +108,52 @@ export default function NoteEdit(props: Props) {
           setSelectedTab={changeTab}
         />
       </div>
-      {currentTab === 'preview' && (
-        <div className="flex flex-col px-2 py-2">
-          <div className="flex flex-1 mt-4">Tag1, Tag2</div>
-          <div className="flex justify-between mt-4 opacity-30 hover:opacity-100 transition-opacity duration-100 ease-out">
+
+      <div className="flex flex-col p-2 my-4">
+        {currentTab === 'write' ? (
+          <ReactTags
+            id={id}
+            classNames={{
+              root: 'ml-1 flex items-center text-gray-500',
+              rootFocused: 'is-focused',
+              selected: 'mr-1',
+              selectedTag: 'mr-2',
+              selectedTagName: 'bg-gray-200 px-2 py-1 rounded-full',
+              search: 'w-52',
+              searchInput:
+                'outline-none border rounded py-1 px-2 text-gray-700',
+              suggestions: 'py-1 px-2 text-gray-600 cursor-pointer absolute',
+              suggestionActive: 'font-bold',
+              suggestionDisabled: 'text-gray-300',
+            }}
+            autoresize={false}
+            tags={tags}
+            suggestions={suggestions}
+            onDelete={(i) => {
+              tags.splice(i, 1);
+            }}
+            onAddition={(tag: Tag) => {
+              tags.push(tag);
+            }}
+          />
+        ) : (
+          <div className="flex items-center mb-4 ml-1 text-gray-500">
+            {tags.map((tag) => (
+              <div className="px-2 py-1 mr-2 bg-gray-200 rounded-full">
+                {tag.name}
+              </div>
+            ))}
+          </div>
+        )}
+
+        {currentTab === 'preview' && (
+          <div className="flex justify-between px-1 opacity-20 hover:opacity-100 transition-opacity duration-100 ease-out">
             <BookmarkOutline className="w-5 h-5 cursor-pointer" />
             <TrashOutline className="w-5 h-5 cursor-pointer" />
             <SaveOutline className="w-5 h-5 cursor-pointer" />
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </>
   );
 }
