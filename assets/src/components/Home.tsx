@@ -38,7 +38,7 @@ type MenuProps = {
 };
 
 const getMenuItemClass = () => {
-  return 'flex items-end justify-start block py-2 px-6 text-gray-700 rounded-r-full cursor-pointer hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-indigo-500';
+  return 'flex items-end justify-start block py-3 px-6 text-gray-700 rounded-r-full cursor-pointer hover:bg-gray-100 hover:text-indigo-700 focus:outline-none focus:bg-indigo-200';
 };
 
 const tags = Array.from({length: 20}, (_, i) => `Tag ${i}`);
@@ -48,17 +48,17 @@ function MenuItems(props: MenuProps) {
 
   return (
     <>
-      <div className="py-1">
+      <div className="py-2">
         <NavLink
           className={getMenuItemClass()}
-          activeClassName="text-indigo-500"
+          activeClassName="text-indigo-800 bg-indigo-200"
           to={'/notes'}
         >
           <LightBulbOutline className="mr-2" /> Notes
         </NavLink>
       </div>
       <div className="border-t border-gray-200"></div>
-      <div className="py-1">
+      <div className="py-2">
         {tags.map((tag) => (
           <span className={getMenuItemClass()} role="menuitem" key={tag}>
             <TagOutline className="mr-2" /> {tag}
@@ -66,24 +66,24 @@ function MenuItems(props: MenuProps) {
         ))}
       </div>
       <div className="border-t border-gray-200"></div>
-      <div className="py-1">
+      <div className="py-2">
         <NavLink
           className={getMenuItemClass()}
-          activeClassName="text-indigo-500"
+          activeClassName="text-indigo-800 bg-indigo-200"
           to={'/archives'}
         >
           <ArchiveOutline className="mr-2" /> Archive
         </NavLink>
         <NavLink
           className={getMenuItemClass()}
-          activeClassName="text-indigo-500"
+          activeClassName="text-indigo-800 bg-indigo-200"
           to={'/archives'}
         >
           <TrashOutline className="mr-2" /> Trash
         </NavLink>
       </div>
       <div className="border-t border-gray-200"></div>
-      <div className="py-1">
+      <div className="py-2">
         {props.routes &&
           props.routes.map((route) => {
             return (
@@ -99,7 +99,7 @@ function MenuItems(props: MenuProps) {
           })}
       </div>
       <div className="border-t border-gray-200"></div>
-      <div className="py-1 pb-2">
+      <div className="py-2 pb-2">
         <span
           className={getMenuItemClass()}
           role="menuitem"
@@ -228,7 +228,7 @@ function HomePage() {
         </nav>
 
         {/* Middle content */}
-        <section className="flex flex-col w-full">
+        <section className="relative flex flex-col w-full">
           <div className="overflow-x-hidden overflow-y-auto">
             {routes.map(({path, Component}) => (
               <Route key={path} exact path={path}>
@@ -270,15 +270,7 @@ function HomePage() {
             className="fixed inset-0 bg-gray-800 opacity-25"
             onClick={() => setSideBarOpen(!isSideBarOpen)}
           ></div>
-          <nav className="fixed top-0 bottom-0 left-0 flex flex-col w-5/6 max-w-sm px-6 py-6 overflow-y-auto bg-white border-r">
-            <div className="flex justify-end">
-              <button
-                className="w-5 h-5"
-                onClick={() => setSideBarOpen(!isSideBarOpen)}
-              >
-                <XOutline />
-              </button>
-            </div>
+          <nav className="fixed top-0 bottom-0 left-0 flex flex-col w-5/6 max-w-sm py-6 pr-4 overflow-x-hidden overflow-y-auto bg-white border-r">
             <div
               className="relative z-20 w-full"
               role="menu"
