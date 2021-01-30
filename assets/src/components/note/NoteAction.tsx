@@ -19,7 +19,7 @@ export default function NoteAction() {
           onClick={() => setShowTagModal(!showTagModal)}
         />
         <SaveOutline className="w-4 h-4 cursor-pointer" />
-        <TrashOutline className="w-4 h-4 cursor-pointer" />
+        <TrashOutline className="w-4 h-4 cursor-pointer hover:text-red-500" />
       </div>
 
       <TagModal

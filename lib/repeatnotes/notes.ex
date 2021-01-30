@@ -3,9 +3,10 @@ defmodule RepeatNotes.Notes do
 
   alias RepeatNotes.Repo
   alias RepeatNotes.Notes.Note
+  alias RepeatNotes.Tags.NoteTag
   alias RepeatNotes.Encryption.AES
 
-  @max_return 200
+  @max_return 100
   @random_return 10
 
   @spec list_notes(binary(), map) :: [Note.t()]
@@ -15,6 +16,7 @@ defmodule RepeatNotes.Notes do
     |> order_by(desc: :inserted_at)
     |> limit(@max_return)
     |> Repo.all()
+    |> Repo.preload([:tags])
   end
 
   @spec random_notes(binary()) :: [Note.t()]
@@ -24,18 +26,35 @@ defmodule RepeatNotes.Notes do
     |> order_by(fragment("RANDOM()"))
     |> limit(@random_return)
     |> Repo.all()
+    |> Repo.preload([:tags])
+  end
+
+  @spec list_notes_by_tag(binary(), binary()) :: [Note.t()]
+  def list_notes_by_tag(user_id, tag_id) do
+    from(
+      note_tag in NoteTag,
+      where: note_tag.user_id == ^user_id and note_tag.tag_id == ^tag_id,
+      inner_join: note in Note,
+      on: note.id == note_tag.note_id,
+      select: note
+    )
+    |> limit(@max_return)
+    |> Repo.all()
+    |> Repo.preload([:tags])
   end
 
   @spec get_note!(binary()) :: Note.t() | nil
   def get_note!(id) do
     Note
     |> Repo.get!(id)
+    |> Repo.preload([:tags])
   end
 
   @spec get_note!(binary(), integer) :: Note.t() | nil
   def get_note!(id, user_id) do
     Note
     |> Repo.get_by!(id: id, user_id: user_id)
+    |> Repo.preload([:tags])
   end
 
   @spec create_note(map()) :: {:ok, Note.t()} | {:error, Ecto.Changeset.t()}
@@ -56,6 +75,37 @@ defmodule RepeatNotes.Notes do
   def encrypt_note_content(note, secret_key) do
     content = AES.encrypt(note["content"], secret_key)
     note |> Map.merge(%{"content" => content})
+  end
+
+  @spec get_note_tag(Note.t(), binary()) :: nil | NoteTag.t()
+  def get_note_tag(%Note{id: id} = _note, tag_id) do
+    NoteTag
+    |> where(note_id: ^id, tag_id: ^tag_id)
+    |> Repo.one()
+  end
+
+  @spec add_tag(Note.t(), binary()) :: {:ok, NoteTag.t()} | {:error, Ecto.Changeset.t()}
+  def add_tag(%Note{id: id} = note, tag_id) do
+    case get_note_tag(note, tag_id) do
+      nil ->
+        %NoteTag{}
+        |> NoteTag.changeset(%{
+          note_id: id,
+          tag_id: tag_id,
+          user_id: note.user_id
+        })
+        |> Repo.insert()
+
+      tag ->
+        {:ok, tag}
+    end
+  end
+
+  @spec remove_tag(Note.t(), binary()) :: {:ok, NoteTag.t()} | {:error, Ecto.Changeset.t()}
+  def remove_tag(%Note{} = note, tag_id) do
+    note
+    |> get_note_tag(tag_id)
+    |> Repo.delete()
   end
 
   @spec decrypt_notes_content([Note.t()], String.t()) :: [Note.t()]

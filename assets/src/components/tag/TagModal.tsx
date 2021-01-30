@@ -84,7 +84,7 @@ export default function TagModal(props: Props) {
                 />
               ) : (
                 <div
-                  className="flex-1 w-full px-0 py-1 m-3 text-sm bg-transparent border-t-0 border-b border-l-0 border-r-0 border-transparent"
+                  className="flex-1 w-full px-0 py-1 m-3 text-sm bg-transparent border-t-0 border-b border-l-0 border-r-0 border-transparent cursor-pointer"
                   onClick={() => {
                     const changed = tags.findIndex((t) => t.id === tag.id);
                     setTags([

@@ -37,6 +37,12 @@ defmodule RepeatNotesWeb.Router do
 
     resources("/cards", CardController)
     resources("/notes", NoteController)
+    resources("/tags", TagController)
+
+    post("/notes/:note_id/tags", NoteController, :add_tag)
+    delete("/notes/:note_id/tags/:tag_id", NoteController, :remove_tag)
+    get("/tags/:tag_id/notes", NoteController, :index_by_tag)
+
     get("/random", NoteController, :random)
     post("/upload", NoteController, :upload)
 

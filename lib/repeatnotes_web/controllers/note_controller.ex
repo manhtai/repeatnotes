@@ -19,6 +19,17 @@ defmodule RepeatNotesWeb.NoteController do
     end
   end
 
+  @spec index_by_tag(Plug.Conn.t(), map) :: Plug.Conn.t()
+  def index_by_tag(conn, %{"tag_id" => tag_id}) do
+    with %User{id: user_id} <- conn.assigns.current_user do
+      notes =
+        Notes.list_notes_by_tag(user_id, tag_id)
+        |> Notes.decrypt_notes_content(conn.private[:secret_key])
+
+      render(conn, "index.json", notes: notes)
+    end
+  end
+
   @spec create(Plug.Conn.t(), map) :: Plug.Conn.t()
   def create(conn, %{"note" => params}) do
     with %User{id: user_id} <- conn.assigns.current_user do
@@ -122,6 +133,43 @@ defmodule RepeatNotesWeb.NoteController do
         conn
         |> put_status(400)
         |> json(%{error: %{status: 400, message: "Couldn't upload file", errors: errors}})
+    end
+  end
+
+  @spec delete(Plug.Conn.t(), map) :: Plug.Conn.t()
+  def delete(conn, %{"id" => id}) do
+    with %User{id: user_id} <- conn.assigns.current_user do
+      note = Notes.get_note!(id, user_id)
+
+      case RepeatNotes.Repo.delete(note) do
+        {:ok, _} ->
+          conn
+          |> put_status(:no_content)
+          |> json(%{})
+
+        {:error, errors} ->
+          conn
+          |> put_status(400)
+          |> json(%{error: %{status: 400, message: "Couldn't delete note", errors: errors}})
+      end
+    end
+  end
+
+  @spec add_tag(Plug.Conn.t(), map) :: Plug.Conn.t()
+  def add_tag(conn, %{"note_id" => id, "tag_id" => tag_id}) do
+    note = Notes.get_note!(id)
+
+    with {:ok, _result} <- Notes.add_tag(note, tag_id) do
+      json(conn, %{data: %{ok: true}})
+    end
+  end
+
+  @spec remove_tag(Plug.Conn.t(), map) :: Plug.Conn.t()
+  def remove_tag(conn, %{"note_id" => id, "tag_id" => tag_id}) do
+    note = Notes.get_note!(id)
+
+    with {:ok, _result} <- Notes.remove_tag(note, tag_id) do
+      json(conn, %{data: %{ok: true}})
     end
   end
 end

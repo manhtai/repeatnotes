@@ -14,6 +14,7 @@ defmodule RepeatNotes.Repo.Migrations.CreateTags do
 
     create(index(:tags, [:name]))
     create(index(:tags, [:user_id]))
+    create(unique_index(:tags, [:user_id, :name]))
 
     # Note tags
     create table(:note_tags, primary_key: false) do

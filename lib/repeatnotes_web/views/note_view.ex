@@ -1,6 +1,6 @@
 defmodule RepeatNotesWeb.NoteView do
   use RepeatNotesWeb, :view
-  alias RepeatNotesWeb.{NoteView}
+  alias RepeatNotesWeb.{NoteView, TagView}
 
   def render("index.json", %{notes: notes}) do
     %{data: render_many(notes, NoteView, "expanded.json")}
@@ -29,7 +29,8 @@ defmodule RepeatNotesWeb.NoteView do
     %{
       id: note.id,
       created_at: note.inserted_at,
-      content: note.content
+      content: note.content,
+      tags: render_many(note.tags, TagView, "basic.json")
     }
   end
 
@@ -38,7 +39,8 @@ defmodule RepeatNotesWeb.NoteView do
       id: note.id,
       created_at: note.inserted_at,
       updated_at: note.updated_at,
-      content: note.content
+      content: note.content,
+      tags: render_many(note.tags, TagView, "basic.json")
     }
   end
 end
