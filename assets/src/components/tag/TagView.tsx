@@ -8,7 +8,7 @@ type Props = {
 export default function TagView(props: Props) {
   const {tags} = props;
   return (
-    <div className="flex items-center py-2 mx-3 mt-4 text-xs">
+    <div className="flex items-center mx-3 mt-8 text-xs">
       {tags.map((tag) => (
         <NavLink
           className="px-2 py-0 mr-2 text-gray-400 bg-gray-200 rounded-full"

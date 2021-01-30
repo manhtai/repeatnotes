@@ -30,6 +30,8 @@ export default function NoteView(props: Props) {
             state: {note},
           })
         }
+        className="cursor-pointer"
+        style={{minHeight: '90px'}}
       >
         <NotePreview content={note.content} />
       </section>

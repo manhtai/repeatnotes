@@ -8,8 +8,6 @@ import FileType from 'file-type/browser';
 
 import MarkdownRenderer from './MarkdownRenderer';
 
-import 'src/css/editor.css';
-
 type Props = {
   content: string;
   setContent: (s: string) => void;
@@ -18,7 +16,7 @@ type Props = {
 };
 
 const supportedTypes = new Set(['jpg', 'jpeg', 'gif', 'png', 'xml']);
-const initialEditorHeight = 128;
+const initialEditorHeight = 256;
 
 export default function Editor(props: Props) {
   const {content, setContent, selectedTab, setSelectedTab} = props;
@@ -90,6 +88,7 @@ export default function Editor(props: Props) {
             ? 'border-b rounded text-sm'
             : 'border rounded text-sm',
       }}
+      minPreviewHeight={100}
       l18n={{
         write: 'Write',
         preview: 'Done',

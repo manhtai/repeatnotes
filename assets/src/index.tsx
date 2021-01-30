@@ -8,7 +8,9 @@ import {AuthProvider} from 'src/components/auth/AuthProvider';
 import {GlobalProvider} from 'src/components/global/GlobalProvider';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import './css/main.css';
+
+import 'src/css/main.css';
+import 'src/css/editor.css';
 
 ReactDOM.render(
   <React.StrictMode>

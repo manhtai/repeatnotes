@@ -90,7 +90,12 @@ export default function NoteEdit(props: Props) {
   ];
 
   return (
-    <div className="max-w-xl mx-auto mt-4 mb-16">
+    <div
+      className={
+        'max-w-xl mx-auto mt-4 mb-16' +
+        (currentTab === 'preview' ? '  border shadow-sm rounded' : '')
+      }
+    >
       <div
         onClick={() => currentTab === 'preview' && changeTab('write')}
         className="cursor-pointer"
@@ -105,9 +110,7 @@ export default function NoteEdit(props: Props) {
         />
       </div>
 
-      <div className="flex flex-col my-4 text-gray-500">
-        {currentTab === 'write' ? null : <TagView tags={tags} />}
-      </div>
+      {currentTab === 'write' ? null : <TagView tags={tags} />}
 
       <NoteAction />
     </div>
