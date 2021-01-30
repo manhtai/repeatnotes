@@ -95,31 +95,17 @@ export default function NoteEdit(props: Props) {
 
   return (
     <>
-      <div
-        onClick={() => currentTab === 'preview' && changeTab('write')}
-        className="cursor-pointer"
-      >
-        <Editor
-          content={content}
-          setContent={(newContent) => {
-            upsertNote(id, newContent);
-          }}
-          selectedTab={currentTab}
-          setSelectedTab={changeTab}
-        />
-      </div>
-
-      <div className="flex flex-col p-2 my-4">
+      <div className="flex flex-col p-1 my-1 text-gray-500">
         {currentTab === 'write' ? (
           <ReactTags
             id={id}
             classNames={{
-              root: 'ml-1 flex items-center text-gray-500',
+              root: 'ml-1 flex items-center  overflow-x-auto overflow-y-hidden',
               rootFocused: 'is-focused',
               selected: 'mr-1',
               selectedTag: 'mr-2',
               selectedTagName: 'bg-gray-200 px-2 py-1 rounded-full',
-              search: 'w-52',
+              search: '',
               searchInput:
                 'outline-none border rounded py-1 px-2 text-gray-700',
               suggestions: 'py-1 px-2 text-gray-600 cursor-pointer absolute',
@@ -137,23 +123,37 @@ export default function NoteEdit(props: Props) {
             }}
           />
         ) : (
-          <div className="flex items-center mb-4 ml-1 text-gray-500">
+          <div className="flex items-center ml-1">
             {tags.map((tag) => (
-              <div className="px-2 py-1 mr-2 bg-gray-200 rounded-full">
+              <div className="px-2 py-0 mr-2 bg-gray-200 rounded-full">
                 {tag.name}
               </div>
             ))}
           </div>
         )}
-
-        {currentTab === 'preview' && (
-          <div className="flex justify-between px-1 opacity-20 hover:opacity-100 transition-opacity duration-100 ease-out">
-            <BookmarkOutline className="w-5 h-5 cursor-pointer" />
-            <TrashOutline className="w-5 h-5 cursor-pointer" />
-            <SaveOutline className="w-5 h-5 cursor-pointer" />
-          </div>
-        )}
       </div>
+
+      <div
+        onClick={() => currentTab === 'preview' && changeTab('write')}
+        className="cursor-pointer"
+      >
+        <Editor
+          content={content}
+          setContent={(newContent) => {
+            upsertNote(id, newContent);
+          }}
+          selectedTab={currentTab}
+          setSelectedTab={changeTab}
+        />
+      </div>
+
+      {currentTab === 'preview' && (
+        <div className="flex justify-between px-2 my-4 opacity-20 hover:opacity-100 transition-opacity duration-100 ease-out">
+          <BookmarkOutline className="w-5 h-5 cursor-pointer" />
+          <TrashOutline className="w-5 h-5 cursor-pointer" />
+          <SaveOutline className="w-5 h-5 cursor-pointer" />
+        </div>
+      )}
     </>
   );
 }

@@ -1,25 +1,14 @@
 import {useRef, useEffect} from 'react';
 import ReactMde from 'react-mde';
-import ReactMarkdown from 'react-markdown';
 import {getDefaultToolbarCommands} from 'react-mde';
 import {EditorTab} from 'src/libs/types';
 import * as API from 'src/libs/api';
 import logger from 'src/libs/logger';
-import Tex from '@matejmazur/react-katex';
 import FileType from 'file-type/browser';
 
-import 'katex/dist/katex.min.css';
+import MarkdownRenderer from './MarkdownRenderer';
 
 import 'src/css/editor.css';
-
-import gfm from 'remark-gfm';
-import math from 'remark-math';
-import breaks from 'remark-breaks';
-
-const renderers = {
-  inlineMath: ({value}: {value: string}) => <Tex math={value} />,
-  math: ({value}: {value: string}) => <Tex block math={value} />,
-};
 
 type Props = {
   content: string;
@@ -91,13 +80,7 @@ export default function Editor(props: Props) {
         selectedTab === 'write' ? getDefaultToolbarCommands() : []
       }
       generateMarkdownPreview={(markdown) =>
-        Promise.resolve(
-          <ReactMarkdown
-            plugins={[gfm, math, breaks]}
-            renderers={renderers}
-            source={markdown}
-          />
-        )
+        Promise.resolve(<MarkdownRenderer source={markdown} />)
       }
       classes={{
         reactMde: selectedTab === 'write' ? 'border rounded' : '',

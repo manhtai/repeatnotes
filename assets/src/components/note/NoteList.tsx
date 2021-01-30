@@ -1,8 +1,9 @@
 import {useState, useEffect} from 'react';
-import NoteEdit from './NoteEdit';
 import {Note} from 'src/libs/types';
 import * as API from 'src/libs/api';
 import logger from 'src/libs/logger';
+
+import NoteView from './NoteView';
 
 export default function NoteList() {
   const [notes, setNotes] = useState<Note[]>([]);
@@ -28,12 +29,7 @@ export default function NoteList() {
   return (
     <>
       {notes.map((note: Note) => (
-        <div
-          className="max-w-xl m-5 mx-auto border rounded shadow min-w-1/4"
-          key={note.id}
-        >
-          <NoteEdit noteId={note.id} noteContent={note.content} />
-        </div>
+        <NoteView key={note.id} note={note} />
       ))}
     </>
   );

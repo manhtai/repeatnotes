@@ -158,6 +158,7 @@ function HomePage() {
   const settingsRoutes = [
     {path: '/settings/account', name: 'Account', Component: Account},
     {path: '/settings/billing', name: 'Billing', Component: Billing},
+    {path: '/settings/config', name: 'Configuration', Component: SrsConfig},
   ];
 
   const routes = [
@@ -166,7 +167,6 @@ function HomePage() {
     {path: '/stats', name: 'Stats', Component: NoteRandom},
     {path: '/new', name: 'New', Component: NoteNew},
     {path: '/review', name: 'Review', Component: CardReview},
-    {path: '/config', name: 'Configuration', Component: SrsConfig},
     {path: '/', name: 'Review', Component: NoteHome},
     ...settingsRoutes,
   ];
@@ -175,14 +175,14 @@ function HomePage() {
     {path: '/review', name: 'Review', Icon: ClockOutline},
     {path: '/random', name: 'Random', Icon: LightningBoltOutline},
     {path: '/stats', name: 'Stats', Icon: ChartBarOutline},
-    {path: '/config', name: 'Config', Icon: CogOutline},
+    {path: '/settings/config', name: 'Config', Icon: CogOutline},
   ];
 
   const bottomNavBar = [
     {path: '/review', name: 'Review', Icon: ClockOutline},
     {path: '/new', name: 'New', Icon: PlusCircleOutline},
     {path: '/random', name: 'Stats', Icon: ChartBarOutline},
-    {path: '/config', name: 'Config', Icon: CogOutline},
+    {path: '/settings/config', name: 'Config', Icon: CogOutline},
   ];
 
   return (
