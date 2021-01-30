@@ -5,17 +5,20 @@ import '@fontsource/comic-mono/700.css';
 import {BrowserRouter} from 'react-router-dom';
 
 import {AuthProvider} from 'src/components/auth/AuthProvider';
+import {GlobalProvider} from 'src/components/global/GlobalProvider';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import './css/main.css';
 
 ReactDOM.render(
   <React.StrictMode>
-    <AuthProvider>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </AuthProvider>
+    <GlobalProvider>
+      <AuthProvider>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </AuthProvider>
+    </GlobalProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

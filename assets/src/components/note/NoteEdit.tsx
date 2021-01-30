@@ -94,7 +94,7 @@ export default function NoteEdit(props: Props) {
   ];
 
   return (
-    <>
+    <div className="max-w-2xl mx-auto mb-16">
       <div className="flex flex-col p-1 my-1 text-gray-500">
         {currentTab === 'write' ? (
           <ReactTags
@@ -125,7 +125,10 @@ export default function NoteEdit(props: Props) {
         ) : (
           <div className="flex items-center ml-1">
             {tags.map((tag) => (
-              <div className="px-2 py-0 mr-2 bg-gray-200 rounded-full">
+              <div
+                className="px-2 py-0 mr-2 bg-gray-200 rounded-full"
+                key={tag.id}
+              >
                 {tag.name}
               </div>
             ))}
@@ -154,6 +157,6 @@ export default function NoteEdit(props: Props) {
           <SaveOutline className="w-5 h-5 cursor-pointer" />
         </div>
       )}
-    </>
+    </div>
   );
 }

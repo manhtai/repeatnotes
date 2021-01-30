@@ -1,14 +1,9 @@
 import React, {useState} from 'react';
 import {
   CogOutline,
-  TrashOutline,
-  PencilOutline,
-  TagOutline,
   ClockOutline,
   ChartBarOutline,
-  LightBulbOutline,
   PlusCircleOutline,
-  ArchiveOutline,
   LightningBoltOutline,
   CheckCircleOutline,
   MenuAlt2Outline,
@@ -16,16 +11,16 @@ import {
   RefreshOutline,
 } from 'heroicons-react';
 
-import {Route, Link, NavLink, useLocation} from 'react-router-dom';
+import {Route, NavLink, useLocation} from 'react-router-dom';
 import {Transition} from '@headlessui/react';
 
-import {useAuth} from 'src/components/auth/AuthProvider';
-import {useGlobal, GlobalProvider} from 'src/components/global/GlobalProvider';
+import {useGlobal} from 'src/components/global/GlobalProvider';
 import {SyncStatus} from 'src/libs/types';
 
 import CardReview from 'src/components/card/CardReview';
 import NoteList from 'src/components/note/NoteList';
 import NoteNew from 'src/components/note/NoteNew';
+import NoteDetail from 'src/components/note/NoteDetail';
 import NoteRandom from 'src/components/note/NoteRandom';
 import NoteHome from 'src/components/note/NoteHome';
 
@@ -33,89 +28,7 @@ import SrsConfig from 'src/components/settings/SrsConfig';
 import Account from 'src/components/settings/Account';
 import Billing from 'src/components/settings/Billing';
 
-type MenuProps = {
-  routes: Array<any>;
-};
-
-const getMenuItemClass = () => {
-  return 'flex items-end justify-start block py-3 px-6 text-gray-700 rounded-r-full cursor-pointer hover:bg-gray-100 hover:text-indigo-700 focus:outline-none focus:bg-indigo-200';
-};
-
-const tags = Array.from({length: 20}, (_, i) => `Tag ${i}`);
-
-function MenuItems(props: MenuProps) {
-  const auth = useAuth();
-
-  return (
-    <>
-      <div className="py-1">
-        <NavLink
-          className={getMenuItemClass()}
-          activeClassName="text-indigo-800 bg-indigo-200"
-          to={'/notes'}
-        >
-          <LightBulbOutline className="mr-2" /> Notes
-        </NavLink>
-      </div>
-      <div className="border-t border-gray-200"></div>
-      <div className="py-1">
-        {tags.map((tag) => (
-          <span className={getMenuItemClass()} role="menuitem" key={tag}>
-            <TagOutline className="mr-2" /> {tag}
-          </span>
-        ))}
-      </div>
-      <div className="py-1">
-        <span className={getMenuItemClass()} role="menuitem">
-          <PencilOutline className="mr-2" /> Edit tags
-        </span>
-      </div>
-      <div className="border-t border-gray-200"></div>
-      <div className="py-1">
-        <NavLink
-          className={getMenuItemClass()}
-          activeClassName="text-indigo-800 bg-indigo-200"
-          to={'/archives'}
-        >
-          <ArchiveOutline className="mr-2" /> Archive
-        </NavLink>
-        <NavLink
-          className={getMenuItemClass()}
-          activeClassName="text-indigo-800 bg-indigo-200"
-          to={'/trash'}
-        >
-          <TrashOutline className="mr-2" /> Trash
-        </NavLink>
-      </div>
-      <div className="border-t border-gray-200"></div>
-      <div className="py-1">
-        {props.routes &&
-          props.routes.map((route) => {
-            return (
-              <Link
-                to={route.path}
-                className={getMenuItemClass()}
-                role="menuitem"
-                key={route.path}
-              >
-                {route.name}
-              </Link>
-            );
-          })}
-      </div>
-      <div className="border-t border-gray-200"></div>
-      <div className="py-1 pb-2">
-        <span
-          className={getMenuItemClass()}
-          role="menuitem"
-          onClick={auth.logout}
-        >
-          Sign out
-        </span>
-      </div>
-    </>
-  );
-}
+import MenuItems from 'src/components/home/MenuItems';
 
 type NavBarProps = {
   path: string;
@@ -150,7 +63,7 @@ function BottomNavBarItem({path, children}: NavBarProps) {
   );
 }
 
-function HomePage() {
+export default function HomePage() {
   const [isSideBarOpen, setSideBarOpen] = useState(false);
   const location = useLocation();
   const globalContext = useGlobal();
@@ -168,6 +81,7 @@ function HomePage() {
     {path: '/new', name: 'New', Component: NoteNew},
     {path: '/review', name: 'Review', Component: CardReview},
     {path: '/', name: 'Review', Component: NoteHome},
+    {path: '/note/:id', name: 'Note', Component: NoteDetail},
     ...settingsRoutes,
   ];
 
@@ -221,7 +135,10 @@ function HomePage() {
       {/* Main */}
       <main className="relative flex flex-1 min-h-0">
         {/* Left sidebar */}
-        <nav className="flex flex-col hidden w-1/4 overflow-x-hidden overflow-y-auto lg:block">
+        <nav
+          className="flex flex-col hidden w-1/4 overflow-x-hidden overflow-y-auto lg:block"
+          id="left-scroll"
+        >
           <div
             className=""
             role="menu"
@@ -234,7 +151,7 @@ function HomePage() {
 
         {/* Middle content */}
         <section className="relative flex flex-col w-full">
-          <div className="overflow-x-hidden overflow-y-auto">
+          <div className="overflow-x-hidden overflow-y-auto" id="middle-scroll">
             {routes.map(({path, Component}) => (
               <Route key={path} exact path={path}>
                 {({match}) => (
@@ -312,13 +229,5 @@ function HomePage() {
         })}
       </section>
     </div>
-  );
-}
-
-export default function HomePageWithContext() {
-  return (
-    <GlobalProvider>
-      <HomePage />
-    </GlobalProvider>
   );
 }

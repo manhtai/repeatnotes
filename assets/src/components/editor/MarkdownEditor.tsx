@@ -1,4 +1,4 @@
-import {useRef, useEffect} from 'react';
+import {useRef, useEffect, useState} from 'react';
 import ReactMde from 'react-mde';
 import {getDefaultToolbarCommands} from 'react-mde';
 import {EditorTab} from 'src/libs/types';
@@ -21,6 +21,7 @@ const supportedTypes = new Set(['jpg', 'jpeg', 'gif', 'png', 'xml']);
 const initialEditorHeight = 128;
 
 export default function Editor(props: Props) {
+  const [firstLoad, setFirstLoad] = useState(true);
   const {content, setContent, selectedTab, setSelectedTab} = props;
 
   const save = async function* (data: any) {
@@ -50,30 +51,28 @@ export default function Editor(props: Props) {
   const ref = useRef<ReactMde>(null);
 
   const fitContent = () => {
+    const middleScroll = document.getElementById('middle-scroll');
     const textArea = ref.current?.finalRefs.textarea?.current;
-    if (textArea) {
-      textArea.style.overflow = 'hidden';
+
+    if (middleScroll && textArea) {
+      const scrollTop = middleScroll.scrollTop;
+
       textArea.style.height = 'auto';
-      textArea.style.height = `${Math.max(
-        50 + textArea.scrollHeight,
-        initialEditorHeight
-      )}px`;
+      textArea.style.height = `${textArea.scrollHeight}px`;
+      textArea.scrollTop = textArea.scrollHeight;
+
+      middleScroll.scrollTo(0, scrollTop);
     }
   };
 
-  const onTextChange = (text: string) => {
-    fitContent();
-    setContent(text);
-  };
-
-  useEffect(() => fitContent(), [selectedTab]);
+  useEffect(fitContent, [selectedTab, content, firstLoad]);
 
   return (
     <ReactMde
       ref={ref}
       initialEditorHeight={initialEditorHeight}
       value={content}
-      onChange={onTextChange}
+      onChange={setContent}
       selectedTab={selectedTab}
       onTabChange={setSelectedTab}
       toolbarCommands={
@@ -91,7 +90,7 @@ export default function Editor(props: Props) {
       }}
       l18n={{
         write: 'Write',
-        preview: 'Done',
+        preview: 'Preview',
         uploadingImage: 'Uploading image...',
         pasteDropSelect:
           'Attach images by dragging & dropping, selecting or pasting them here.',
