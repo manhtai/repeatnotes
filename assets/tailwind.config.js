@@ -50,6 +50,7 @@ module.exports = {
       backgroundColor: ['active'],
       cursor: ['disabled'],
       outline: ['active'],
+      borderWidth: ['disabled'],
     }
   },
   plugins: [

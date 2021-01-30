@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {NavLink} from 'react-router-dom';
 import {useAuth} from 'src/components/auth/AuthProvider';
 import {
@@ -8,6 +8,7 @@ import {
   LightBulbOutline,
   ArchiveOutline,
 } from 'heroicons-react';
+import TagModal from 'src/components/tag/TagModal';
 
 type MenuProps = {
   routes: Array<any>;
@@ -36,6 +37,7 @@ function MenuItem(props: MenuItemProps) {
 
 export default function MenuItems(props: MenuProps) {
   const auth = useAuth();
+  const [showTagModal, setShowTagModal] = useState(false);
 
   return (
     <>
@@ -51,9 +53,15 @@ export default function MenuItems(props: MenuProps) {
         </MenuItem>
       ))}
 
-      <MenuItem link={'/tags'}>
-        <PencilOutline className="mr-2" /> Edit tags
-      </MenuItem>
+      <div className="py-1">
+        <span
+          className="flex items-end justify-start block px-6 py-3 text-gray-700 rounded-r-full cursor-pointer hover:bg-gray-100 hover:text-indigo-700 focus:outline-none focus:bg-indigo-200"
+          role="menuitem"
+          onClick={() => setShowTagModal(!showTagModal)}
+        >
+          <PencilOutline className="mr-2" /> Edit tags
+        </span>
+      </div>
 
       <div className="border-t border-gray-200"></div>
 
@@ -86,6 +94,13 @@ export default function MenuItems(props: MenuProps) {
           Sign out
         </span>
       </div>
+
+      <TagModal
+        header={'Edit tags'}
+        allowCheck={false}
+        showModal={showTagModal}
+        setShowTagModal={() => setShowTagModal(false)}
+      />
     </>
   );
 }

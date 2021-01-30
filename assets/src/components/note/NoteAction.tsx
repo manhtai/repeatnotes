@@ -23,6 +23,8 @@ export default function NoteAction() {
       </div>
 
       <TagModal
+        allowCheck={true}
+        header={'Add tags to note'}
         showModal={showTagModal}
         setShowTagModal={() => setShowTagModal(false)}
       />
