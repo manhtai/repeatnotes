@@ -222,10 +222,120 @@ export const updateNote = async (
     .then((res) => res.body.data);
 };
 
+export const deleteNote = async (id: string, token = getAccessToken()) => {
+  if (!token) {
+    throw new Error('Invalid token!');
+  }
+
+  return request
+    .delete(`/api/notes/${id}`)
+    .set('Authorization', token)
+    .then(() => {});
+};
+
+// Upload APIs
 export const uploadFile = async (file: File, token = getAccessToken()) => {
   return request
     .post(`/api/upload`)
     .set('Authorization', token || '')
     .attach('file', file)
     .then((res) => res.body.data);
+};
+
+// Tag APIs
+export const fetchAllTags = async (params = {}, token = getAccessToken()) => {
+  if (!token) {
+    throw new Error('Invalid token!');
+  }
+
+  return request
+    .get('/api/tags')
+    .query(params)
+    .set('Authorization', token)
+    .then((res) => res.body.data);
+};
+
+export const fetchTagById = async (id: string, token = getAccessToken()) => {
+  return request
+    .get(`/api/tags/${id}`)
+    .set('Authorization', token || '')
+    .then((res) => res.body.data);
+};
+
+export const createTag = async (data: any, token = getAccessToken()) => {
+  if (!token) {
+    throw new Error('Invalid token!');
+  }
+
+  return request
+    .post('/api/tags')
+    .set('Authorization', token)
+    .send(data)
+    .then((res) => res.body.data);
+};
+
+export const updateTag = async (
+  id: string,
+  updates: any,
+  token = getAccessToken()
+) => {
+  if (!token) {
+    throw new Error('Invalid token!');
+  }
+
+  return request
+    .put(`/api/tags/${id}`)
+    .set('Authorization', token)
+    .send(updates)
+    .then((res) => res.body.data);
+};
+
+export const deleteTag = async (id: string, token = getAccessToken()) => {
+  if (!token) {
+    throw new Error('Invalid token!');
+  }
+
+  return request
+    .delete(`/api/tags/${id}`)
+    .set('Authorization', token)
+    .then(() => {});
+};
+
+// Note tags
+export const fetchNotesByTag = async (id: string, token = getAccessToken()) => {
+  return request
+    .get(`/api/tags/${id}/notes`)
+    .set('Authorization', token || '')
+    .then((res) => res.body.data);
+};
+
+export const addTag = async (
+  noteId: string,
+  tagId: string,
+  token = getAccessToken()
+) => {
+  if (!token) {
+    throw new Error('Invalid token!');
+  }
+
+  return request
+    .post(`/api/notes/${noteId}/tags`)
+    .send({tag_id: tagId})
+    .set('Authorization', token)
+    .then((res) => res.body.data);
+};
+
+export const removeTag = async (
+  noteId: string,
+  tagId: string,
+  token = getAccessToken()
+) => {
+  if (!token) {
+    throw new Error('Invalid token!');
+  }
+
+  return request
+    .delete(`/api/notes/${noteId}/tags/${tagId}`)
+    .set('Authorization', token)
+    .then(() => {});
 };
