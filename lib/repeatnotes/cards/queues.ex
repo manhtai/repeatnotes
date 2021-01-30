@@ -13,4 +13,3 @@ defmodule RepeatNotes.Cards.Queues do
   def suspended, do: @suspended
   def buried, do: @buried
 end
-

@@ -20,4 +20,3 @@ defmodule RepeatNotesWeb.SrsConfigController do
     end
   end
 end
-
