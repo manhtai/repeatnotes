@@ -1,12 +1,12 @@
 import {useState, useEffect, useCallback} from 'react';
-import {Note, EditorTab, SyncStatus} from 'src/libs/types';
+import {Note, Tag, EditorTab, SyncStatus} from 'src/libs/types';
 import * as API from 'src/libs/api';
 import logger from 'src/libs/logger';
 import Editor from 'src/components/editor/MarkdownEditor';
 import {useGlobal} from 'src/components/global/GlobalProvider';
 import debounce from 'lodash/debounce';
-import {TrashOutline, SaveOutline, BookmarkOutline} from 'heroicons-react';
-import ReactTags, {Tag} from 'react-tag-autocomplete';
+import TagView from 'src/components/tag/TagView';
+import NoteAction from './NoteAction';
 
 type Props = {
   noteId?: string;
@@ -33,6 +33,7 @@ export default function NoteEdit(props: Props) {
         (note: Note) => {
           setSync(SyncStatus.Success);
           setId(note.id);
+          setNote && setNote({id: note.id, content: newContent});
         },
         (error) => {
           setSync(SyncStatus.Error);
@@ -46,6 +47,7 @@ export default function NoteEdit(props: Props) {
       API.updateNote(id, {note: {content: newContent}}).then(
         () => {
           setSync(SyncStatus.Success);
+          setNote && setNote({id, content: newContent});
         },
         (error) => {
           setSync(SyncStatus.Error);
@@ -83,59 +85,12 @@ export default function NoteEdit(props: Props) {
   }, [noteId, noteContent]);
 
   const tags: Tag[] = [
-    {id: 1, name: 'Apples'},
-    {id: 2, name: 'Pears'},
-  ];
-  const suggestions = [
-    {id: 3, name: 'Bananas'},
-    {id: 4, name: 'Mangos'},
-    {id: 5, name: 'Lemons'},
-    {id: 6, name: 'Apricots'},
+    {id: '1', name: 'Apples'},
+    {id: '2', name: 'Pears'},
   ];
 
   return (
-    <div className="max-w-2xl mx-auto mb-16">
-      <div className="flex flex-col p-1 my-1 text-gray-500">
-        {currentTab === 'write' ? (
-          <ReactTags
-            id={id}
-            classNames={{
-              root: 'ml-1 flex items-center  overflow-x-auto overflow-y-hidden',
-              rootFocused: 'is-focused',
-              selected: 'mr-1',
-              selectedTag: 'mr-2',
-              selectedTagName: 'bg-gray-200 px-2 py-1 rounded-full',
-              search: '',
-              searchInput:
-                'outline-none border rounded py-1 px-2 text-gray-700',
-              suggestions: 'py-1 px-2 text-gray-600 cursor-pointer absolute',
-              suggestionActive: 'font-bold',
-              suggestionDisabled: 'text-gray-300',
-            }}
-            autoresize={false}
-            tags={tags}
-            suggestions={suggestions}
-            onDelete={(i) => {
-              tags.splice(i, 1);
-            }}
-            onAddition={(tag: Tag) => {
-              tags.push(tag);
-            }}
-          />
-        ) : (
-          <div className="flex items-center ml-1">
-            {tags.map((tag) => (
-              <div
-                className="px-2 py-0 mr-2 bg-gray-200 rounded-full"
-                key={tag.id}
-              >
-                {tag.name}
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-
+    <div className="max-w-2xl mx-auto mt-4 mb-16">
       <div
         onClick={() => currentTab === 'preview' && changeTab('write')}
         className="cursor-pointer"
@@ -150,13 +105,11 @@ export default function NoteEdit(props: Props) {
         />
       </div>
 
-      {currentTab === 'preview' && (
-        <div className="flex justify-between px-2 my-4 opacity-20 hover:opacity-100 transition-opacity duration-100 ease-out">
-          <BookmarkOutline className="w-5 h-5 cursor-pointer" />
-          <TrashOutline className="w-5 h-5 cursor-pointer" />
-          <SaveOutline className="w-5 h-5 cursor-pointer" />
-        </div>
-      )}
+      <div className="flex flex-col my-4 text-gray-500">
+        {currentTab === 'write' ? null : <TagView tags={tags} />}
+      </div>
+
+      <NoteAction />
     </div>
   );
 }

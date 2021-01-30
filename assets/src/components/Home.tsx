@@ -22,7 +22,6 @@ import NoteList from 'src/components/note/NoteList';
 import NoteNew from 'src/components/note/NoteNew';
 import NoteDetail from 'src/components/note/NoteDetail';
 import NoteRandom from 'src/components/note/NoteRandom';
-import NoteHome from 'src/components/note/NoteHome';
 
 import SrsConfig from 'src/components/settings/SrsConfig';
 import Account from 'src/components/settings/Account';
@@ -38,7 +37,7 @@ type NavBarProps = {
 
 function TopNavBarItem({path, name, children}: NavBarProps) {
   return (
-    <li className="hidden h-full hover:bg-gray-200 lg:block">
+    <li className="hidden h-full hover:bg-gray-200 lg:block active:outline-none">
       <NavLink
         className="flex flex-row items-center h-full px-4 focus:text-indigo-500"
         activeClassName="text-indigo-500"
@@ -80,15 +79,15 @@ export default function HomePage() {
     {path: '/stats', name: 'Stats', Component: NoteRandom},
     {path: '/new', name: 'New', Component: NoteNew},
     {path: '/review', name: 'Review', Component: CardReview},
-    {path: '/', name: 'Review', Component: NoteHome},
+    {path: '/', name: 'Review', Component: NoteList},
     {path: '/note/:id', name: 'Note', Component: NoteDetail},
     ...settingsRoutes,
   ];
 
   const topNavBar = [
-    {path: '/review', name: 'Review', Icon: ClockOutline},
-    {path: '/random', name: 'Random', Icon: LightningBoltOutline},
-    {path: '/stats', name: 'Stats', Icon: ChartBarOutline},
+    {path: '/new', name: 'New', Icon: PlusCircleOutline},
+    {path: '/review', name: 'Review', Icon: LightningBoltOutline},
+    {path: '/hightlight', name: 'Hightlight', Icon: ClockOutline},
     {path: '/settings/config', name: 'Config', Icon: CogOutline},
   ];
 
@@ -100,7 +99,7 @@ export default function HomePage() {
   ];
 
   return (
-    <div className="absolute inset-0 flex flex-col overflow-hidden sm:text-sm">
+    <div className="absolute inset-0 flex flex-col overflow-hidden text-sm">
       {/* Top bar nav */}
       <header className="flex px-4 text-sm bg-gray-100 border-b flex-0 h-14">
         <ul className="flex items-center px-2">

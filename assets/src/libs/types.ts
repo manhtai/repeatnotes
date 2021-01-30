@@ -77,4 +77,9 @@ export enum Choice {
   Easy = 4,
 }
 
+export type Tag = {
+  id: string;
+  name: string;
+};
+
 export type EditorTab = 'write' | 'preview';

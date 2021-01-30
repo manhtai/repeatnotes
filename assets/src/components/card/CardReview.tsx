@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import {useSrs, SrsProvider} from './SrsProvider';
 import {useGlobal} from 'src/components/global/GlobalProvider';
-import NoteEdit from 'src/components/note/NoteEdit';
+import NotePreview from 'src/components/note/NotePreview';
 
-import {Choice, SyncStatus, SrsConfig, Card, EditorTab} from 'src/libs/types';
+import {Choice, SyncStatus, SrsConfig, Card} from 'src/libs/types';
 import logger from 'src/libs/logger';
 import * as API from 'src/libs/api';
 
@@ -15,42 +15,56 @@ type AnswerProps = {
 };
 
 const getAnswerButtonClass = (color: string) => {
-  return `flex-0 w-full px-1 py-0 mb-1 mr-1 font-bold text-${color}-700 border-2 border-${color}-700 rounded-full outline-none hover:text-${color}-600 hover:border-${color}-600 active:text-${color}-500 active:border-${color}-500 focus:outline-none`;
+  return `w-full p-1 mb-1 font-bold text-${color}-700 border-2 border-${color}-700 rounded-full outline-none hover:text-${color}-600 hover:border-${color}-600 active:text-${color}-500 active:border-${color}-500 focus:outline-none`;
 };
 
-function Answer(props: AnswerProps) {
+type AnswerItemProps = {
+  text: string;
+  color: string;
+  showDue: boolean;
+  card: Card;
+  choice: Choice;
+  answerCard: (card: Card, choice: Choice) => void;
+  nextInterval: (card: Card, choice: Choice) => string;
+};
+
+function AnswerItem(props: AnswerItemProps) {
+  const {text, showDue, choice, color, answerCard, card, nextInterval} = props;
+  return (
+    <button
+      className={getAnswerButtonClass(color)}
+      onClick={() => answerCard(card, choice)}
+    >
+      {text}
+      {showDue && ` (${nextInterval(card, choice)})`}
+    </button>
+  );
+}
+
+function Answers(props: AnswerProps) {
   const {card, config, answerCard, nextInterval} = props;
 
+  const choices = [
+    {text: 'Forgot', choice: Choice.Again, color: 'red'},
+    {text: 'Hard', choice: Choice.Hard, color: 'yellow'},
+    {text: 'Good', choice: Choice.Ok, color: 'green'},
+    {text: 'Easy', choice: Choice.Easy, color: 'indigo'},
+  ];
+
   return (
-    <div className="flex items-center justify-center p-2 mt-2 text-xs md:text-sm">
-      <button
-        className={getAnswerButtonClass('red')}
-        onClick={() => answerCard(card, Choice.Again)}
-      >
-        Forgot
-        {config?.show_next_due && <p> ({nextInterval(card, Choice.Again)})</p>}
-      </button>
-      <button
-        className={getAnswerButtonClass('yellow')}
-        onClick={() => answerCard(card, Choice.Hard)}
-      >
-        Hard
-        {config?.show_next_due && <p> ({nextInterval(card, Choice.Hard)})</p>}
-      </button>
-      <button
-        className={getAnswerButtonClass('green')}
-        onClick={() => answerCard(card, Choice.Ok)}
-      >
-        Good
-        {config?.show_next_due && <p> ({nextInterval(card, Choice.Ok)})</p>}
-      </button>
-      <button
-        className={getAnswerButtonClass('indigo')}
-        onClick={() => answerCard(card, Choice.Easy)}
-      >
-        Easy
-        {config?.show_next_due && <p> ({nextInterval(card, Choice.Easy)})</p>}
-      </button>
+    <div className="flex items-center justify-center p-2 mt-2 text-xs space-x-2 md:text-sm">
+      {choices.map((choice) => (
+        <AnswerItem
+          key={choice.text}
+          text={choice.text}
+          color={choice.color}
+          choice={choice.choice}
+          card={card}
+          answerCard={answerCard}
+          nextInterval={nextInterval}
+          showDue={config?.show_next_due ? true : false}
+        />
+      ))}
     </div>
   );
 }
@@ -61,7 +75,6 @@ function CardReview() {
 
   const [card, setCard] = useState<Card | null>(null);
   const [cards, setCards] = useState([]);
-  const [selectedTab, setSelectedTab] = useState<EditorTab>('preview');
   const [fetchingCards, setFetchingCards] = useState(true);
 
   const answerCard = async (card: Card, choice: Choice) => {
@@ -128,22 +141,14 @@ function CardReview() {
         </div>
       ) : (
         <div className="p-2 border rounded shadow">
-          <NoteEdit
-            noteId={card.note.id}
-            noteContent={card.note.content}
-            setNote={(note) => setCard({...card, note})}
-            selectedTab={selectedTab}
-            setSelectedTab={setSelectedTab}
-          />
+          <NotePreview content={card.note.content} />
 
-          {selectedTab === 'preview' && (
-            <Answer
-              card={card}
-              answerCard={answerCard}
-              nextInterval={nextInterval}
-              config={config}
-            />
-          )}
+          <Answers
+            card={card}
+            answerCard={answerCard}
+            nextInterval={nextInterval}
+            config={config}
+          />
         </div>
       )}
     </div>

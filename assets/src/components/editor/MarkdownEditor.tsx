@@ -1,4 +1,4 @@
-import {useRef, useEffect, useState} from 'react';
+import {useRef, useEffect} from 'react';
 import ReactMde from 'react-mde';
 import {getDefaultToolbarCommands} from 'react-mde';
 import {EditorTab} from 'src/libs/types';
@@ -21,7 +21,6 @@ const supportedTypes = new Set(['jpg', 'jpeg', 'gif', 'png', 'xml']);
 const initialEditorHeight = 128;
 
 export default function Editor(props: Props) {
-  const [firstLoad, setFirstLoad] = useState(true);
   const {content, setContent, selectedTab, setSelectedTab} = props;
 
   const save = async function* (data: any) {
@@ -58,14 +57,17 @@ export default function Editor(props: Props) {
       const scrollTop = middleScroll.scrollTop;
 
       textArea.style.height = 'auto';
-      textArea.style.height = `${textArea.scrollHeight}px`;
+      textArea.style.height = `${Math.max(
+        textArea.scrollHeight,
+        initialEditorHeight
+      )}px`;
       textArea.scrollTop = textArea.scrollHeight;
 
       middleScroll.scrollTo(0, scrollTop);
     }
   };
 
-  useEffect(fitContent, [selectedTab, content, firstLoad]);
+  useEffect(fitContent, [selectedTab, content]);
 
   return (
     <ReactMde
@@ -90,7 +92,7 @@ export default function Editor(props: Props) {
       }}
       l18n={{
         write: 'Write',
-        preview: 'Preview',
+        preview: 'Done',
         uploadingImage: 'Uploading image...',
         pasteDropSelect:
           'Attach images by dragging & dropping, selecting or pasting them here.',
