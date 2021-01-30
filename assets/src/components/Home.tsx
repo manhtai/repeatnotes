@@ -81,6 +81,7 @@ export default function HomePage() {
     {path: '/review', name: 'Review', Component: CardReview},
     {path: '/', name: 'Review', Component: NoteList},
     {path: '/note/:id', name: 'Note', Component: NoteDetail},
+    {path: '/tag/:tagId', name: 'Note', Component: NoteList},
     ...settingsRoutes,
   ];
 
@@ -135,7 +136,7 @@ export default function HomePage() {
       <main className="relative flex flex-1 min-h-0">
         {/* Left sidebar */}
         <nav
-          className="flex flex-col hidden w-1/4 overflow-x-hidden overflow-y-auto lg:block"
+          className="flex flex-col hidden w-1/5 overflow-x-hidden overflow-y-auto lg:block"
           id="left-scroll"
         >
           <div

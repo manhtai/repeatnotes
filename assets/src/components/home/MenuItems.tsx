@@ -13,7 +13,10 @@ type MenuProps = {
   routes: Array<any>;
 };
 
-const tags = Array.from({length: 20}, (_, i) => `Tag ${i}`);
+const tags = Array.from({length: 20}, (_, i) => ({
+  id: `${i}`,
+  name: `Tag ${i}`,
+}));
 
 type MenuItemProps = React.PropsWithChildren<{link: string}>;
 
@@ -43,8 +46,8 @@ export default function MenuItems(props: MenuProps) {
       <div className="border-t border-gray-200"></div>
 
       {tags.map((tag) => (
-        <MenuItem link={`/tag/${tag}`} key={tag}>
-          <TagOutline className="mr-2" /> {tag}
+        <MenuItem link={`/tag/${tag.id}`} key={tag.id}>
+          <TagOutline className="mr-2" /> {tag.name}
         </MenuItem>
       ))}
 

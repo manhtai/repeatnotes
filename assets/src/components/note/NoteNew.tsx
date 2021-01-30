@@ -2,7 +2,6 @@ import NoteEdit from 'src/components/note/NoteEdit';
 import {useState, useEffect} from 'react';
 import {useHistory} from 'react-router-dom';
 import {Note, EditorTab} from 'src/libs/types';
-import logger from 'src/libs/logger';
 
 export default function NoteNew() {
   const history = useHistory();
@@ -10,10 +9,9 @@ export default function NoteNew() {
   const [selectedTab, setSelectedTab] = useState<EditorTab>('write');
 
   useEffect(() => {
-    logger.log(note, selectedTab);
     if (note && note.id && selectedTab === 'preview') {
       history.push({
-        pathname: `note/${note.id}`,
+        pathname: `/note/${note.id}`,
         state: {
           note,
           tab: selectedTab,

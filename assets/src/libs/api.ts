@@ -168,13 +168,14 @@ export const updateCard = async (
 };
 
 // Note APIs
-export const fetchAllNotes = async (token = getAccessToken()) => {
+export const fetchAllNotes = async (params = {}, token = getAccessToken()) => {
   if (!token) {
     throw new Error('Invalid token!');
   }
 
   return request
     .get('/api/notes')
+    .query(params)
     .set('Authorization', token)
     .then((res) => res.body.data);
 };

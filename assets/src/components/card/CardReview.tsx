@@ -52,7 +52,7 @@ function Answers(props: AnswerProps) {
   ];
 
   return (
-    <div className="flex items-center justify-center p-2 mt-2 text-xs space-x-2 md:text-sm">
+    <div className="flex items-center justify-center p-2 mt-2 text-xs space-x-2">
       {choices.map((choice) => (
         <AnswerItem
           key={choice.text}
@@ -140,7 +140,7 @@ function CardReview() {
           No card to review for now, come back later.
         </div>
       ) : (
-        <div className="p-2 border rounded shadow">
+        <div className="p-2 border rounded shadow-sm">
           <NotePreview content={card.note.content} />
 
           <Answers

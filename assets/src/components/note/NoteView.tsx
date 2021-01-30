@@ -1,4 +1,3 @@
-import {TrashOutline, SaveOutline, BookmarkOutline} from 'heroicons-react';
 import NotePreview from './NotePreview';
 import TagView from 'src/components/tag/TagView';
 import {useHistory} from 'react-router-dom';
@@ -20,17 +19,20 @@ export default function NoteView(props: Props) {
 
   return (
     <div
-      className="max-w-2xl m-5 mx-auto border rounded shadow min-w-1/4 mde-preview"
+      className="max-w-xl m-5 mx-auto border rounded shadow-sm min-w-1/4"
       key={note.id}
-      onClick={() =>
-        note.id &&
-        history.push({
-          pathname: `note/${note.id}`,
-          state: {note},
-        })
-      }
     >
-      <NotePreview content={note.content} />
+      <section
+        onClick={() =>
+          note.id &&
+          history.push({
+            pathname: `/note/${note.id}`,
+            state: {note},
+          })
+        }
+      >
+        <NotePreview content={note.content} />
+      </section>
 
       <TagView tags={tags} />
 

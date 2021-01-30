@@ -90,7 +90,7 @@ export default function NoteEdit(props: Props) {
   ];
 
   return (
-    <div className="max-w-2xl mx-auto mt-4 mb-16">
+    <div className="max-w-xl mx-auto mt-4 mb-16">
       <div
         onClick={() => currentTab === 'preview' && changeTab('write')}
         className="cursor-pointer"
