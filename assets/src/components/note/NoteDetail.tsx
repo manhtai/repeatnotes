@@ -56,13 +56,11 @@ export default function NoteDetail() {
   }
 
   return (
-    <>
-      <NoteEdit
-        note={note}
-        setNote={updateNote}
-        selectedTab={selectedTab}
-        setSelectedTab={updateTab}
-      />
-    </>
+    <NoteEdit
+      note={note}
+      setNote={updateNote}
+      selectedTab={selectedTab}
+      setSelectedTab={updateTab}
+    />
   );
 }

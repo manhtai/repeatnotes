@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import {
   CogOutline,
-  ClockOutline,
   ChartBarOutline,
   LightBulbOutline,
   PlusCircleOutline,
@@ -25,6 +24,7 @@ import NoteArchive from 'src/components/note/NoteArchive';
 import NoteTrash from 'src/components/note/NoteTrash';
 import NoteBookmark from 'src/components/note/NoteBookmark';
 import NoteNew from 'src/components/note/NoteNew';
+import NoteEmpty from 'src/components/note/NoteEmpty';
 import NoteDetail from 'src/components/note/NoteDetail';
 
 import SrsConfig from 'src/components/settings/SrsConfig';
@@ -79,7 +79,7 @@ export default function HomePage() {
 
   const routes = [
     {path: '/notes', name: 'Notes', Component: NoteList},
-    {path: '/stats', name: 'Stats', Component: NoteList},
+    {path: '/stats', name: 'Stats', Component: NoteEmpty},
     {path: '/new', name: 'New', Component: NoteNew},
     {path: '/review', name: 'Review', Component: CardReview},
     {path: '/note/:id', name: 'Note', Component: NoteDetail},
@@ -94,12 +94,12 @@ export default function HomePage() {
   const topNavBar = [
     {path: '/new', name: 'New', Icon: PlusCircleOutline},
     {path: '/review', name: 'Review', Icon: LightningBoltOutline},
-    {path: '/stats', name: 'Hightlight', Icon: ChartBarOutline},
+    {path: '/stats', name: 'Stats', Icon: ChartBarOutline},
     {path: '/settings/config', name: 'Config', Icon: CogOutline},
   ];
 
   const bottomNavBar = [
-    {path: '/review', name: 'Review', Icon: ClockOutline},
+    {path: '/review', name: 'Review', Icon: LightningBoltOutline},
     {path: '/new', name: 'New', Icon: PlusCircleOutline},
     {path: '/notes', name: 'Notes', Icon: LightBulbOutline},
     {path: '/settings/config', name: 'Config', Icon: CogOutline},

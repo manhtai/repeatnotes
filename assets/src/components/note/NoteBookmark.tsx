@@ -4,6 +4,7 @@ import * as API from 'src/libs/api';
 import logger from 'src/libs/logger';
 
 import NoteView from './NoteView';
+import NoteEmpty from './NoteEmpty';
 
 export default function NoteBookmark() {
   const [notes, setNotes] = useState<Note[]>([]);
@@ -30,6 +31,10 @@ export default function NoteBookmark() {
 
   if (loading) {
     return null;
+  }
+
+  if (!notes.length) {
+    return <NoteEmpty />;
   }
 
   return (

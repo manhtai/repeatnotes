@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {useSrs, SrsProvider} from './SrsProvider';
 import {useGlobal} from 'src/components/global/GlobalProvider';
 import NotePreview from 'src/components/note/NotePreview';
+import NoteEmpty from 'src/components/note/NoteEmpty';
 
 import {Choice, SyncStatus, SrsConfig, Card} from 'src/libs/types';
 import logger from 'src/libs/logger';
@@ -136,9 +137,7 @@ function CardReview() {
   return (
     <div className="max-w-xl mx-auto mt-5">
       {!card ? (
-        <div className="px-4 py-3 border rounded shadow">
-          No card to review for now, come back later.
-        </div>
+        <NoteEmpty text="No more note to review today, come back later." />
       ) : (
         <div className="p-2 border rounded shadow-sm">
           <NotePreview content={card.note.content} />
