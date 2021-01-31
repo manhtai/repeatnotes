@@ -20,6 +20,7 @@ type Props = {
 type ContextTag = Tag & {
   checked: boolean;
   editing: boolean;
+  error: boolean;
 };
 
 export default function TagModal(props: Props) {
@@ -44,6 +45,9 @@ export default function TagModal(props: Props) {
             ...contextTags[changed],
             ...changes,
             id: changes.newId ? changes.newId : changes.id,
+            error: contextTags.find(
+              (t) => t.name === changes.name && t.id !== changes.id
+            ),
           },
           ...contextTags.slice(changed + 1).map(changeEditing),
         ];
@@ -55,6 +59,7 @@ export default function TagModal(props: Props) {
       ...tag,
       checked: false,
       editing: false,
+      error: false,
     }));
     setcontextTags(allTags);
   }, [tags]);
@@ -109,7 +114,12 @@ export default function TagModal(props: Props) {
                   autoFocus
                   value={tag.name}
                   placeholder="Tag name..."
-                  className="flex-1 w-full px-0 py-1 m-3 text-sm bg-transparent border-t-0 border-b border-l-0 border-r-0 border-gray-300 focus:border-gray-300 focus:ring-0 focus:outline-none"
+                  className={
+                    'flex-1 w-full px-0 py-1 m-3 text-sm bg-transparent border-t-0 border-b border-l-0 border-r-0 focus:ring-0 focus:outline-none' +
+                    (tag.error
+                      ? ' border-red-400 focus:border-red-400'
+                      : ' border-gray-400 focus:border-gray-400')
+                  }
                   onChange={(e) => {
                     updateContextTag({
                       ...tag,
@@ -145,6 +155,9 @@ export default function TagModal(props: Props) {
                 <CheckOutline
                   className="w-4 h-4 mr-6 cursor-pointer"
                   onClick={async () => {
+                    if (tag.error) {
+                      return;
+                    }
                     if (!tag.id) {
                       const newTag = await createTag(tag);
                       updateContextTag({...tag, newId: newTag && newTag.id});
@@ -168,6 +181,7 @@ export default function TagModal(props: Props) {
                   checked: false,
                   name: '',
                   editing: true,
+                  error: false,
                 });
                 setcontextTags([...contextTags]);
               }

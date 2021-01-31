@@ -142,10 +142,9 @@ defmodule RepeatNotesWeb.NoteController do
       note = Notes.get_note!(id, user_id)
 
       case Notes.delete_note(note) do
-        {:ok, _} ->
+        {:ok, %Note{}} ->
           conn
-          |> put_status(:no_content)
-          |> json(%{})
+          |> send_resp(:no_content, "")
 
         {:error, errors} ->
           conn

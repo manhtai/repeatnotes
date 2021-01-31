@@ -83,10 +83,9 @@ defmodule RepeatNotesWeb.TagController do
       tag = Tags.get_tag!(id, user_id)
 
       case Tags.delete_tag(tag) do
-        {:ok, _} ->
+        {:ok, %Tag{}} ->
           conn
-          |> put_status(:no_content)
-          |> json(%{})
+          |> send_resp(:no_content, "")
 
         {:error, errors} ->
           conn
