@@ -31,11 +31,11 @@ function Login(props: Props) {
 
   return (
     <main className="flex items-center justify-center min-h-screen">
-      <section className="flex flex-col items-center justify-center w-full max-w-sm">
+      <section className="flex flex-col items-center justify-center w-full max-w-sm p-4 mt-8 text-center">
         <Link to="/" className="mb-8">
           <img className="w-24" src={Logo} alt="logo" />
         </Link>
-        <h1 className="flex-auto pb-2 text-2xl font-bold">Welcome back!</h1>
+        <h1 className="pb-2 text-2xl font-bold">Welcome back!</h1>
         <p>{'Log in to your RepeatNotes account:'}</p>
         <div className="flex-auto w-full py-10">
           <form

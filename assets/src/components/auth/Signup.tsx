@@ -66,14 +66,12 @@ function SignUp(props: Props) {
 
   return (
     <main className="flex items-center justify-center min-h-screen">
-      <section className="flex flex-col items-center justify-center w-full max-w-sm">
+      <section className="flex flex-col items-center justify-center w-full max-w-sm p-4 mt-8 text-center">
         <Link to="/" className="mb-8">
           <img className="w-24" src={Logo} alt="logo" />
         </Link>
-        <h1 className="flex-auto pb-2 text-3xl font-bold">
-          Create your account
-        </h1>
-        <p>{'RepeatNotes is an open source project'}</p>
+        <h1 className="pb-2 text-2xl font-bold">Create your account</h1>
+        <p>{'RepeatNotes is an open source project.'}</p>
         <div className="flex-auto w-full py-10">
           <form onSubmit={handleSubmit}>
             <div className="relative flex flex-row items-center content-center justify-center w-full mb-4">
@@ -144,7 +142,7 @@ function SignUp(props: Props) {
             to={{pathname: '/login', search: `redirect=${redirect}`}}
             className="ml-1 font-bold text-indigo-500 hover:text-indigo-600"
           >
-            Log In
+            Log In.
           </Link>
         </p>
         <div className="h-48" />

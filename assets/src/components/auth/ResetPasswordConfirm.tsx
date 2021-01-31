@@ -32,13 +32,11 @@ function Confirm(props: ConfirmProps) {
 
   return (
     <main className="flex items-center justify-center min-h-screen">
-      <section className="flex flex-col items-center justify-center w-full max-w-sm">
+      <section className="flex flex-col items-center justify-center w-full max-w-sm p-4 mt-8 text-center">
         <Link to="/" className="mb-8">
           <img className="w-24" src={Logo} alt="logo" />
         </Link>
-        <h1 className="flex-auto mb-8 text-xl font-bold">
-          Choose a new password
-        </h1>
+        <h1 className="mb-8 text-xl font-bold">Choose a new password</h1>
         <div className="flex-auto w-full">
           <form onSubmit={handleSubmit}>
             <div className="relative flex flex-row items-center content-center justify-center w-full mb-4">

@@ -26,7 +26,7 @@ function Request(props: Props) {
 
   return (
     <main className="flex items-center justify-center min-h-screen">
-      <section className="flex flex-col items-center justify-center w-full max-w-sm">
+      <section className="flex flex-col items-center justify-center w-full max-w-sm p-4 mt-8 text-center">
         <Link to="/" className="mb-8">
           <img className="w-24" src={Logo} alt="logo" />
         </Link>
@@ -34,8 +34,8 @@ function Request(props: Props) {
           <p>Check your inbox for further instructions</p>
         ) : (
           <>
-            <h1 className="flex-auto mb-6 text-xl font-bold">Reset password</h1>
-            <p className="p-1 mb-8 text-sm text-center text-red-500">
+            <h1 className="mb-6 text-xl font-bold">Reset password</h1>
+            <p className="p-1 mb-8 text-sm text-red-500">
               {
                 'RepeatNotes encrypts your notes using your password to protect your privacy, if you reset your password, you will lose all your notes content.'
               }
