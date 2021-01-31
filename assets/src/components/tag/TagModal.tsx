@@ -12,7 +12,9 @@ import {Tag} from 'src/libs/types';
 
 type Props = {
   header: string;
-  allowCheck: boolean;
+  noteId: string | null;
+  checkedTagIds: string[];
+  setCheckedTagIds: (tags: string[]) => void;
   showModal: boolean;
   setShowTagModal: (b: boolean) => void;
 };
@@ -24,7 +26,14 @@ type ContextTag = Tag & {
 };
 
 export default function TagModal(props: Props) {
-  const {header, allowCheck, showModal, setShowTagModal} = props;
+  const {
+    header,
+    noteId,
+    checkedTagIds,
+    setCheckedTagIds,
+    showModal,
+    setShowTagModal,
+  } = props;
   const {tags, updateTag, deleteTag, createTag} = useGlobal();
 
   const [contextTags, setcontextTags] = useState<ContextTag[]>([]);
@@ -51,18 +60,20 @@ export default function TagModal(props: Props) {
           },
           ...contextTags.slice(changed + 1).map(changeEditing),
         ];
+
     setcontextTags(newTags);
+    setCheckedTagIds(newTags.filter((t) => t.checked).map((t) => t.id));
   };
 
   useEffect(() => {
     const allTags = tags.map((tag) => ({
       ...tag,
-      checked: false,
+      checked: checkedTagIds.find((id) => tag.id === id) ? true : false,
       editing: false,
       error: false,
     }));
     setcontextTags(allTags);
-  }, [tags]);
+  }, [tags, checkedTagIds]);
 
   return showModal ? (
     <div
@@ -80,7 +91,7 @@ export default function TagModal(props: Props) {
         <div className="pl-6 overflow-x-hidden overflow-y-auto max-h-96">
           {contextTags.map((tag) => (
             <div className="flex items-center" key={tag.id}>
-              {allowCheck ? (
+              {noteId != null ? (
                 <input
                   type="checkbox"
                   className="flex-none text-sm text-indigo-600 border-gray-300 rounded focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"

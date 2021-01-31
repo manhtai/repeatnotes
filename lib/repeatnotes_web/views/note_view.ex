@@ -3,7 +3,7 @@ defmodule RepeatNotesWeb.NoteView do
   alias RepeatNotesWeb.{NoteView, TagView}
 
   def render("index.json", %{notes: notes}) do
-    %{data: render_many(notes, NoteView, "expanded.json")}
+    %{data: render_many(notes, NoteView, "full.json")}
   end
 
   def render("create.json", %{note: note}) do

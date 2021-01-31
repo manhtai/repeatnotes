@@ -99,7 +99,9 @@ export default function MenuItems(props: MenuProps) {
 
       <TagModal
         header={'Edit tags'}
-        allowCheck={false}
+        checkedTagIds={[]}
+        setCheckedTagIds={() => {}}
+        noteId={null}
         showModal={showTagModal}
         setShowTagModal={() => setShowTagModal(false)}
       />

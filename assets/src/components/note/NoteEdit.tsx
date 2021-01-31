@@ -1,11 +1,10 @@
 import {useState, useEffect, useCallback} from 'react';
-import {Note, Tag, EditorTab, SyncStatus} from 'src/libs/types';
+import {Note, EditorTab, SyncStatus} from 'src/libs/types';
 import * as API from 'src/libs/api';
 import logger from 'src/libs/logger';
 import Editor from 'src/components/editor/MarkdownEditor';
 import {useGlobal} from 'src/components/global/GlobalProvider';
 import debounce from 'lodash/debounce';
-import TagView from 'src/components/tag/TagView';
 import NoteAction from './NoteAction';
 
 type Props = {
@@ -84,11 +83,6 @@ export default function NoteEdit(props: Props) {
     setContent(noteContent || '');
   }, [noteId, noteContent]);
 
-  const tags: Tag[] = [
-    {id: '1', name: 'Apples'},
-    {id: '2', name: 'Pears'},
-  ];
-
   return (
     <div
       className={
@@ -110,9 +104,13 @@ export default function NoteEdit(props: Props) {
         />
       </div>
 
-      {currentTab === 'write' ? null : <TagView tags={tags} />}
-
-      <NoteAction />
+      {noteId && (
+        <NoteAction
+          noteId={noteId}
+          noteTags={[]}
+          setNoteTags={(tags) => setNote && setNote({id, content, tags})}
+        />
+      )}
     </div>
   );
 }

@@ -17,7 +17,8 @@ export default function NoteList() {
 
   useEffect(() => {
     setLoading(true);
-    API.fetchAllNotes({tag: tagId}).then(
+    const fetchNotes = tagId ? API.fetchNotesByTag(tagId) : API.fetchAllNotes();
+    fetchNotes.then(
       (notes) => {
         setNotes(notes);
         setLoading(false);
@@ -28,6 +29,12 @@ export default function NoteList() {
     );
   }, [tagId]);
 
+  const updateNotes = (note: Note) => {
+    const changed = notes.findIndex((t) => t.id === note.id);
+    notes[changed] = {...note};
+    setNotes(notes);
+  };
+
   if (loading) {
     return null;
   }
@@ -35,7 +42,13 @@ export default function NoteList() {
   return (
     <>
       {notes.map((note: Note) => (
-        <NoteView key={note.id} note={note} />
+        <NoteView
+          key={note.id}
+          note={note}
+          setNote={(note) => {
+            updateNotes(note);
+          }}
+        />
       ))}
     </>
   );

@@ -1,21 +1,17 @@
 import NotePreview from './NotePreview';
 import TagView from 'src/components/tag/TagView';
 import {useHistory} from 'react-router-dom';
-import {Note, Tag} from 'src/libs/types';
+import {Note} from 'src/libs/types';
 import NoteAction from './NoteAction';
 
 type Props = {
   note: Note;
+  setNote: (note: Note) => void;
 };
 
 export default function NoteView(props: Props) {
   const history = useHistory();
-  const {note} = props;
-
-  const tags: Tag[] = [
-    {id: '1', name: 'Apples'},
-    {id: '2', name: 'Googles'},
-  ];
+  const {note, setNote} = props;
 
   return (
     <div
@@ -36,9 +32,13 @@ export default function NoteView(props: Props) {
         <NotePreview content={note.content} />
       </section>
 
-      <TagView tags={tags} />
+      <TagView tags={note.tags || []} />
 
-      <NoteAction />
+      <NoteAction
+        noteId={note.id}
+        noteTags={note.tags || []}
+        setNoteTags={(tags) => setNote({...note, tags})}
+      />
     </div>
   );
 }

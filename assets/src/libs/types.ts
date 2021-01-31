@@ -36,6 +36,7 @@ export enum CardQueue {
 export type Note = {
   id: string;
   content: string;
+  tags?: Tag[];
 };
 
 export type Card = {
