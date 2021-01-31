@@ -39,6 +39,9 @@ defmodule RepeatNotesWeb.NoteView do
       created_at: note.inserted_at,
       updated_at: note.updated_at,
       content: note.content,
+      pin: note.pin,
+      archive: note.archive,
+      trash: note.trash,
       tags: render_many(note.tags, TagView, "basic.json")
     }
   end

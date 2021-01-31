@@ -5,7 +5,13 @@ import {Note, EditorTab} from 'src/libs/types';
 
 export default function NoteNew() {
   const history = useHistory();
-  const [note, setNote] = useState<Note>();
+  const [note, setNote] = useState<Note>({
+    id: '',
+    content: '',
+    pin: false,
+    archive: false,
+    trash: false,
+  });
   const [selectedTab, setSelectedTab] = useState<EditorTab>('write');
 
   useEffect(() => {
@@ -22,8 +28,9 @@ export default function NoteNew() {
 
   return (
     <NoteEdit
-      selectedTab={selectedTab}
+      note={note}
       setNote={setNote}
+      selectedTab={selectedTab}
       setSelectedTab={setSelectedTab}
     />
   );

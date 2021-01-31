@@ -9,31 +9,21 @@ import NoteAction from './NoteAction';
 import TagView from 'src/components/tag/TagView';
 
 type Props = {
-  noteId?: string;
-  noteContent?: string;
-  noteTags?: Tag[];
-  setNote?: (note: Note) => void;
-  selectedTab?: EditorTab;
-  setSelectedTab?: (tab: EditorTab) => void;
+  note: Note;
+  setNote: (note: Note) => void;
+  selectedTab: EditorTab;
+  setSelectedTab: (tab: EditorTab) => void;
 };
 
 export default function NoteEdit(props: Props) {
   const {setSync} = useGlobal();
-  const {
-    noteId,
-    noteContent,
-    noteTags,
-    setNote,
-    selectedTab,
-    setSelectedTab,
-  } = props;
+  const {note, setNote, selectedTab, setSelectedTab} = props;
   const [currentTab, setCurrentTab] = useState<EditorTab>(
     selectedTab || 'preview'
   );
 
-  const [content, setContent] = useState(noteContent || '');
-  const [id, setId] = useState(noteId || '');
-  const [tags, setTags] = useState(noteTags || []);
+  const [content, setContent] = useState(note.content || '');
+  const [id, setId] = useState(note.id || '');
 
   const upsertFunc = (id: string, newContent: string, oldNote: Note) => {
     setSync(SyncStatus.Syncing);
@@ -42,7 +32,7 @@ export default function NoteEdit(props: Props) {
         (note: Note) => {
           setSync(SyncStatus.Success);
           setId(note.id);
-          setNote && setNote({id: note.id, content: newContent});
+          setNote && setNote({...note, id: note.id, content: newContent});
         },
         (error) => {
           setSync(SyncStatus.Error);
@@ -56,7 +46,7 @@ export default function NoteEdit(props: Props) {
       API.updateNote(id, {note: {content: newContent}}).then(
         () => {
           setSync(SyncStatus.Success);
-          setNote && setNote({id, content: newContent});
+          setNote && setNote({...note, id, content: newContent});
         },
         (error) => {
           setSync(SyncStatus.Error);
@@ -74,11 +64,11 @@ export default function NoteEdit(props: Props) {
 
   const upsertNote = (id: string, newContent: string) => {
     // For revert if things go wrong
-    const oldNote = {id, content};
+    const oldNote = {...note, id, content};
 
     // Optimistically set forward
     setContent(newContent);
-    setNote && setNote({id, content: newContent});
+    setNote && setNote({...note, id, content: newContent});
 
     debounceUpsert(id, newContent, oldNote);
   };
@@ -89,9 +79,9 @@ export default function NoteEdit(props: Props) {
   };
 
   useEffect(() => {
-    setId(noteId || '');
-    setContent(noteContent || '');
-  }, [noteId, noteContent]);
+    setId(note.id || '');
+    setContent(note.content || '');
+  }, [note]);
 
   return (
     <div
@@ -114,15 +104,9 @@ export default function NoteEdit(props: Props) {
         />
       </div>
 
-      <TagView tags={tags} />
+      <TagView tags={note.tags || []} />
 
-      {noteId && (
-        <NoteAction
-          noteId={noteId}
-          noteTags={tags}
-          setNoteTags={(tags) => setTags(tags)}
-        />
-      )}
+      {note && <NoteAction note={note} setNote={setNote} />}
     </div>
   );
 }

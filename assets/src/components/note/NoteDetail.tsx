@@ -3,7 +3,7 @@ import {useParams, useLocation} from 'react-router-dom';
 import NoteEdit from './NoteEdit';
 import * as API from 'src/libs/api';
 import logger from 'src/libs/logger';
-import {EditorTab, Tag, Note} from 'src/libs/types';
+import {EditorTab, Note} from 'src/libs/types';
 
 type ParamsType = {
   id: string;
@@ -17,10 +17,8 @@ interface StateType {
 export default function NoteDetail() {
   const {hash, state} = useLocation<StateType>();
   const {id} = useParams<ParamsType>();
-  const [noteId, setNoteId] = useState('');
-  const [noteContent, setNoteContent] = useState('');
-  const [noteTags, setNoteTags] = useState<Tag[]>([]);
   const [selectedTab, setSelectedTab] = useState<EditorTab>('write');
+  const [note, setNote] = useState<Note>();
 
   useEffect(() => {
     if (state && state.note) {
@@ -28,16 +26,12 @@ export default function NoteDetail() {
         setSelectedTab(state.tab);
       }
 
-      setNoteId(state.note.id);
-      setNoteContent(state.note.content);
-      setNoteTags(state.note.tags || []);
+      setNote(state.note);
     } else {
       id &&
         API.fetchNoteById(id).then(
           (note) => {
-            setNoteId(note.id);
-            setNoteContent(note.content);
-            setNoteTags(note.tags);
+            setNote(note);
           },
           (error) => {
             logger.error(error);
@@ -46,17 +40,17 @@ export default function NoteDetail() {
     }
   }, [id, hash, state]);
 
-  if (!noteId) {
+  if (!note || !note.id) {
     return null;
   }
 
   return (
     <>
       <NoteEdit
-        noteId={noteId}
-        noteContent={noteContent}
-        noteTags={noteTags}
+        note={note}
+        setNote={setNote}
         selectedTab={selectedTab}
+        setSelectedTab={setSelectedTab}
       />
     </>
   );

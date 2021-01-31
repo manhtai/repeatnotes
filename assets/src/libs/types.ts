@@ -37,6 +37,9 @@ export type Note = {
   id: string;
   content: string;
   tags?: Tag[];
+  pin: boolean;
+  trash: boolean;
+  archive: boolean;
 };
 
 export type Card = {

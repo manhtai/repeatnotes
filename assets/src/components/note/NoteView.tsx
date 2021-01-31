@@ -34,11 +34,7 @@ export default function NoteView(props: Props) {
 
       <TagView tags={note.tags || []} />
 
-      <NoteAction
-        noteId={note.id}
-        noteTags={note.tags || []}
-        setNoteTags={(tags) => setNote({...note, tags})}
-      />
+      <NoteAction note={note} setNote={setNote} />
     </div>
   );
 }

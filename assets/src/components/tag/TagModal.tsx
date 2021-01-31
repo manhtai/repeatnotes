@@ -151,7 +151,7 @@ export default function TagModal(props: Props) {
     initContextTag(tags, checkedTagIds)
   );
 
-  const overLimit = () => contextTags.length >= 5;
+  const overLimit = () => contextTags.length >= 50;
 
   const updateContextTag = (changes: any, isDelete = false) => {
     const changedIndex = contextTags.findIndex((t) => t.id === changes.id);

@@ -3,6 +3,7 @@ import {
   CogOutline,
   ClockOutline,
   ChartBarOutline,
+  LightBulbOutline,
   PlusCircleOutline,
   LightningBoltOutline,
   CheckCircleOutline,
@@ -21,7 +22,6 @@ import CardReview from 'src/components/card/CardReview';
 import NoteList from 'src/components/note/NoteList';
 import NoteNew from 'src/components/note/NoteNew';
 import NoteDetail from 'src/components/note/NoteDetail';
-import NoteRandom from 'src/components/note/NoteRandom';
 
 import SrsConfig from 'src/components/settings/SrsConfig';
 import Account from 'src/components/settings/Account';
@@ -75,8 +75,7 @@ export default function HomePage() {
 
   const routes = [
     {path: '/notes', name: 'Notes', Component: NoteList},
-    {path: '/random', name: 'Random', Component: NoteRandom},
-    {path: '/stats', name: 'Stats', Component: NoteRandom},
+    {path: '/stats', name: 'Stats', Component: NoteList},
     {path: '/new', name: 'New', Component: NoteNew},
     {path: '/review', name: 'Review', Component: CardReview},
     {path: '/', name: 'Review', Component: NoteList},
@@ -88,14 +87,14 @@ export default function HomePage() {
   const topNavBar = [
     {path: '/new', name: 'New', Icon: PlusCircleOutline},
     {path: '/review', name: 'Review', Icon: LightningBoltOutline},
-    {path: '/hightlight', name: 'Hightlight', Icon: ClockOutline},
+    {path: '/stats', name: 'Hightlight', Icon: ChartBarOutline},
     {path: '/settings/config', name: 'Config', Icon: CogOutline},
   ];
 
   const bottomNavBar = [
     {path: '/review', name: 'Review', Icon: ClockOutline},
     {path: '/new', name: 'New', Icon: PlusCircleOutline},
-    {path: '/random', name: 'Stats', Icon: ChartBarOutline},
+    {path: '/notes', name: 'Notes', Icon: LightBulbOutline},
     {path: '/settings/config', name: 'Config', Icon: CogOutline},
   ];
 
