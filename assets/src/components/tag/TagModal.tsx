@@ -20,10 +20,112 @@ type Props = {
 };
 
 type ContextTag = Tag & {
+  newId: string | null;
   checked: boolean;
   editing: boolean;
   error: boolean;
 };
+
+type TagLineProps = {
+  tag: ContextTag;
+  noteId: string | null;
+  updateContextTag: (tags: ContextTag, isDelete?: boolean) => void;
+};
+
+function TagLine(props: TagLineProps) {
+  const {tag, noteId, updateContextTag} = props;
+  const {updateTag, deleteTag, createTag} = useGlobal();
+
+  const [tagName, setTagName] = useState(tag.name);
+  const [tagChecked, setTagChecked] = useState(tag.checked);
+
+  return (
+    <div className="flex items-center">
+      {noteId != null ? (
+        <input
+          type="checkbox"
+          className="flex-none text-sm text-indigo-600 border-gray-300 rounded focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+          checked={tagChecked}
+          disabled={!tag.id}
+          onChange={(e) => {
+            setTagChecked(e.target.checked);
+            updateContextTag({...tag, checked: e.target.checked});
+          }}
+        />
+      ) : (
+        <TrashOutline
+          className="flex-none w-4 h-4 cursor-pointer hover:text-red-500"
+          onClick={async () => {
+            if (tag.id) {
+              if (
+                window.confirm(
+                  'Are you sure want to delete this tag? Your notes remain untouched.'
+                )
+              ) {
+                (await deleteTag(tag)) && updateContextTag(tag, true);
+              }
+            } else {
+              updateContextTag(tag, true);
+            }
+          }}
+        />
+      )}
+
+      {tag.editing ? (
+        <input
+          type="text"
+          autoFocus
+          value={tagName}
+          placeholder="Tag name..."
+          className={
+            'flex-1 w-full px-0 py-1 m-3 text-sm bg-transparent border-t-0 border-b border-l-0 border-r-0 focus:ring-0 focus:outline-none' +
+            (tag.error
+              ? ' border-red-400 focus:border-red-400'
+              : ' border-gray-400 focus:border-gray-400')
+          }
+          onChange={(e) => {
+            setTagName(e.target.value);
+            updateContextTag({
+              ...tag,
+              name: e.target.value,
+            });
+          }}
+        />
+      ) : (
+        <div
+          className="flex items-center justify-between flex-1 w-full px-0 py-1 m-3 overflow-hidden text-sm bg-transparent border-t-0 border-b border-l-0 border-r-0 border-transparent cursor-pointer overflow-ellipsis whitespace-nowrap"
+          onClick={() => {
+            updateContextTag({
+              ...tag,
+              editing: true,
+            });
+          }}
+        >
+          {tag.name}
+
+          <PencilOutline className="w-4 h-4 mr-3" />
+        </div>
+      )}
+
+      {tag.editing ? (
+        <CheckOutline
+          className="w-4 h-4 mr-6 cursor-pointer"
+          onClick={async () => {
+            if (tag.error) {
+              return;
+            }
+            if (!tag.id) {
+              const newTag = await createTag(tag);
+              updateContextTag({...tag, newId: newTag ? newTag.id : null});
+            } else {
+              updateTag(tag);
+            }
+          }}
+        />
+      ) : null}
+    </div>
+  );
+}
 
 export default function TagModal(props: Props) {
   const {
@@ -34,7 +136,7 @@ export default function TagModal(props: Props) {
     showModal,
     setShowTagModal,
   } = props;
-  const {tags, updateTag, deleteTag, createTag} = useGlobal();
+  const {tags} = useGlobal();
 
   const [contextTags, setcontextTags] = useState<ContextTag[]>([]);
 
@@ -66,8 +168,8 @@ export default function TagModal(props: Props) {
           ...contextTags.slice(changedIndex + 1).map(changeEditingFunc),
         ];
 
-    setCheckedTagIds(newTags.filter((t) => t.checked).map((t) => t.id));
     setcontextTags(newTags);
+    setCheckedTagIds(newTags.filter((t) => t.checked && t.id).map((t) => t.id));
   };
 
   useEffect(() => {
@@ -76,9 +178,11 @@ export default function TagModal(props: Props) {
       checked: checkedTagIds.find((id) => tag.id === id) ? true : false,
       editing: false,
       error: false,
+      newId: null,
     }));
     setcontextTags(allTags);
-  }, [tags, checkedTagIds]);
+    // eslint-disable-next-line
+  }, [tags]);
 
   return showModal ? (
     <div
@@ -95,87 +199,12 @@ export default function TagModal(props: Props) {
 
         <div className="pl-6 overflow-x-hidden overflow-y-auto max-h-96">
           {contextTags.map((tag) => (
-            <div className="flex items-center" key={tag.id}>
-              {noteId != null ? (
-                <input
-                  type="checkbox"
-                  className="flex-none text-sm text-indigo-600 border-gray-300 rounded focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                  checked={tag.checked}
-                  onChange={(e) => {
-                    updateContextTag({...tag, checked: e.target.checked});
-                  }}
-                />
-              ) : (
-                <TrashOutline
-                  className="flex-none w-4 h-4 cursor-pointer hover:text-red-500"
-                  onClick={async () => {
-                    if (tag.id) {
-                      if (
-                        window.confirm(
-                          'Are you sure want to delete this tag? Your notes remain untouched.'
-                        )
-                      ) {
-                        (await deleteTag(tag)) && updateContextTag(tag, true);
-                      }
-                    } else {
-                      updateContextTag(tag, true);
-                    }
-                  }}
-                />
-              )}
-
-              {tag.editing ? (
-                <input
-                  type="text"
-                  autoFocus
-                  value={tag.name}
-                  placeholder="Tag name..."
-                  className={
-                    'flex-1 w-full px-0 py-1 m-3 text-sm bg-transparent border-t-0 border-b border-l-0 border-r-0 focus:ring-0 focus:outline-none' +
-                    (tag.error
-                      ? ' border-red-400 focus:border-red-400'
-                      : ' border-gray-400 focus:border-gray-400')
-                  }
-                  onChange={(e) => {
-                    updateContextTag({
-                      ...tag,
-                      name: e.target.value,
-                    });
-                  }}
-                />
-              ) : (
-                <div
-                  className="flex items-center justify-between flex-1 w-full px-0 py-1 m-3 overflow-hidden text-sm bg-transparent border-t-0 border-b border-l-0 border-r-0 border-transparent cursor-pointer overflow-ellipsis whitespace-nowrap"
-                  onClick={() => {
-                    updateContextTag({
-                      ...tag,
-                      editing: true,
-                    });
-                  }}
-                >
-                  {tag.name}
-
-                  <PencilOutline className="w-4 h-4 mr-3" />
-                </div>
-              )}
-
-              {tag.editing ? (
-                <CheckOutline
-                  className="w-4 h-4 mr-6 cursor-pointer"
-                  onClick={async () => {
-                    if (tag.error) {
-                      return;
-                    }
-                    if (!tag.id) {
-                      const newTag = await createTag(tag);
-                      updateContextTag({...tag, newId: newTag && newTag.id});
-                    } else {
-                      updateTag(tag);
-                    }
-                  }}
-                />
-              ) : null}
-            </div>
+            <TagLine
+              key={tag.id}
+              tag={tag}
+              noteId={noteId}
+              updateContextTag={updateContextTag}
+            />
           ))}
         </div>
 
@@ -198,6 +227,7 @@ export default function TagModal(props: Props) {
                   name: '',
                   editing: true,
                   error: false,
+                  newId: null,
                 });
                 setcontextTags([...contextTags]);
               }
