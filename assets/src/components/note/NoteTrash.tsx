@@ -2,26 +2,16 @@ import {useState, useEffect} from 'react';
 import {Note} from 'src/libs/types';
 import * as API from 'src/libs/api';
 import logger from 'src/libs/logger';
-import {useParams} from 'react-router-dom';
 
 import NoteView from './NoteView';
 
-type ParamsType = {
-  tagId: string;
-};
-const params = {archive: false, trash: false};
-
-export default function NoteList() {
+export default function NoteTrash() {
   const [notes, setNotes] = useState<Note[]>([]);
   const [loading, setLoading] = useState(true);
-  const {tagId} = useParams<ParamsType>();
 
   useEffect(() => {
     setLoading(true);
-    const fetchNotes = tagId
-      ? API.fetchNotesByTag(tagId)
-      : API.fetchAllNotes(params);
-    fetchNotes.then(
+    API.fetchAllNotes({trash: true}).then(
       (notes) => {
         setNotes(notes);
         setLoading(false);
@@ -30,7 +20,7 @@ export default function NoteList() {
         logger.error(error);
       }
     );
-  }, [tagId]);
+  }, []);
 
   const updateNotes = (note: Note) => {
     const changed = notes.findIndex((t) => t.id === note.id);

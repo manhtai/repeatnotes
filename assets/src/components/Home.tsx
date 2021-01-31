@@ -19,7 +19,11 @@ import {useGlobal} from 'src/components/global/GlobalProvider';
 import {SyncStatus} from 'src/libs/types';
 
 import CardReview from 'src/components/card/CardReview';
+
 import NoteList from 'src/components/note/NoteList';
+import NoteArchive from 'src/components/note/NoteArchive';
+import NoteTrash from 'src/components/note/NoteTrash';
+import NoteBookmark from 'src/components/note/NoteBookmark';
 import NoteNew from 'src/components/note/NoteNew';
 import NoteDetail from 'src/components/note/NoteDetail';
 
@@ -78,9 +82,12 @@ export default function HomePage() {
     {path: '/stats', name: 'Stats', Component: NoteList},
     {path: '/new', name: 'New', Component: NoteNew},
     {path: '/review', name: 'Review', Component: CardReview},
-    {path: '/', name: 'Review', Component: NoteList},
     {path: '/note/:id', name: 'Note', Component: NoteDetail},
     {path: '/tag/:tagId', name: 'Note', Component: NoteList},
+    {path: '/archive', name: 'Archive', Component: NoteArchive},
+    {path: '/trash', name: 'Notes', Component: NoteTrash},
+    {path: '/bookmark', name: 'Notes', Component: NoteBookmark},
+    {path: '/', name: 'Notes', Component: NoteList},
     ...settingsRoutes,
   ];
 

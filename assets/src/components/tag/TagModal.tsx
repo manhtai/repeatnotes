@@ -190,7 +190,7 @@ export default function TagModal(props: Props) {
 
   return showModal ? (
     <div
-      className="fixed inset-0 z-10 flex items-center justify-center w-full h-full"
+      className="fixed inset-0 z-50 flex items-center justify-center w-full h-full"
       onClick={() => setShowTagModal(false)}
     >
       <div

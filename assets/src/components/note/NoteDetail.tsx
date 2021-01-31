@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import {useParams, useLocation} from 'react-router-dom';
+import {useParams, useLocation, useHistory} from 'react-router-dom';
 import NoteEdit from './NoteEdit';
 import * as API from 'src/libs/api';
 import logger from 'src/libs/logger';
@@ -15,7 +15,8 @@ interface StateType {
 }
 
 export default function NoteDetail() {
-  const {hash, state} = useLocation<StateType>();
+  const {hash, state, pathname} = useLocation<StateType>();
+  const history = useHistory();
   const {id} = useParams<ParamsType>();
   const [selectedTab, setSelectedTab] = useState<EditorTab>('write');
   const [note, setNote] = useState<Note>();
@@ -40,6 +41,16 @@ export default function NoteDetail() {
     }
   }, [id, hash, state]);
 
+  const updateNote = (note: Note) => {
+    setNote(note);
+    history.replace(pathname, {note, selectedTab});
+  };
+
+  const updateTab = (selectedTab: EditorTab) => {
+    setSelectedTab(selectedTab);
+    history.replace(pathname, {note, selectedTab});
+  };
+
   if (!note || !note.id) {
     return null;
   }
@@ -48,9 +59,9 @@ export default function NoteDetail() {
     <>
       <NoteEdit
         note={note}
-        setNote={setNote}
+        setNote={updateNote}
         selectedTab={selectedTab}
-        setSelectedTab={setSelectedTab}
+        setSelectedTab={updateTab}
       />
     </>
   );

@@ -3,6 +3,7 @@ import {NavLink} from 'react-router-dom';
 import {useAuth} from 'src/components/auth/AuthProvider';
 import {
   TrashOutline,
+  BookmarkOutline,
   PencilOutline,
   TagOutline,
   LightBulbOutline,
@@ -22,7 +23,7 @@ function MenuItem(props: MenuItemProps) {
   return (
     <div className="py-1">
       <NavLink
-        className="flex items-end justify-start block px-6 py-3 text-gray-700 rounded-r-full cursor-pointer hover:bg-gray-100 hover:text-indigo-700 focus:outline-none focus:bg-indigo-200"
+        className="flex items-end justify-start block px-6 py-3 text-gray-700 rounded-r-full cursor-pointer hover:bg-indigo-100 hover:text-indigo-700 focus:outline-none focus:bg-indigo-200"
         activeClassName="text-indigo-800 bg-indigo-200"
         to={props.link}
       >
@@ -47,6 +48,10 @@ export default function MenuItems(props: MenuProps) {
         <LightBulbOutline className="mr-2" /> Notes
       </MenuItem>
 
+      <MenuItem link={'/bookmark'}>
+        <BookmarkOutline className="w-5 h-5 mr-2" /> Bookmark
+      </MenuItem>
+
       <div className="border-t border-gray-200"></div>
 
       {tags.map((tag: Tag) => (
@@ -65,7 +70,10 @@ export default function MenuItems(props: MenuProps) {
         <span
           className="flex items-end justify-start block px-6 py-3 text-gray-700 rounded-r-full cursor-pointer hover:bg-gray-100 hover:text-indigo-700 focus:outline-none focus:bg-indigo-200"
           role="menuitem"
-          onClick={() => setShowTagModal(!showTagModal)}
+          onClick={(e) => {
+            setShowTagModal(!showTagModal);
+            e.stopPropagation();
+          }}
         >
           <PencilOutline className="w-5 h-5 mr-2" /> Edit tags
         </span>
@@ -73,7 +81,7 @@ export default function MenuItems(props: MenuProps) {
 
       <div className="border-t border-gray-200"></div>
 
-      <MenuItem link={'/archives'}>
+      <MenuItem link={'/archive'}>
         <ArchiveOutline className="w-5 h-5 mr-2" /> Archive
       </MenuItem>
       <MenuItem link={'/trash'}>

@@ -188,7 +188,7 @@ export default function NoteAction(props: Props) {
         noteId={note.id}
         checkedTagIds={checkedTagIds}
         setCheckedTagIds={updateNoteTags}
-        header={'Adding tags to note'}
+        header={'Add tags to note'}
         showModal={showTagModal}
         setShowTagModal={() => setShowTagModal(false)}
       />
