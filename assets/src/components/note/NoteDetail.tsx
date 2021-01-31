@@ -3,8 +3,7 @@ import {useParams, useLocation} from 'react-router-dom';
 import NoteEdit from './NoteEdit';
 import * as API from 'src/libs/api';
 import logger from 'src/libs/logger';
-import {EditorTab, Note} from 'src/libs/types';
-import TagView from 'src/components/tag/TagView';
+import {EditorTab, Tag, Note} from 'src/libs/types';
 
 type ParamsType = {
   id: string;
@@ -20,25 +19,25 @@ export default function NoteDetail() {
   const {id} = useParams<ParamsType>();
   const [noteId, setNoteId] = useState('');
   const [noteContent, setNoteContent] = useState('');
+  const [noteTags, setNoteTags] = useState<Tag[]>([]);
   const [selectedTab, setSelectedTab] = useState<EditorTab>('write');
-  const [note, setNote] = useState<Note>();
 
   useEffect(() => {
     if (state && state.note) {
-      setNote(state.note);
       if (state.tab) {
         setSelectedTab(state.tab);
       }
 
       setNoteId(state.note.id);
       setNoteContent(state.note.content);
+      setNoteTags(state.note.tags || []);
     } else {
       id &&
         API.fetchNoteById(id).then(
           (note) => {
-            setNote(note);
             setNoteId(note.id);
             setNoteContent(note.content);
+            setNoteTags(note.tags);
           },
           (error) => {
             logger.error(error);
@@ -56,12 +55,9 @@ export default function NoteDetail() {
       <NoteEdit
         noteId={noteId}
         noteContent={noteContent}
+        noteTags={noteTags}
         selectedTab={selectedTab}
       />
-
-      {selectedTab === 'preview' && note ? (
-        <TagView tags={note.tags || []} />
-      ) : null}
     </>
   );
 }

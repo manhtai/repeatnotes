@@ -1,15 +1,17 @@
 import {useState, useEffect, useCallback} from 'react';
-import {Note, EditorTab, SyncStatus} from 'src/libs/types';
+import {Note, EditorTab, Tag, SyncStatus} from 'src/libs/types';
 import * as API from 'src/libs/api';
 import logger from 'src/libs/logger';
 import Editor from 'src/components/editor/MarkdownEditor';
 import {useGlobal} from 'src/components/global/GlobalProvider';
 import debounce from 'lodash/debounce';
 import NoteAction from './NoteAction';
+import TagView from 'src/components/tag/TagView';
 
 type Props = {
   noteId?: string;
   noteContent?: string;
+  noteTags?: Tag[];
   setNote?: (note: Note) => void;
   selectedTab?: EditorTab;
   setSelectedTab?: (tab: EditorTab) => void;
@@ -17,13 +19,21 @@ type Props = {
 
 export default function NoteEdit(props: Props) {
   const {setSync} = useGlobal();
-  const {noteId, noteContent, setNote, selectedTab, setSelectedTab} = props;
+  const {
+    noteId,
+    noteContent,
+    noteTags,
+    setNote,
+    selectedTab,
+    setSelectedTab,
+  } = props;
   const [currentTab, setCurrentTab] = useState<EditorTab>(
     selectedTab || 'preview'
   );
 
   const [content, setContent] = useState(noteContent || '');
   const [id, setId] = useState(noteId || '');
+  const [tags, setTags] = useState(noteTags || []);
 
   const upsertFunc = (id: string, newContent: string, oldNote: Note) => {
     setSync(SyncStatus.Syncing);
@@ -104,11 +114,13 @@ export default function NoteEdit(props: Props) {
         />
       </div>
 
+      <TagView tags={tags} />
+
       {noteId && (
         <NoteAction
           noteId={noteId}
-          noteTags={[]}
-          setNoteTags={(tags) => setNote && setNote({id, content, tags})}
+          noteTags={tags}
+          setNoteTags={(tags) => setTags(tags)}
         />
       )}
     </div>
