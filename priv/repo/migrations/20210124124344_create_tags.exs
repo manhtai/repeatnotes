@@ -6,7 +6,6 @@ defmodule RepeatNotes.Repo.Migrations.CreateTags do
     create table(:tags, primary_key: false) do
       add(:id, :binary_id, primary_key: true)
       add(:name, :string, null: false)
-      add(:color, :string)
 
       add(:user_id, references(:users, type: :binary_id))
 
@@ -15,6 +14,7 @@ defmodule RepeatNotes.Repo.Migrations.CreateTags do
 
     create(index(:tags, [:name]))
     create(index(:tags, [:user_id]))
+    create(unique_index(:tags, [:user_id, :name]))
 
     # Note tags
     create table(:note_tags, primary_key: false) do

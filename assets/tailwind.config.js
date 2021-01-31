@@ -18,7 +18,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["\"Comic Mono\"", ...defaultTheme.fontFamily.sans]
+        sans: ["\"Comic Mono\"", "sans-serif"]
       },
       animation: {
         'reverse-spin': 'reverse-spin 1s linear infinite',
@@ -49,13 +49,15 @@ module.exports = {
       opacity: ['disabled'],
       backgroundColor: ['active'],
       cursor: ['disabled'],
+      outline: ['active'],
+      borderWidth: ['disabled'],
     }
   },
   plugins: [
     require('@tailwindcss/forms'),
     plugin(function({ addBase, config }) {
       addBase({
-        'body': { color: config('theme.colors.gray.800') },
+        'body': { color: config('theme.colors.gray.700') },
       })
     }),
   ],

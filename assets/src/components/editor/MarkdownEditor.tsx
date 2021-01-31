@@ -1,23 +1,12 @@
+import {useRef, useEffect} from 'react';
 import ReactMde from 'react-mde';
-import ReactMarkdown from 'react-markdown';
 import {getDefaultToolbarCommands} from 'react-mde';
 import {EditorTab} from 'src/libs/types';
 import * as API from 'src/libs/api';
 import logger from 'src/libs/logger';
-import Tex from '@matejmazur/react-katex';
+import FileType from 'file-type/browser';
 
-import 'katex/dist/katex.min.css';
-
-import 'src/css/editor.css';
-
-import gfm from 'remark-gfm';
-import math from 'remark-math';
-import breaks from 'remark-breaks';
-
-const renderers = {
-  inlineMath: ({value}: {value: string}) => <Tex math={value} />,
-  math: ({value}: {value: string}) => <Tex block math={value} />,
-};
+import MarkdownRenderer from './MarkdownRenderer';
 
 type Props = {
   content: string;
@@ -26,12 +15,26 @@ type Props = {
   setSelectedTab: (t: EditorTab) => void;
 };
 
+const supportedTypes = new Set(['jpg', 'jpeg', 'gif', 'png', 'xml']);
+const initialEditorHeight = 256;
+
 export default function Editor(props: Props) {
   const {content, setContent, selectedTab, setSelectedTab} = props;
 
   const save = async function* (data: any) {
-    // FIXME: Change file name here
-    const file = new File([data], 'image.jpg', {type: 'image/jpeg'});
+    const fileType = await FileType.fromBuffer(data);
+    if (!fileType || !supportedTypes.has(fileType.ext)) {
+      return false;
+    }
+    // Treat xml as svg for now
+    let ext = `${fileType.ext}`;
+    let mime = `${fileType.mime}`;
+
+    if (ext === 'xml') {
+      ext = 'svg';
+      mime = 'image/svg';
+    }
+    const file = new File([data], `image.${ext}`, {type: mime});
     try {
       const res = await API.uploadFile(file);
       yield res.file_path;
@@ -42,8 +45,32 @@ export default function Editor(props: Props) {
     }
   };
 
+  const ref = useRef<ReactMde>(null);
+
+  const fitContent = () => {
+    const middleScroll = document.getElementById('middle-scroll');
+    const textArea = ref.current?.finalRefs.textarea?.current;
+
+    if (middleScroll && textArea) {
+      const scrollTop = middleScroll.scrollTop;
+
+      textArea.style.height = 'auto';
+      textArea.style.height = `${Math.max(
+        textArea.scrollHeight,
+        initialEditorHeight
+      )}px`;
+      textArea.scrollTop = textArea.scrollHeight;
+
+      middleScroll.scrollTo(0, scrollTop);
+    }
+  };
+
+  useEffect(fitContent, [selectedTab, content]);
+
   return (
     <ReactMde
+      ref={ref}
+      initialEditorHeight={initialEditorHeight}
       value={content}
       onChange={setContent}
       selectedTab={selectedTab}
@@ -52,13 +79,7 @@ export default function Editor(props: Props) {
         selectedTab === 'write' ? getDefaultToolbarCommands() : []
       }
       generateMarkdownPreview={(markdown) =>
-        Promise.resolve(
-          <ReactMarkdown
-            plugins={[gfm, math, breaks]}
-            renderers={renderers}
-            source={markdown}
-          />
-        )
+        Promise.resolve(<MarkdownRenderer source={markdown} />)
       }
       classes={{
         reactMde: selectedTab === 'write' ? 'border rounded' : '',
@@ -67,12 +88,13 @@ export default function Editor(props: Props) {
             ? 'border-b rounded text-sm'
             : 'border rounded text-sm',
       }}
+      minPreviewHeight={100}
       l18n={{
         write: 'Write',
-        preview: 'Preview',
+        preview: 'Done',
         uploadingImage: 'Uploading image...',
         pasteDropSelect:
-          'Attach files by dragging & dropping, selecting or pasting them.',
+          'Attach images by dragging & dropping, selecting or pasting them here.',
       }}
       childProps={{
         previewButton: {

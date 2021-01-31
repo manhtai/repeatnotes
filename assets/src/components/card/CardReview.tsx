@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import {useSrs, SrsProvider} from './SrsProvider';
 import {useGlobal} from 'src/components/global/GlobalProvider';
-import NoteEdit from 'src/components/note/NoteEdit';
+import NotePreview from 'src/components/note/NotePreview';
 
-import {Choice, SyncStatus, SrsConfig, Card, EditorTab} from 'src/libs/types';
+import {Choice, SyncStatus, SrsConfig, Card} from 'src/libs/types';
 import logger from 'src/libs/logger';
 import * as API from 'src/libs/api';
 
@@ -14,47 +14,57 @@ type AnswerProps = {
   nextInterval: (card: Card, choice: Choice) => string;
 };
 
-function Answer(props: AnswerProps) {
+const getAnswerButtonClass = (color: string) => {
+  return `w-full p-1 mb-1 font-bold text-${color}-700 border-2 border-${color}-700 rounded-full outline-none hover:text-${color}-600 hover:border-${color}-600 active:text-${color}-500 active:border-${color}-500 focus:outline-none`;
+};
+
+type AnswerItemProps = {
+  text: string;
+  color: string;
+  showDue: boolean;
+  card: Card;
+  choice: Choice;
+  answerCard: (card: Card, choice: Choice) => void;
+  nextInterval: (card: Card, choice: Choice) => string;
+};
+
+function AnswerItem(props: AnswerItemProps) {
+  const {text, showDue, choice, color, answerCard, card, nextInterval} = props;
+  return (
+    <button
+      className={getAnswerButtonClass(color)}
+      onClick={() => answerCard(card, choice)}
+    >
+      {text}
+      {showDue && ` (${nextInterval(card, choice)})`}
+    </button>
+  );
+}
+
+function Answers(props: AnswerProps) {
   const {card, config, answerCard, nextInterval} = props;
 
+  const choices = [
+    {text: 'Forgot', choice: Choice.Again, color: 'red'},
+    {text: 'Hard', choice: Choice.Hard, color: 'yellow'},
+    {text: 'Good', choice: Choice.Ok, color: 'green'},
+    {text: 'Easy', choice: Choice.Easy, color: 'indigo'},
+  ];
+
   return (
-    <div className="flex items-center justify-center p-2 mt-2">
-      <button
-        className="flex-1 w-full px-3 py-1 mb-1 mr-1 font-bold text-gray-200 bg-red-700 rounded-full outline-none active:bg-red-500 hover:bg-red-600 focus:outline-none"
-        onClick={() => answerCard(card, Choice.Again)}
-      >
-        Again
-        {config?.show_next_due && (
-          <span> ({nextInterval(card, Choice.Again)})</span>
-        )}
-      </button>
-      <button
-        className="flex-1 w-full px-3 py-1 mb-1 mr-1 font-bold text-gray-200 bg-yellow-700 rounded-full outline-none active:bg-yellow-500 hover:bg-yellow-600 focus:outline-none"
-        onClick={() => answerCard(card, Choice.Hard)}
-      >
-        Hard
-        {config?.show_next_due && (
-          <span> ({nextInterval(card, Choice.Hard)})</span>
-        )}
-      </button>
-      <button
-        className="flex-1 w-full px-3 py-1 mb-1 mr-1 font-bold text-gray-100 bg-green-700 rounded-full outline-none active:bg-green-500 hover:bg-green-600 focus:outline-none"
-        onClick={() => answerCard(card, Choice.Ok)}
-      >
-        Good
-        {config?.show_next_due && (
-          <span> ({nextInterval(card, Choice.Ok)})</span>
-        )}
-      </button>
-      <button
-        className="flex-1 w-full px-3 py-1 mb-1 mr-1 font-bold text-gray-100 bg-blue-700 rounded-full outline-none active:bg-blue-500 hover:bg-blue-600 focus:outline-none"
-        onClick={() => answerCard(card, Choice.Easy)}
-      >
-        Easy
-        {config?.show_next_due && (
-          <span> ({nextInterval(card, Choice.Easy)})</span>
-        )}
-      </button>
+    <div className="flex items-center justify-center p-2 mt-2 text-xs space-x-2">
+      {choices.map((choice) => (
+        <AnswerItem
+          key={choice.text}
+          text={choice.text}
+          color={choice.color}
+          choice={choice.choice}
+          card={card}
+          answerCard={answerCard}
+          nextInterval={nextInterval}
+          showDue={config?.show_next_due ? true : false}
+        />
+      ))}
     </div>
   );
 }
@@ -65,7 +75,6 @@ function CardReview() {
 
   const [card, setCard] = useState<Card | null>(null);
   const [cards, setCards] = useState([]);
-  const [selectedTab, setSelectedTab] = useState<EditorTab>('preview');
   const [fetchingCards, setFetchingCards] = useState(true);
 
   const answerCard = async (card: Card, choice: Choice) => {
@@ -128,26 +137,18 @@ function CardReview() {
     <div className="max-w-xl mx-auto mt-5">
       {!card ? (
         <div className="px-4 py-3 border rounded shadow">
-          No card to learn for now, come back here later.
+          No card to review for now, come back later.
         </div>
       ) : (
-        <div className="p-2 border rounded shadow">
-          <NoteEdit
-            noteId={card.note.id}
-            noteContent={card.note.content}
-            setNote={(note) => setCard({...card, note})}
-            selectedTab={selectedTab}
-            setSelectedTab={setSelectedTab}
-          />
+        <div className="p-2 border rounded shadow-sm">
+          <NotePreview content={card.note.content} />
 
-          {selectedTab === 'preview' && (
-            <Answer
-              card={card}
-              answerCard={answerCard}
-              nextInterval={nextInterval}
-              config={config}
-            />
-          )}
+          <Answers
+            card={card}
+            answerCard={answerCard}
+            nextInterval={nextInterval}
+            config={config}
+          />
         </div>
       )}
     </div>

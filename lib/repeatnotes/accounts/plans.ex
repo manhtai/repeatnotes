@@ -10,4 +10,3 @@ defmodule RepeatNotes.Accounts.Plans do
   def plus, do: @plus
   def pro, do: @pro
 end
-

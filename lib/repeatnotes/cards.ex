@@ -64,7 +64,7 @@ defmodule RepeatNotes.Cards do
     |> Repo.preload([:note])
   end
 
-  @spec get_card!(binary(), integer) :: Card.t() | nil
+  @spec get_card!(binary(), binary()) :: Card.t() | nil
   def get_card!(id, user_id) do
     Card
     |> Repo.get_by!(id: id, user_id: user_id)

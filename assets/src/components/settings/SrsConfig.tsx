@@ -50,10 +50,10 @@ function SrsConfigPage() {
   return (
     <div className="max-w-lg mx-auto mb-16">
       <div className="mt-5">
-        <h2 className="px-4 py-3 font-bold text-white bg-gray-700 rounded-t-lg shadow">
+        <h2 className="px-4 py-3 font-bold text-white bg-gray-700 rounded-t-lg shadow-sm">
           Schedule
         </h2>
-        <div className="p-4 pb-8 mb-5 bg-gray-100 rounded-b-lg shadow">
+        <div className="p-4 pb-8 mb-5 bg-gray-100 rounded-b-lg shadow-sm">
           <div className="grid grid-cols-1 gap-6">
             <label className="block">
               <span className="text-sm text-gray-700">
@@ -114,10 +114,10 @@ function SrsConfigPage() {
       </div>
 
       <div className="mt-5">
-        <h2 className="px-4 py-3 font-bold text-white bg-gray-700 rounded-t-lg shadow">
+        <h2 className="px-4 py-3 font-bold text-white bg-gray-700 rounded-t-lg shadow-sm">
           Learn
         </h2>
-        <div className="p-4 pb-8 mb-5 bg-gray-100 rounded-b-lg shadow">
+        <div className="p-4 pb-8 mb-5 bg-gray-100 rounded-b-lg shadow-sm">
           <div className="grid grid-cols-1 gap-6">
             <label className="block">
               <span className="text-sm text-gray-700">
@@ -199,10 +199,10 @@ function SrsConfigPage() {
       </div>
 
       <div className="mt-5">
-        <h2 className="px-4 py-3 font-bold text-white bg-gray-700 rounded-t-lg shadow">
+        <h2 className="px-4 py-3 font-bold text-white bg-gray-700 rounded-t-lg shadow-sm">
           Review
         </h2>
-        <div className="p-4 pb-8 mb-5 bg-gray-100 rounded-b-lg shadow">
+        <div className="p-4 pb-8 mb-5 bg-gray-100 rounded-b-lg shadow-sm">
           <div className="grid grid-cols-1 gap-6">
             <label className="block">
               <span className="text-sm text-gray-700">Easy multiplier (%)</span>
@@ -311,10 +311,10 @@ function SrsConfigPage() {
       </div>
 
       <div className="mt-5">
-        <h2 className="px-4 py-3 font-bold text-white bg-gray-700 rounded-t-lg shadow">
+        <h2 className="px-4 py-3 font-bold text-white bg-gray-700 rounded-t-lg shadow-sm">
           Relearn
         </h2>
-        <div className="p-4 pb-8 mb-5 bg-gray-100 rounded-b-lg shadow">
+        <div className="p-4 pb-8 mb-5 bg-gray-100 rounded-b-lg shadow-sm">
           <div className="grid grid-cols-1 gap-6">
             <label className="block">
               <span className="text-sm text-gray-700">

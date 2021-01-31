@@ -1,20 +1,26 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import '@fontsource/comic-mono';
+import '@fontsource/comic-mono/400.css';
+import '@fontsource/comic-mono/700.css';
 import {BrowserRouter} from 'react-router-dom';
 
 import {AuthProvider} from 'src/components/auth/AuthProvider';
+import {GlobalProvider} from 'src/components/global/GlobalProvider';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import './css/main.css';
+
+import 'src/css/main.css';
+import 'src/css/editor.css';
 
 ReactDOM.render(
   <React.StrictMode>
-    <AuthProvider>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </AuthProvider>
+    <GlobalProvider>
+      <AuthProvider>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </AuthProvider>
+    </GlobalProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

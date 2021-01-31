@@ -1,16 +1,24 @@
 import {useState, useEffect} from 'react';
-import NoteEdit from './NoteEdit';
 import {Note} from 'src/libs/types';
 import * as API from 'src/libs/api';
 import logger from 'src/libs/logger';
+import {useParams} from 'react-router-dom';
+
+import NoteView from './NoteView';
+
+type ParamsType = {
+  tagId: string;
+};
 
 export default function NoteList() {
   const [notes, setNotes] = useState<Note[]>([]);
   const [loading, setLoading] = useState(true);
+  const {tagId} = useParams<ParamsType>();
 
   useEffect(() => {
     setLoading(true);
-    API.fetchAllNotes().then(
+    const fetchNotes = tagId ? API.fetchNotesByTag(tagId) : API.fetchAllNotes();
+    fetchNotes.then(
       (notes) => {
         setNotes(notes);
         setLoading(false);
@@ -19,7 +27,13 @@ export default function NoteList() {
         logger.error(error);
       }
     );
-  }, []);
+  }, [tagId]);
+
+  const updateNotes = (note: Note) => {
+    const changed = notes.findIndex((t) => t.id === note.id);
+    notes[changed] = {...note};
+    setNotes(notes);
+  };
 
   if (loading) {
     return null;
@@ -28,12 +42,13 @@ export default function NoteList() {
   return (
     <>
       {notes.map((note: Note) => (
-        <div
-          className="max-w-xl m-5 mx-auto border rounded shadow min-w-1/4"
+        <NoteView
           key={note.id}
-        >
-          <NoteEdit noteId={note.id} noteContent={note.content} />
-        </div>
+          note={note}
+          setNote={(note) => {
+            updateNotes(note);
+          }}
+        />
       ))}
     </>
   );

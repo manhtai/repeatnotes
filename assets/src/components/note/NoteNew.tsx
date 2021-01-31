@@ -1,9 +1,30 @@
 import NoteEdit from 'src/components/note/NoteEdit';
+import {useState, useEffect} from 'react';
+import {useHistory} from 'react-router-dom';
+import {Note, EditorTab} from 'src/libs/types';
 
 export default function NoteNew() {
+  const history = useHistory();
+  const [note, setNote] = useState<Note>();
+  const [selectedTab, setSelectedTab] = useState<EditorTab>('write');
+
+  useEffect(() => {
+    if (note && note.id && selectedTab === 'preview') {
+      history.push({
+        pathname: `/note/${note.id}`,
+        state: {
+          note,
+          tab: selectedTab,
+        },
+      });
+    }
+  }, [note, history, selectedTab]);
+
   return (
-    <div className="max-w-xl mx-auto my-5 border rounded shadow">
-      <NoteEdit selectedTab="write" />
-    </div>
+    <NoteEdit
+      selectedTab={selectedTab}
+      setNote={setNote}
+      setSelectedTab={setSelectedTab}
+    />
   );
 }

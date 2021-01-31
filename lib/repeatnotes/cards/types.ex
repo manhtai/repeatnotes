@@ -9,4 +9,3 @@ defmodule RepeatNotes.Cards.Types do
   def review, do: @review
   def relearn, do: @relearn
 end
-
