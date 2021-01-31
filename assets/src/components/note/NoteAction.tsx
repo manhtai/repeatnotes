@@ -28,9 +28,13 @@ export default function NoteAction(props: Props) {
   }, [noteTags]);
 
   const updateNoteTags = (newCheckedIds: string[]) => {
-    const addTagIds = newCheckedIds.filter((id) => !checkedTagIds.includes(id));
+    const currentIds = new Set(tags.map((t) => t.id));
+
+    const addTagIds = newCheckedIds.filter(
+      (id) => !checkedTagIds.includes(id) && currentIds.has(id)
+    );
     const removeTagIds = checkedTagIds.filter(
-      (id) => !newCheckedIds.includes(id)
+      (id) => !newCheckedIds.includes(id) && currentIds.has(id)
     );
 
     const changePromise = addTagIds

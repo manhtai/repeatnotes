@@ -140,7 +140,7 @@ export default function TagModal(props: Props) {
 
   const [contextTags, setcontextTags] = useState<ContextTag[]>([]);
 
-  const overLimit = (tags: ContextTag[]) => tags.length >= 50;
+  const overLimit = () => contextTags.length >= 5;
 
   const updateContextTag = (changes: any, isDelete = false) => {
     const changedIndex = contextTags.findIndex((t) => t.id === changes.id);
@@ -212,12 +212,10 @@ export default function TagModal(props: Props) {
           <div
             className={
               'flex items-stretch justify-center' +
-              (overLimit(contextTags)
-                ? ' cursor-not-allowed'
-                : ' cursor-pointer')
+              (overLimit() ? ' cursor-not-allowed' : ' cursor-pointer')
             }
             onClick={() => {
-              if (overLimit(contextTags)) {
+              if (overLimit()) {
                 return;
               }
               if (!contextTags.find((tag) => tag.id === '')) {
