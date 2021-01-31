@@ -39,6 +39,7 @@ defmodule RepeatNotesWeb.Router do
     resources("/notes", NoteController)
     resources("/tags", TagController)
 
+    patch("/notes/:id/action", NoteController, :patch)
     post("/notes/:note_id/tags", NoteController, :add_tag)
     delete("/notes/:note_id/tags/:tag_id", NoteController, :remove_tag)
     get("/tags/:tag_id/notes", NoteController, :index_by_tag)

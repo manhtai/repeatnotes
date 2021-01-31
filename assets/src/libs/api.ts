@@ -222,6 +222,22 @@ export const updateNote = async (
     .then((res) => res.body.data);
 };
 
+export const patchNote = async (
+  id: string,
+  updates: any,
+  token = getAccessToken()
+) => {
+  if (!token) {
+    throw new Error('Invalid token!');
+  }
+
+  return request
+    .patch(`/api/notes/${id}/action`)
+    .set('Authorization', token)
+    .send(updates)
+    .then((res) => res.body.data);
+};
+
 export const deleteNote = async (id: string, token = getAccessToken()) => {
   if (!token) {
     throw new Error('Invalid token!');

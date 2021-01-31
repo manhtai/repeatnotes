@@ -3,6 +3,7 @@ import {
   CogOutline,
   ClockOutline,
   ChartBarOutline,
+  LightBulbOutline,
   PlusCircleOutline,
   LightningBoltOutline,
   CheckCircleOutline,
@@ -18,10 +19,13 @@ import {useGlobal} from 'src/components/global/GlobalProvider';
 import {SyncStatus} from 'src/libs/types';
 
 import CardReview from 'src/components/card/CardReview';
+
 import NoteList from 'src/components/note/NoteList';
+import NoteArchive from 'src/components/note/NoteArchive';
+import NoteTrash from 'src/components/note/NoteTrash';
+import NoteBookmark from 'src/components/note/NoteBookmark';
 import NoteNew from 'src/components/note/NoteNew';
 import NoteDetail from 'src/components/note/NoteDetail';
-import NoteRandom from 'src/components/note/NoteRandom';
 
 import SrsConfig from 'src/components/settings/SrsConfig';
 import Account from 'src/components/settings/Account';
@@ -75,27 +79,29 @@ export default function HomePage() {
 
   const routes = [
     {path: '/notes', name: 'Notes', Component: NoteList},
-    {path: '/random', name: 'Random', Component: NoteRandom},
-    {path: '/stats', name: 'Stats', Component: NoteRandom},
+    {path: '/stats', name: 'Stats', Component: NoteList},
     {path: '/new', name: 'New', Component: NoteNew},
     {path: '/review', name: 'Review', Component: CardReview},
-    {path: '/', name: 'Review', Component: NoteList},
     {path: '/note/:id', name: 'Note', Component: NoteDetail},
     {path: '/tag/:tagId', name: 'Note', Component: NoteList},
+    {path: '/archive', name: 'Archive', Component: NoteArchive},
+    {path: '/trash', name: 'Notes', Component: NoteTrash},
+    {path: '/bookmark', name: 'Notes', Component: NoteBookmark},
+    {path: '/', name: 'Notes', Component: NoteList},
     ...settingsRoutes,
   ];
 
   const topNavBar = [
     {path: '/new', name: 'New', Icon: PlusCircleOutline},
     {path: '/review', name: 'Review', Icon: LightningBoltOutline},
-    {path: '/hightlight', name: 'Hightlight', Icon: ClockOutline},
+    {path: '/stats', name: 'Hightlight', Icon: ChartBarOutline},
     {path: '/settings/config', name: 'Config', Icon: CogOutline},
   ];
 
   const bottomNavBar = [
     {path: '/review', name: 'Review', Icon: ClockOutline},
     {path: '/new', name: 'New', Icon: PlusCircleOutline},
-    {path: '/random', name: 'Stats', Icon: ChartBarOutline},
+    {path: '/notes', name: 'Notes', Icon: LightBulbOutline},
     {path: '/settings/config', name: 'Config', Icon: CogOutline},
   ];
 

@@ -10,9 +10,10 @@ defmodule RepeatNotes.Notes do
   @random_return 10
 
   @spec list_notes(binary(), map) :: [Note.t()]
-  def list_notes(user_id, _params) do
+  def list_notes(user_id, params) do
     Note
     |> where(user_id: ^user_id)
+    |> where(^filter_where(params))
     |> order_by(desc: :inserted_at)
     |> limit(@max_return)
     |> Repo.all()
@@ -68,6 +69,13 @@ defmodule RepeatNotes.Notes do
   def update_note(%Note{} = note, attrs) do
     note
     |> Note.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @spec patch_note(Note.t(), map()) :: {:ok, Note.t()} | {:error, Ecto.Changeset.t()}
+  def patch_note(%Note{} = note, attrs) do
+    note
+    |> Note.changeset_patch(attrs)
     |> Repo.update()
   end
 
@@ -127,5 +135,23 @@ defmodule RepeatNotes.Notes do
   def decrypt_note_content(note, secret_key) do
     content = AES.decrypt(note.content, secret_key)
     struct(note, %{content: content})
+  end
+
+  @spec filter_where(map) :: Ecto.Query.DynamicExpr.t()
+  defp filter_where(attrs) do
+    Enum.reduce(attrs, dynamic(true), fn
+      {"trash", value}, dynamic ->
+        dynamic([n], ^dynamic and n.trash == ^value)
+
+      {"archive", value}, dynamic ->
+        dynamic([n], ^dynamic and n.archive == ^value)
+
+      {"pin", value}, dynamic ->
+        dynamic([n], ^dynamic and n.pin == ^value)
+
+      {_, _}, dynamic ->
+        # Not a where parameter
+        dynamic
+    end)
   end
 end

@@ -27,8 +27,14 @@ defmodule RepeatNotes.Notes.Note do
 
   def changeset(note, attrs) do
     note
-    |> cast(attrs, [:content, :user_id, :color, :pin, :archive, :trash])
+    |> cast(attrs, [:content, :user_id])
     |> validate_length(:content, max: @max_content)
     |> validate_required([:user_id])
+  end
+
+  def changeset_patch(note, attrs) do
+    note
+    |> cast(attrs, [:color, :pin, :archive, :trash])
+    |> validate_required([])
   end
 end
