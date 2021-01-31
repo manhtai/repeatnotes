@@ -25,72 +25,70 @@ function Request(props: Props) {
   };
 
   return (
-    <main>
-      <section className="absolute w-full h-full">
-        <div className="container h-full px-3 mx-auto">
-          <div className="flex items-center content-center justify-center h-full">
-            <div className="relative flex flex-col items-center w-full max-w-sm my-3 break-words">
-              <Link to="/" className="mb-8">
-                <img className="w-24" src={Logo} alt="logo" />
-              </Link>
-              {submitted ? (
-                <p>Check your inbox for further instructions</p>
-              ) : (
-                <>
-                  <h1 className="flex-auto mb-8 text-xl font-bold">
-                    Reset password
-                  </h1>
-                  <div className="flex-auto w-full">
-                    <form onSubmit={handleSubmit}>
-                      <div className="relative flex flex-row items-center content-center justify-center w-full mb-4">
-                        <div className="flex-none px-3 py-2 text-gray-700 bg-gray-100 border-t border-b border-l border-gray-200 rounded-l-sm">
-                          <Mail className="w-5" />
-                        </div>
-                        <input
-                          type="email"
-                          className="flex-1 w-full px-3 py-2 text-gray-700 placeholder-gray-700 bg-white border border-gray-200 rounded-l-none rounded-r-sm outline-none appearance-none focus:border-indigo-500"
-                          placeholder="Email"
-                          value={email}
-                          onChange={(e) => {
-                            const val = e.target.value;
-                            setEmail(val);
-                          }}
-                          required
-                        />
-                      </div>
-
-                      {error && (
-                        <div className="flex items-center mb-4 text-sm text-red-500">
-                          <ExclamationCircle />
-                          <span className="ml-1">{error}</span>
-                        </div>
-                      )}
-
-                      <div className="text-center">
-                        <button
-                          className="w-full px-6 py-2 btn-primary"
-                          type="submit"
-                          disabled={submitting}
-                        >
-                          Send email
-                        </button>
-                      </div>
-                    </form>
+    <main className="flex items-center justify-center min-h-screen">
+      <section className="flex flex-col items-center justify-center w-full max-w-sm">
+        <Link to="/" className="mb-8">
+          <img className="w-24" src={Logo} alt="logo" />
+        </Link>
+        {submitted ? (
+          <p>Check your inbox for further instructions</p>
+        ) : (
+          <>
+            <h1 className="flex-auto mb-6 text-xl font-bold">Reset password</h1>
+            <p className="p-1 mb-8 text-sm text-center text-red-500">
+              {
+                'RepeatNotes encrypts your notes using your password to protect your privacy, if you reset your password, you will lose all your notes content.'
+              }
+            </p>
+            <div className="flex-auto w-full">
+              <form onSubmit={handleSubmit}>
+                <div className="relative flex flex-row items-center content-center justify-center w-full mb-4">
+                  <div className="flex-none px-3 py-2 text-gray-700 bg-gray-100 border-t border-b border-l border-gray-200 rounded-l-sm">
+                    <Mail className="w-5" />
                   </div>
-                  <p className="mt-8">
-                    {'Already have an account?'}
-                    <Link
-                      to="/login"
-                      className="ml-1 font-bold text-indigo-500 hover:text-indigo-600"
-                    >
-                      Log In
-                    </Link>
-                  </p>
-                </>
-              )}
+                  <input
+                    type="email"
+                    className="flex-1 w-full px-3 py-2 text-gray-700 placeholder-gray-700 bg-white border border-gray-200 rounded-l-none rounded-r-sm outline-none appearance-none focus:border-indigo-500"
+                    placeholder="Email"
+                    value={email}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      setEmail(val);
+                    }}
+                    required
+                  />
+                </div>
+
+                {error && (
+                  <div className="flex items-center mb-4 text-sm text-red-500">
+                    <ExclamationCircle />
+                    <span className="ml-1">{error}</span>
+                  </div>
+                )}
+
+                <div className="text-center">
+                  <button
+                    className="w-full px-6 py-2 btn-primary"
+                    type="submit"
+                    disabled={submitting}
+                  >
+                    Send email
+                  </button>
+                </div>
+              </form>
             </div>
-          </div>
-        </div>
+            <p className="mt-8">
+              {'Already have an account?'}
+              <Link
+                to="/login"
+                className="ml-1 font-bold text-indigo-500 hover:text-indigo-600"
+              >
+                Log In
+              </Link>
+            </p>
+          </>
+        )}
+        <div className="h-52" />
       </section>
     </main>
   );
