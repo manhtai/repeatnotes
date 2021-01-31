@@ -12,8 +12,9 @@ defmodule RepeatNotes.Tags do
   @spec list_tags(binary(), map) :: [Card.t()]
   def list_tags(user_id, params) do
     Tag
-    |> where(^filter_where(params))
     |> where(user_id: ^user_id)
+    |> where(^filter_where(params))
+    |> order_by(asc: :name)
     |> limit(@limit)
     |> Repo.all()
   end
@@ -27,7 +28,13 @@ defmodule RepeatNotes.Tags do
     |> Repo.aggregate(:count)
   end
 
-  @spec get_tag!(binary(), integer) :: Card.t() | nil
+  @spec get_tag!(binary()) :: Card.t() | nil
+  def get_tag!(id) do
+    Tag
+    |> Repo.get_by!(id: id)
+  end
+
+  @spec get_tag!(binary(), binary()) :: Card.t() | nil
   def get_tag!(id, user_id) do
     Tag
     |> Repo.get_by!(id: id, user_id: user_id)
@@ -45,6 +52,12 @@ defmodule RepeatNotes.Tags do
     tag
     |> Tag.changeset(attrs)
     |> Repo.update()
+  end
+
+  @spec delete_tag(Tag.t()) :: {:ok, Tag.t()} | {:error, Ecto.Changeset.t()}
+  def delete_tag(%Tag{} = tag) do
+    tag
+    |> Repo.delete()
   end
 
   @spec filter_where(map) :: Ecto.Query.DynamicExpr.t()

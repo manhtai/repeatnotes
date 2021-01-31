@@ -82,7 +82,7 @@ defmodule RepeatNotesWeb.TagController do
     with %User{id: user_id} <- conn.assigns.current_user do
       tag = Tags.get_tag!(id, user_id)
 
-      case RepeatNotes.Repo.delete(tag) do
+      case Tags.delete_tag(tag) do
         {:ok, _} ->
           conn
           |> put_status(:no_content)

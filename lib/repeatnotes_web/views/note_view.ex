@@ -29,8 +29,7 @@ defmodule RepeatNotesWeb.NoteView do
     %{
       id: note.id,
       created_at: note.inserted_at,
-      content: note.content,
-      tags: render_many(note.tags, TagView, "basic.json")
+      content: note.content
     }
   end
 

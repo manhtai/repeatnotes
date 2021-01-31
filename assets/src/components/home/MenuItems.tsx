@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {NavLink} from 'react-router-dom';
 import {useAuth} from 'src/components/auth/AuthProvider';
 import {
@@ -9,15 +9,12 @@ import {
   ArchiveOutline,
 } from 'heroicons-react';
 import TagModal from 'src/components/tag/TagModal';
+import {useGlobal} from 'src/components/global/GlobalProvider';
+import {Tag} from 'src/libs/types';
 
 type MenuProps = {
   routes: Array<any>;
 };
-
-const tags = Array.from({length: 20}, (_, i) => ({
-  id: `${i}`,
-  name: `Tag ${i}`,
-}));
 
 type MenuItemProps = React.PropsWithChildren<{link: string}>;
 
@@ -37,7 +34,12 @@ function MenuItem(props: MenuItemProps) {
 
 export default function MenuItems(props: MenuProps) {
   const auth = useAuth();
+  const {fetchTags, tags} = useGlobal();
   const [showTagModal, setShowTagModal] = useState(false);
+
+  useEffect(() => {
+    fetchTags();
+  }, [fetchTags]);
 
   return (
     <>
@@ -47,7 +49,7 @@ export default function MenuItems(props: MenuProps) {
 
       <div className="border-t border-gray-200"></div>
 
-      {tags.map((tag) => (
+      {tags.map((tag: Tag) => (
         <MenuItem link={`/tag/${tag.id}`} key={tag.id}>
           <TagOutline className="mr-2" /> {tag.name}
         </MenuItem>

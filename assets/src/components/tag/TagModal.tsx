@@ -4,8 +4,11 @@ import {
   TrashOutline,
   CheckOutline,
   PencilOutline,
+  XOutline,
 } from 'heroicons-react';
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
+import {useGlobal} from 'src/components/global/GlobalProvider';
+import {Tag} from 'src/libs/types';
 
 type Props = {
   header: string;
@@ -14,17 +17,47 @@ type Props = {
   setShowTagModal: (b: boolean) => void;
 };
 
+type ContextTag = Tag & {
+  checked: boolean;
+  editing: boolean;
+};
+
 export default function TagModal(props: Props) {
   const {header, allowCheck, showModal, setShowTagModal} = props;
+  const {tags, updateTag, deleteTag, createTag} = useGlobal();
 
-  const _tags = Array.from({length: 20}, (_, i) => ({
-    id: `${i}`,
-    checked: false,
-    editing: false,
-    name: `Tag ${i}`,
-  }));
+  const [contextTags, setcontextTags] = useState<ContextTag[]>([]);
 
-  const [tags, setTags] = useState(_tags);
+  const updateContextTag = (changes: any, isDelete = false) => {
+    const changed = contextTags.findIndex((t) => t.id === changes.id);
+
+    // Edit 1 tag at a time
+    const changeEditing = changes.editing
+      ? (t: any) => ({...t, editing: false})
+      : (t: any) => t;
+
+    const newTags = isDelete
+      ? [...contextTags.slice(0, changed), ...contextTags.slice(changed + 1)]
+      : [
+          ...contextTags.slice(0, changed).map(changeEditing),
+          {
+            ...contextTags[changed],
+            ...changes,
+            id: changes.newId ? changes.newId : changes.id,
+          },
+          ...contextTags.slice(changed + 1).map(changeEditing),
+        ];
+    setcontextTags(newTags);
+  };
+
+  useEffect(() => {
+    const allTags = tags.map((tag) => ({
+      ...tag,
+      checked: false,
+      editing: false,
+    }));
+    setcontextTags(allTags);
+  }, [tags]);
 
   return showModal ? (
     <div
@@ -32,15 +65,15 @@ export default function TagModal(props: Props) {
       onClick={() => setShowTagModal(false)}
     >
       <div
-        className="relative z-20 w-11/12 max-w-lg px-8 py-5 mx-auto my-6 text-sm text-gray-800 bg-gray-100 border rounded opacity-100 shadow-sm"
+        className="relative w-11/12 max-w-sm py-5 mx-auto my-6 text-sm text-gray-800 bg-gray-100 border rounded opacity-100 shadow-sm"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-center pb-3 mb-2 font-bold border-b">
           <TagOutline className="mr-1" /> {header}
         </div>
 
-        <div className="overflow-y-auto max-h-96">
-          {tags.map((tag) => (
+        <div className="pl-6 overflow-x-hidden overflow-y-auto max-h-96">
+          {contextTags.map((tag) => (
             <div className="flex items-center" key={tag.id}>
               {allowCheck ? (
                 <input
@@ -48,19 +81,26 @@ export default function TagModal(props: Props) {
                   className="flex-none text-sm text-indigo-600 border-gray-300 rounded focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                   checked={tag.checked}
                   onChange={(e) => {
-                    const changed = tags.findIndex((t) => t.id === tag.id);
-                    setTags([
-                      ...tags.slice(0, changed),
-                      {
-                        ...tags[changed],
-                        checked: e.target.checked,
-                      },
-                      ...tags.slice(changed + 1),
-                    ]);
+                    updateContextTag({...tag, checked: e.target.checked});
                   }}
                 />
               ) : (
-                <TrashOutline className="flex-none w-4 h-4 cursor-pointer hover:text-red-500" />
+                <TrashOutline
+                  className="flex-none w-4 h-4 cursor-pointer hover:text-red-500"
+                  onClick={async () => {
+                    if (tag.id) {
+                      if (
+                        window.confirm(
+                          'Are you sure want to delete this tag? Your notes remain untouched.'
+                        )
+                      ) {
+                        (await deleteTag(tag)) && updateContextTag(tag, true);
+                      }
+                    } else {
+                      updateContextTag(tag, true);
+                    }
+                  }}
+                />
               )}
 
               {tag.editing ? (
@@ -71,92 +111,76 @@ export default function TagModal(props: Props) {
                   placeholder="Tag name..."
                   className="flex-1 w-full px-0 py-1 m-3 text-sm bg-transparent border-t-0 border-b border-l-0 border-r-0 border-gray-300 focus:border-gray-300 focus:ring-0 focus:outline-none"
                   onChange={(e) => {
-                    const changed = tags.findIndex((t) => t.id === tag.id);
-                    setTags([
-                      ...tags.slice(0, changed),
-                      {
-                        ...tags[changed],
-                        name: e.target.value,
-                      },
-                      ...tags.slice(changed + 1),
-                    ]);
+                    updateContextTag({
+                      ...tag,
+                      name: e.target.value,
+                    });
                   }}
                 />
               ) : (
                 <div
-                  className="flex-1 w-full px-0 py-1 m-3 text-sm bg-transparent border-t-0 border-b border-l-0 border-r-0 border-transparent cursor-pointer"
+                  className="flex items-center justify-between flex-1 w-full px-0 py-1 m-3 overflow-hidden text-sm bg-transparent border-t-0 border-b border-l-0 border-r-0 border-transparent cursor-pointer overflow-ellipsis whitespace-nowrap"
                   onClick={() => {
-                    const changed = tags.findIndex((t) => t.id === tag.id);
-                    setTags([
-                      ...tags
-                        .slice(0, changed)
-                        .map((t) => ({...t, editing: false})),
-                      {
-                        ...tags[changed],
-                        editing: true,
-                      },
-                      ...tags
-                        .slice(changed + 1)
-                        .map((t) => ({...t, editing: false})),
-                    ]);
+                    updateContextTag({
+                      ...tag,
+                      editing: true,
+                    });
                   }}
                 >
                   {tag.name}
+
+                  <PencilOutline
+                    className="w-4 h-4 mr-3"
+                    onClick={() => {
+                      updateContextTag({
+                        ...tag,
+                        editing: true,
+                      });
+                    }}
+                  />
                 </div>
               )}
 
-              <div
-                className={
-                  'flex-none cursor-pointer hover:opacity-100 mr-8' +
-                  (tag.editing ? '' : ' opacity-20')
-                }
-                onClick={() => {
-                  const changed = tags.findIndex((t) => t.id === tag.id);
-                  if (tag.editing) {
-                    setTags([
-                      ...tags.slice(0, changed),
-                      {
-                        ...tags[changed],
-                        editing: false,
-                      },
-                      ...tags.slice(changed + 1),
-                    ]);
-                  } else {
-                    setTags([
-                      ...tags
-                        .slice(0, changed)
-                        .map((t) => ({...t, editing: false})),
-                      {
-                        ...tags[changed],
-                        editing: true,
-                      },
-                      ...tags
-                        .slice(changed + 1)
-                        .map((t) => ({...t, editing: false})),
-                    ]);
-                  }
-                }}
-              >
-                {tag.editing ? (
-                  <CheckOutline className="w-4 h-4" />
-                ) : (
-                  <PencilOutline className="w-4 h-4" />
-                )}
-              </div>
+              {tag.editing ? (
+                <CheckOutline
+                  className="w-4 h-4 mr-6 cursor-pointer"
+                  onClick={async () => {
+                    if (!tag.id) {
+                      const newTag = await createTag(tag);
+                      updateContextTag({...tag, newId: newTag && newTag.id});
+                    } else {
+                      updateTag(tag);
+                    }
+                  }}
+                />
+              ) : null}
             </div>
           ))}
         </div>
 
-        <div
-          className="flex items-end justify-center my-2 cursor-pointer"
-          onClick={() => {
-            if (!tags.find((tag) => !tag.id)) {
-              tags.unshift({id: '', checked: false, name: '', editing: true});
-              setTags([...tags]);
-            }
-          }}
-        >
-          <PlusOutline /> Add more
+        <div className="flex items-center justify-between px-5 pt-2 mt-4 mr-1 text-gray-600">
+          <div
+            className="flex items-stretch justify-center cursor-pointer"
+            onClick={() => {
+              if (!contextTags.find((tag) => tag.id === '')) {
+                contextTags.unshift({
+                  id: '',
+                  checked: false,
+                  name: '',
+                  editing: true,
+                });
+                setcontextTags([...contextTags]);
+              }
+            }}
+          >
+            <PlusOutline className="w-5 h-5" /> Add more
+          </div>
+          <div
+            className="flex items-stretch justify-center cursor-pointer"
+            onClick={() => setShowTagModal(false)}
+          >
+            <XOutline className="w-5 h-5" /> Close
+          </div>
         </div>
       </div>
     </div>

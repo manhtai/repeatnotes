@@ -141,7 +141,7 @@ defmodule RepeatNotesWeb.NoteController do
     with %User{id: user_id} <- conn.assigns.current_user do
       note = Notes.get_note!(id, user_id)
 
-      case RepeatNotes.Repo.delete(note) do
+      case Notes.delete_note(note) do
         {:ok, _} ->
           conn
           |> put_status(:no_content)

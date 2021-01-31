@@ -50,7 +50,7 @@ defmodule RepeatNotes.Notes do
     |> Repo.preload([:tags])
   end
 
-  @spec get_note!(binary(), integer) :: Note.t() | nil
+  @spec get_note!(binary(), binary()) :: Note.t() | nil
   def get_note!(id, user_id) do
     Note
     |> Repo.get_by!(id: id, user_id: user_id)
@@ -69,6 +69,12 @@ defmodule RepeatNotes.Notes do
     note
     |> Note.changeset(attrs)
     |> Repo.update()
+  end
+
+  @spec delete_note(Note.t()) :: {:ok, Note.t()} | {:error, Ecto.Changeset.t()}
+  def delete_note(%Note{} = note) do
+    note
+    |> Repo.delete()
   end
 
   @spec encrypt_note_content(map, String.t()) :: map()
