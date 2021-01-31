@@ -9,6 +9,7 @@ To start your Phoenix server:
 
 Now you can visit [`localhost:3333`](http://localhost:3333) from your browser.
 
+
 ## Deploy to Heroku
 
 
@@ -28,4 +29,7 @@ heroku config:set SECRET_KEY_BASE=XXXXXXXXXXXXXXXXXXXX
 
 # Deploy
 git push heroku master
+
+# Migrate
+heroku run "POOL_SIZE=2 mix ecto.migrate"
 ```
