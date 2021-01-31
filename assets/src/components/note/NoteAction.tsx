@@ -21,7 +21,9 @@ export default function NoteAction(props: Props) {
   const [showTagModal, setShowTagModal] = useState(false);
   const {tags, setSync} = useGlobal();
   const {noteTags, setNoteTags, noteId} = props;
-  const [checkedTagIds, setCheckedTagIds] = useState<string[]>([]);
+  const [checkedTagIds, setCheckedTagIds] = useState<string[]>(
+    noteTags.map((t) => t.id)
+  );
 
   useEffect(() => {
     setCheckedTagIds(noteTags.map((tag) => tag.id));

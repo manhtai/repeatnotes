@@ -16,10 +16,10 @@ export default function TagView(props: Props) {
   }, [tags, props.tags]);
 
   return (
-    <div className="flex items-center mx-3 mt-8 text-xs">
+    <div className="flex flex-wrap items-center justify-start mx-3 mt-8 text-xs">
       {noteTags.map((tag) => (
         <NavLink
-          className="px-2 py-0 mr-2 text-gray-400 bg-gray-200 rounded-full"
+          className="self-center px-2 py-0 my-1 mr-2 text-gray-400 bg-gray-200 rounded-full"
           to={`/tag/${tag.id}`}
           key={tag.id}
         >

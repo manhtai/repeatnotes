@@ -51,7 +51,13 @@ export default function MenuItems(props: MenuProps) {
 
       {tags.map((tag: Tag) => (
         <MenuItem link={`/tag/${tag.id}`} key={tag.id}>
-          <TagOutline className="mr-2" /> {tag.name}
+          <TagOutline className="flex-shrink-0 w-5 h-5 mr-2" />
+          <div
+            className="overflow-hidden overflow-ellipsis whitespace-nowrap"
+            title={tag.name}
+          >
+            {tag.name}
+          </div>
         </MenuItem>
       ))}
 
@@ -61,17 +67,17 @@ export default function MenuItems(props: MenuProps) {
           role="menuitem"
           onClick={() => setShowTagModal(!showTagModal)}
         >
-          <PencilOutline className="mr-2" /> Edit tags
+          <PencilOutline className="w-5 h-5 mr-2" /> Edit tags
         </span>
       </div>
 
       <div className="border-t border-gray-200"></div>
 
       <MenuItem link={'/archives'}>
-        <ArchiveOutline className="mr-2" /> Archive
+        <ArchiveOutline className="w-5 h-5 mr-2" /> Archive
       </MenuItem>
       <MenuItem link={'/trash'}>
-        <TrashOutline className="mr-2" /> Trash
+        <TrashOutline className="w-5 h-5 mr-2" /> Trash
       </MenuItem>
 
       <div className="border-t border-gray-200"></div>

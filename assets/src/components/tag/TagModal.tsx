@@ -93,7 +93,7 @@ function TagLine(props: TagLineProps) {
         />
       ) : (
         <div
-          className="flex items-center justify-between flex-1 w-full px-0 py-1 m-3 overflow-hidden text-sm bg-transparent border-t-0 border-b border-l-0 border-r-0 border-transparent cursor-pointer overflow-ellipsis whitespace-nowrap"
+          className="flex items-center justify-between flex-1 w-full px-0 py-1 m-3 text-sm bg-transparent border-t-0 border-b border-l-0 border-r-0 border-transparent cursor-pointer"
           onClick={() => {
             updateContextTag({
               ...tag,
@@ -101,9 +101,8 @@ function TagLine(props: TagLineProps) {
             });
           }}
         >
-          {tag.name}
-
-          <PencilOutline className="w-4 h-4 mr-3" />
+          <div className="flex-1">{tag.name}</div>
+          <PencilOutline className="w-4 h-4 mr-3 flex-0" />
         </div>
       )}
 
@@ -138,7 +137,19 @@ export default function TagModal(props: Props) {
   } = props;
   const {tags} = useGlobal();
 
-  const [contextTags, setcontextTags] = useState<ContextTag[]>([]);
+  const initContextTag = (tags: Tag[], checkedTagIds: string[]) => {
+    return tags.map((tag) => ({
+      ...tag,
+      checked: checkedTagIds.find((id) => tag.id === id) ? true : false,
+      editing: false,
+      error: false,
+      newId: null,
+    }));
+  };
+
+  const [contextTags, setcontextTags] = useState<ContextTag[]>(
+    initContextTag(tags, checkedTagIds)
+  );
 
   const overLimit = () => contextTags.length >= 5;
 
@@ -173,14 +184,7 @@ export default function TagModal(props: Props) {
   };
 
   useEffect(() => {
-    const allTags = tags.map((tag) => ({
-      ...tag,
-      checked: checkedTagIds.find((id) => tag.id === id) ? true : false,
-      editing: false,
-      error: false,
-      newId: null,
-    }));
-    setcontextTags(allTags);
+    setcontextTags(initContextTag(tags, checkedTagIds));
     // eslint-disable-next-line
   }, [tags]);
 
