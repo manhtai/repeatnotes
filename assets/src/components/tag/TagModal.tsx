@@ -41,30 +41,33 @@ export default function TagModal(props: Props) {
   const overLimit = (tags: ContextTag[]) => tags.length >= 50;
 
   const updateContextTag = (changes: any, isDelete = false) => {
-    const changed = contextTags.findIndex((t) => t.id === changes.id);
+    const changedIndex = contextTags.findIndex((t) => t.id === changes.id);
 
     // Edit 1 tag at a time
-    const changeEditing = changes.editing
+    const changeEditingFunc = changes.editing
       ? (t: any) => ({...t, editing: false})
       : (t: any) => t;
 
     const newTags = isDelete
-      ? [...contextTags.slice(0, changed), ...contextTags.slice(changed + 1)]
+      ? [
+          ...contextTags.slice(0, changedIndex),
+          ...contextTags.slice(changedIndex + 1),
+        ]
       : [
-          ...contextTags.slice(0, changed).map(changeEditing),
+          ...contextTags.slice(0, changedIndex).map(changeEditingFunc),
           {
-            ...contextTags[changed],
+            ...contextTags[changedIndex],
             ...changes,
             id: changes.newId ? changes.newId : changes.id,
             error: contextTags.find(
               (t) => t.name === changes.name && t.id !== changes.id
             ),
           },
-          ...contextTags.slice(changed + 1).map(changeEditing),
+          ...contextTags.slice(changedIndex + 1).map(changeEditingFunc),
         ];
 
-    setcontextTags(newTags);
     setCheckedTagIds(newTags.filter((t) => t.checked).map((t) => t.id));
+    setcontextTags(newTags);
   };
 
   useEffect(() => {
@@ -152,15 +155,7 @@ export default function TagModal(props: Props) {
                 >
                   {tag.name}
 
-                  <PencilOutline
-                    className="w-4 h-4 mr-3"
-                    onClick={() => {
-                      updateContextTag({
-                        ...tag,
-                        editing: true,
-                      });
-                    }}
-                  />
+                  <PencilOutline className="w-4 h-4 mr-3" />
                 </div>
               )}
 
