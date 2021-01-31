@@ -1,6 +1,7 @@
 import {
   Tag as TagSolid,
   TagOutline,
+  ReplyOutline,
   Trash,
   TrashOutline,
   Save,
@@ -30,14 +31,12 @@ export default function NoteAction(props: Props) {
   );
 
   const [pin, setPin] = useState(note.pin);
-  const [archive, setArchive] = useState(false);
-  const [trash, setTrash] = useState(false);
+  const [archive, setArchive] = useState(note.archive);
+  const [trash, setTrash] = useState(note.trash);
+  const [firstClick, setFirstClick] = useState(false);
 
   useEffect(() => {
     setCheckedTagIds(note.tags ? note.tags.map((t) => t.id) : []);
-    setPin(note.pin);
-    setTrash(note.pin);
-    setArchive(note.pin);
   }, [note]);
 
   const updateNoteTags = (newCheckedIds: string[]) => {
@@ -71,6 +70,35 @@ export default function NoteAction(props: Props) {
     );
   };
 
+  useEffect(() => {
+    if (!firstClick) {
+      return;
+    }
+    setSync(SyncStatus.Syncing);
+    API.patchNote(note.id, {note: {pin, trash, archive}}).then(
+      () => {
+        setSync(SyncStatus.Success);
+      },
+      (error) => {
+        logger.error(error);
+        setSync(SyncStatus.Error);
+      }
+    );
+  }, [pin, trash, archive, note.id, setSync, firstClick]);
+
+  const deleteNote = (note: Note) => {
+    setSync(SyncStatus.Syncing);
+    API.deleteNote(note.id).then(
+      () => {
+        setSync(SyncStatus.Success);
+      },
+      (error) => {
+        logger.error(error);
+        setSync(SyncStatus.Error);
+      }
+    );
+  };
+
   return (
     <>
       <div className="flex justify-between px-3 my-3 opacity-20 hover:opacity-100 transition-opacity duration-100 ease-out">
@@ -78,6 +106,7 @@ export default function NoteAction(props: Props) {
           <Bookmark
             className="w-4 h-4 cursor-pointer"
             onClick={() => {
+              setFirstClick(true);
               setPin(!pin);
             }}
           />
@@ -85,6 +114,7 @@ export default function NoteAction(props: Props) {
           <BookmarkOutline
             className="w-4 h-4 cursor-pointer"
             onClick={() => {
+              setFirstClick(true);
               setPin(!pin);
             }}
           />
@@ -106,6 +136,7 @@ export default function NoteAction(props: Props) {
           <Save
             className="w-4 h-4 cursor-pointer"
             onClick={() => {
+              setFirstClick(true);
               setArchive(!archive);
             }}
           />
@@ -113,28 +144,51 @@ export default function NoteAction(props: Props) {
           <SaveOutline
             className="w-4 h-4 cursor-pointer"
             onClick={() => {
+              setFirstClick(true);
               setArchive(!archive);
             }}
           />
         )}
 
         {trash ? (
-          <Trash
-            className="w-4 h-4 cursor-pointer hover:text-red-500"
+          <ReplyOutline
+            className="w-4 h-4 cursor-pointer"
             onClick={() => {
+              setFirstClick(true);
               setTrash(!trash);
             }}
           />
         ) : (
-          <TrashOutline className="w-4 h-4 cursor-pointer hover:text-red-500" />
+          <TrashOutline
+            className="w-4 h-4 cursor-pointer"
+            onClick={() => {
+              setFirstClick(true);
+              setTrash(!trash);
+            }}
+          />
         )}
+
+        {trash ? (
+          <Trash
+            className="w-4 h-4 text-red-400 cursor-pointer hover:text-red-500"
+            onClick={() => {
+              if (
+                window.confirm(
+                  "Are you sure want to delete this note? No one can't recover it!"
+                )
+              ) {
+                deleteNote(note);
+              }
+            }}
+          />
+        ) : null}
       </div>
 
       <TagModal
         noteId={note.id}
         checkedTagIds={checkedTagIds}
         setCheckedTagIds={updateNoteTags}
-        header={'Note tag'}
+        header={'Adding tags to note'}
         showModal={showTagModal}
         setShowTagModal={() => setShowTagModal(false)}
       />

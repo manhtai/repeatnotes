@@ -111,6 +111,27 @@ defmodule RepeatNotesWeb.NoteController do
     end
   end
 
+  @spec patch(Plug.Conn.t(), map) :: Plug.Conn.t()
+  def patch(conn, %{"id" => id, "note" => note_params}) do
+    with %User{id: user_id} <- conn.assigns.current_user do
+      note = Notes.get_note!(id, user_id)
+
+      case Notes.patch_note(note, note_params) do
+        {:ok, %Note{} = note} ->
+          conn
+          |> put_status(:ok)
+          |> render("update.json", note: note)
+
+        {:error, changeset} ->
+          errors = Changeset.traverse_errors(changeset, &ErrorHelpers.translate_error/1)
+
+          conn
+          |> put_status(400)
+          |> json(%{error: %{status: 400, message: "Couldn't update note", errors: errors}})
+      end
+    end
+  end
+
   @spec upload(Plug.Conn.t(), map) :: Plug.Conn.t()
   def upload(conn, %{"file" => file}) do
     scope = %{

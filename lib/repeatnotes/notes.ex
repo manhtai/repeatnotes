@@ -71,6 +71,13 @@ defmodule RepeatNotes.Notes do
     |> Repo.update()
   end
 
+  @spec patch_note(Note.t(), map()) :: {:ok, Note.t()} | {:error, Ecto.Changeset.t()}
+  def patch_note(%Note{} = note, attrs) do
+    note
+    |> Note.changeset_patch(attrs)
+    |> Repo.update()
+  end
+
   @spec delete_note(Note.t()) :: {:ok, Note.t()} | {:error, Ecto.Changeset.t()}
   def delete_note(%Note{} = note) do
     note
