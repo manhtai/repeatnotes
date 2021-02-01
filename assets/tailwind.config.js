@@ -12,7 +12,7 @@ module.exports = {
       "./src/**/*.{ts,tsx,html}",
     ],
     options: {
-      // whitelistPatterns: [/^bg-/, /^text-/],
+      whitelistPatterns: [/^border-/, /^text-/],
     },
   },
   theme: {
