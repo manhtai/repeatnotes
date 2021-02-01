@@ -42,7 +42,7 @@
     "start": "npm run stop && npm run watch:css && PORT=3333 BROWSER=none react-app-rewired start",
     "stop": "lsof -ti :3333 | xargs kill",
     "build": "npm run build:css && react-app-rewired build",
-    "postbuild": "mkdirp ../priv/static && cpx \"./build/static/**\" \"../priv/static\" --clean",
+    "postbuild": "mkdirp ../priv/static && cpx \"./build/**\" \"../priv/static\" --clean",
     "deploy": "NODE_ENV=production npm run build && npm run postbuild",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
