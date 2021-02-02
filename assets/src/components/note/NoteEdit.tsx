@@ -24,15 +24,19 @@ export default function NoteEdit(props: Props) {
 
   const [content, setContent] = useState(note.content || '');
   const [id, setId] = useState(note.id || '');
+  const [creating, setCreating] = useState(false);
 
   const upsertFunc = (id: string, newContent: string, oldNote: Note) => {
     setSync(SyncStatus.Syncing);
-    if (!id && newContent.trim()) {
+    if (!id && !creating && newContent.trim()) {
+      setCreating(true);
       API.createNote({note: {content: newContent}}).then(
         (note: Note) => {
           setSync(SyncStatus.Success);
           setId(note.id);
           setNote && setNote({...note, id: note.id, content: newContent});
+
+          setCreating(false);
         },
         (error) => {
           setSync(SyncStatus.Error);
@@ -40,6 +44,7 @@ export default function NoteEdit(props: Props) {
 
           setContent(oldNote.content);
           setNote && setNote(oldNote);
+          setCreating(false);
         }
       );
     } else if (id) {
