@@ -2,7 +2,7 @@ name: RepeatNotes
 
 on:
   push:
-    branches: [ci]
+    branches: [master]
   pull_request:
 
 jobs:
