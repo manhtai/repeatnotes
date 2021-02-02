@@ -190,11 +190,11 @@ export default function TagModal(props: Props) {
 
   return showModal ? (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center w-full h-full"
+      className="fixed inset-0 z-30 flex items-center justify-center w-full h-full bg-gray-100 bg-opacity-50"
       onClick={() => setShowTagModal(false)}
     >
       <div
-        className="relative w-11/12 max-w-sm py-5 mx-auto my-6 text-sm text-gray-800 bg-gray-100 border rounded opacity-100 shadow-sm"
+        className="relative z-40 w-11/12 max-w-sm py-5 mx-auto my-6 text-sm text-gray-800 bg-white border rounded opacity-100 shadow-sm"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-center pb-3 mb-2 font-bold border-b">
@@ -235,7 +235,7 @@ export default function TagModal(props: Props) {
               }
             }}
           >
-            <PlusOutline className="w-5 h-5" /> Add more
+            <PlusOutline className="w-5 h-5" /> Add more tag
           </div>
           <div
             className="flex items-stretch justify-center cursor-pointer"
