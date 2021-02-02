@@ -9,7 +9,7 @@ import {
   MenuAlt2Outline,
   ExclamationCircleOutline,
   RefreshOutline,
-} from 'heroicons-react';
+} from '@graywolfai/react-heroicons';
 
 import {Route, NavLink, useLocation} from 'react-router-dom';
 import {Transition} from '@headlessui/react';
@@ -115,16 +115,16 @@ export default function HomePage() {
           <li>
             {globalContext.sync === SyncStatus.Syncing ? (
               <span className="flex items-end text-indigo-500">
-                <RefreshOutline className="mr-1 animate-reverse-spin" />{' '}
+                <RefreshOutline className="w-5 h-5 mr-1 animate-reverse-spin" />{' '}
                 Syncing...
               </span>
             ) : globalContext.sync === SyncStatus.Error ? (
               <span className="flex items-end text-red-500">
-                <ExclamationCircleOutline className="mr-1" /> Error
+                <ExclamationCircleOutline className="w-5 h-5 mr-1" /> Error
               </span>
             ) : (
               <span className="flex items-end text-green-500">
-                <CheckCircleOutline className="mr-1" /> Synced
+                <CheckCircleOutline className="w-5 h-5 mr-1" /> Synced
               </span>
             )}
           </li>
@@ -133,7 +133,7 @@ export default function HomePage() {
           {topNavBar.map(({path, name, Icon}) => {
             return (
               <TopNavBarItem path={path} name={name} key={path}>
-                <Icon />
+                <Icon className="w-5" />
               </TopNavBarItem>
             );
           })}
@@ -231,13 +231,13 @@ export default function HomePage() {
               : '')
           }
         >
-          <MenuAlt2Outline />
+          <MenuAlt2Outline className="w-5 h-5" />
         </div>
 
         {bottomNavBar.map(({path, Icon}) => {
           return (
             <BottomNavBarItem path={path} key={path}>
-              <Icon />
+              <Icon className="w-5" />
             </BottomNavBarItem>
           );
         })}

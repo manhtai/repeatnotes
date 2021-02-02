@@ -1,14 +1,14 @@
 import {
-  Tag as TagSolid,
+  TagSolid,
   TagOutline,
   ReplyOutline,
-  Trash,
+  TrashSolid,
   TrashOutline,
-  Save,
+  SaveSolid,
   SaveOutline,
-  Bookmark,
+  BookmarkSolid,
   BookmarkOutline,
-} from 'heroicons-react';
+} from '@graywolfai/react-heroicons';
 import {useState, useEffect} from 'react';
 import TagModal from 'src/components/tag/TagModal';
 import {Note, SyncStatus} from 'src/libs/types';
@@ -103,7 +103,7 @@ export default function NoteAction(props: Props) {
     <>
       <div className="flex justify-between px-3 my-3 opacity-20 hover:opacity-100 transition-opacity duration-100 ease-out">
         {pin ? (
-          <Bookmark
+          <BookmarkSolid
             className="w-4 h-4 cursor-pointer"
             onClick={() => {
               setFirstClick(true);
@@ -133,7 +133,7 @@ export default function NoteAction(props: Props) {
         )}
 
         {archive ? (
-          <Save
+          <SaveSolid
             className="w-4 h-4 cursor-pointer"
             onClick={() => {
               setFirstClick(true);
@@ -169,7 +169,7 @@ export default function NoteAction(props: Props) {
         )}
 
         {trash ? (
-          <Trash
+          <TrashSolid
             className="w-4 h-4 text-red-400 cursor-pointer hover:text-red-500"
             onClick={() => {
               if (

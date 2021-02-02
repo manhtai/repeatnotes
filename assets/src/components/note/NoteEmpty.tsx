@@ -1,4 +1,4 @@
-import {PlusOutline} from 'heroicons-react';
+import {PlusOutline} from '@graywolfai/react-heroicons';
 import {NavLink} from 'react-router-dom';
 
 type Props = {
@@ -15,7 +15,7 @@ export default function NoteEmpty(props: Props) {
         to={'/new'}
         className="flex items-center justify-center my-4 text-indigo-600 hover:text-indigo-500"
       >
-        <PlusOutline /> Creat new one
+        <PlusOutline className="w-5 h-5" /> Creat new one
       </NavLink>
     </div>
   );

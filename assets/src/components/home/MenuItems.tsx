@@ -8,7 +8,7 @@ import {
   TagOutline,
   LightBulbOutline,
   ArchiveOutline,
-} from 'heroicons-react';
+} from '@graywolfai/react-heroicons';
 import {useGlobal} from 'src/components/global/GlobalProvider';
 import {Tag} from 'src/libs/types';
 
@@ -45,7 +45,7 @@ export default function MenuItems(props: MenuProps) {
   return (
     <>
       <MenuItem link={'/notes'}>
-        <LightBulbOutline className="mr-2" /> Notes
+        <LightBulbOutline className="w-5 h-5 mr-2" /> Notes
       </MenuItem>
 
       <MenuItem link={'/bookmark'}>

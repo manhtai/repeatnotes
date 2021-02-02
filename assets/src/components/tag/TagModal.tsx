@@ -5,7 +5,7 @@ import {
   CheckOutline,
   PencilOutline,
   XOutline,
-} from 'heroicons-react';
+} from '@graywolfai/react-heroicons';
 import {useState, useEffect} from 'react';
 import {useGlobal} from 'src/components/global/GlobalProvider';
 import {Tag} from 'src/libs/types';
@@ -198,7 +198,7 @@ export default function TagModal(props: Props) {
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-center pb-3 mb-2 font-bold border-b">
-          <TagOutline className="mr-1" /> {header}
+          <TagOutline className="w-5 h-5 mr-1" /> {header}
         </div>
 
         <div className="pl-6 overflow-x-hidden overflow-y-auto max-h-96">
