@@ -1,4 +1,3 @@
-const defaultTheme = require("tailwindcss/defaultTheme");
 const plugin = require('tailwindcss/plugin')
 
 
@@ -12,7 +11,7 @@ module.exports = {
       "./src/**/*.{ts,tsx,html}",
     ],
     options: {
-      whitelistPatterns: [/^border-/, /^text-/],
+      safelist: [/^border-/, /^text-/],
     },
   },
   theme: {
