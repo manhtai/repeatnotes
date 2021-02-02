@@ -9,7 +9,7 @@ import {
   MenuAlt2Outline,
   ExclamationCircleOutline,
   RefreshOutline,
-} from 'heroicons-react';
+} from '@graywolfai/react-heroicons';
 
 import {Route, NavLink, useLocation} from 'react-router-dom';
 import {Transition} from '@headlessui/react';
@@ -32,6 +32,7 @@ import Account from 'src/components/settings/Account';
 import Billing from 'src/components/settings/Billing';
 
 import MenuItems from 'src/components/home/MenuItems';
+import TagModal from 'src/components/tag/TagModal';
 
 type NavBarProps = {
   path: string;
@@ -68,6 +69,7 @@ function BottomNavBarItem({path, children}: NavBarProps) {
 
 export default function HomePage() {
   const [isSideBarOpen, setSideBarOpen] = useState(false);
+  const [showTagModal, setShowTagModal] = useState(false);
   const location = useLocation();
   const globalContext = useGlobal();
 
@@ -113,16 +115,16 @@ export default function HomePage() {
           <li>
             {globalContext.sync === SyncStatus.Syncing ? (
               <span className="flex items-end text-indigo-500">
-                <RefreshOutline className="mr-1 animate-reverse-spin" />{' '}
+                <RefreshOutline className="w-5 h-5 mr-1 animate-reverse-spin" />{' '}
                 Syncing...
               </span>
             ) : globalContext.sync === SyncStatus.Error ? (
               <span className="flex items-end text-red-500">
-                <ExclamationCircleOutline className="mr-1" /> Error
+                <ExclamationCircleOutline className="w-5 h-5 mr-1" /> Error
               </span>
             ) : (
               <span className="flex items-end text-green-500">
-                <CheckCircleOutline className="mr-1" /> Synced
+                <CheckCircleOutline className="w-5 h-5 mr-1" /> Synced
               </span>
             )}
           </li>
@@ -131,7 +133,7 @@ export default function HomePage() {
           {topNavBar.map(({path, name, Icon}) => {
             return (
               <TopNavBarItem path={path} name={name} key={path}>
-                <Icon />
+                <Icon className="w-5" />
               </TopNavBarItem>
             );
           })}
@@ -151,7 +153,10 @@ export default function HomePage() {
             aria-orientation="horizontal"
             aria-labelledby="options-menu"
           >
-            <MenuItems routes={settingsRoutes} />
+            <MenuItems
+              routes={settingsRoutes}
+              setShowTagModal={setShowTagModal}
+            />
           </div>
         </nav>
 
@@ -206,7 +211,10 @@ export default function HomePage() {
               aria-labelledby="options-menu"
               onClick={() => setSideBarOpen(!isSideBarOpen)}
             >
-              <MenuItems routes={settingsRoutes} />
+              <MenuItems
+                routes={settingsRoutes}
+                setShowTagModal={setShowTagModal}
+              />
             </div>
           </nav>
         </Transition>
@@ -223,17 +231,26 @@ export default function HomePage() {
               : '')
           }
         >
-          <MenuAlt2Outline />
+          <MenuAlt2Outline className="w-5 h-5" />
         </div>
 
         {bottomNavBar.map(({path, Icon}) => {
           return (
             <BottomNavBarItem path={path} key={path}>
-              <Icon />
+              <Icon className="w-5" />
             </BottomNavBarItem>
           );
         })}
       </section>
+
+      <TagModal
+        header={'Edit tags'}
+        checkedTagIds={[]}
+        setCheckedTagIds={() => {}}
+        noteId={null}
+        showModal={showTagModal}
+        setShowTagModal={() => setShowTagModal(false)}
+      />
     </div>
   );
 }

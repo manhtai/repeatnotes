@@ -29,7 +29,7 @@ export default function Account() {
               type="email"
               className="mt-0 block w-full px-0.5 border-0 border-b-2 bg-gray-100 border-gray-200 cursor-not-allowed focus:ring-0 focus:border-black"
               value={user.email}
-              disabled
+              readOnly
             />
           </label>
           <label className="block">
@@ -38,7 +38,7 @@ export default function Account() {
               type="text"
               className="mt-0 block w-full px-0.5 border-0 border-b-2 bg-gray-100 border-gray-200 focus:ring-0 focus:border-black"
               value={formatDate(user.inserted_at)}
-              disabled
+              readOnly
             />
           </label>
         </div>

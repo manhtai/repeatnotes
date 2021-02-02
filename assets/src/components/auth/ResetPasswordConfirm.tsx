@@ -2,7 +2,12 @@ import React, {useState} from 'react';
 import Logo from '../../img/logo.svg';
 import * as API from '../../libs/api';
 
-import {LockClosed, Eye, EyeOff, ExclamationCircle} from 'heroicons-react';
+import {
+  LockClosedOutline,
+  EyeOutline,
+  EyeOffOutline,
+  ExclamationCircleOutline,
+} from '@graywolfai/react-heroicons';
 
 import {
   RouteComponentProps,
@@ -39,9 +44,9 @@ function Confirm(props: ConfirmProps) {
         <h1 className="mb-8 text-xl font-bold">Choose a new password</h1>
         <div className="flex-auto w-full">
           <form onSubmit={handleSubmit}>
-            <div className="relative flex flex-row items-center content-center justify-center w-full mb-4">
+            <div className="relative flex flex-row items-stretch content-center justify-center w-full mb-4">
               <div className="flex-none px-3 py-2 text-gray-700 bg-gray-100 border-t border-b border-l border-gray-200 rounded-l-sm">
-                <LockClosed className="w-5" />
+                <LockClosedOutline className="w-5" />
               </div>
               <input
                 type={showPassword ? 'text' : 'password'}
@@ -58,13 +63,17 @@ function Confirm(props: ConfirmProps) {
                 className="absolute inset-y-0 right-0 flex items-center pr-3"
                 onClick={() => setShowPassword(!showPassword)}
               >
-                {showPassword ? <EyeOff /> : <Eye />}
+                {showPassword ? (
+                  <EyeOffOutline className="w-5" />
+                ) : (
+                  <EyeOutline className="w-5" />
+                )}
               </div>
             </div>
 
             {error && (
               <div className="flex items-center mb-4 text-sm text-red-500">
-                <ExclamationCircle />
+                <ExclamationCircleOutline className="w-5" />
                 <span className="ml-1">{error}</span>
               </div>
             )}
