@@ -10,7 +10,7 @@ config :repeatnotes, RepeatNotes.Repo,
   password: "postgres",
   database: "repeatnotes_test#{System.get_env("MIX_TEST_PARTITION")}",
   hostname: "localhost",
-  port: 25432,
+  port: System.get_env("DATABASE_PORT") || 25432,
   pool: Ecto.Adapters.SQL.Sandbox
 
 # We don't run a server during test. If one is required,

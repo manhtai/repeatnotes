@@ -6,7 +6,7 @@ config :repeatnotes, RepeatNotes.Repo,
   password: "postgres",
   database: "repeatnotes_dev",
   hostname: "localhost",
-  port: 25432,
+  port: System.get_env("DATABASE_PORT") || 25432,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 
