@@ -12,7 +12,7 @@ export default function Billing() {
               type="text"
               className="mt-0 block w-full px-0.5 border-0 border-b-2 bg-gray-100 border-gray-200 focus:ring-0 focus:border-black"
               value="FREE"
-              disabled
+              readOnly
             />
           </label>
         </div>
