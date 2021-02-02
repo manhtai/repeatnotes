@@ -1,5 +1,10 @@
 # RepeatNotes
 
+![RepeatNotes](https://github.com/repeatnotes/repeatnotes/workflows/RepeatNotes/badge.svg)
+
+
+## Local setup
+
 To start your Phoenix server:
 
   * Install dependencies with `mix deps.get`
