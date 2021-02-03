@@ -71,7 +71,7 @@ function Answers(props: AnswerProps) {
 }
 
 function CardReview() {
-  const {sm2, loadSm2, loading, config} = useSrs();
+  const {sm2, loadSm2, loading, error, config} = useSrs();
   const {setSync} = useGlobal();
 
   const [card, setCard] = useState<Card | null>(null);
@@ -132,6 +132,13 @@ function CardReview() {
 
   if (fetchingCards) {
     return null;
+  }
+
+  if (!loading && error) {
+    // https://github.com/repeatnotes/repeatnotes/issues/28
+    return (
+      <NoteEmpty text="Your web browser is not supported to run this feature." />
+    );
   }
 
   return (
