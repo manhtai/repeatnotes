@@ -28,12 +28,11 @@ fn new(config: Config) -> Result<Scheduler, Error> {
 
 #[rustler::nif]
 fn next_interval(
-    env: Env,
     scheduler: Scheduler,
     card: Card,
     choice: Choice,
-) -> Result<Term, Error> {
-    Ok(scheduler.next_interval(&card, choice).encode(env))
+) -> Result<i64, Error> {
+    Ok(scheduler.next_interval(&card, choice))
 }
 
 rustler::init!("Elixir.RepeatNotes.Sm2", [new, next_interval], load = load);

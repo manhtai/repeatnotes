@@ -6,6 +6,6 @@ defmodule RepeatNotes.Sm2.Sm2Test do
 
   test "load config success" do
     scheduler = Sm2.new(%Config{})
-    assert Sm2.next_interval(scheduler, %Card{}, 1) > 0
+    assert Sm2.next_interval(scheduler, %Card{}, :again) > 0
   end
 end

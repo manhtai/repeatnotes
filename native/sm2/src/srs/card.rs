@@ -1,9 +1,7 @@
 use rustler::{NifStruct, NifUnitEnum};
 use serde::{Deserialize, Serialize};
-use serde_repr::{Deserialize_repr, Serialize_repr};
 
-#[derive(PartialEq, Clone, Copy, Serialize_repr, Deserialize_repr, NifUnitEnum)]
-#[repr(i8)]
+#[derive(PartialEq, Clone, Copy, Serialize, Deserialize, NifUnitEnum)]
 pub enum CardType {
     New = 0,
     Learn = 1,
@@ -11,8 +9,7 @@ pub enum CardType {
     Relearn = 3,
 }
 
-#[derive(PartialEq, Clone, Copy, Serialize_repr, Deserialize_repr, NifUnitEnum)]
-#[repr(i8)]
+#[derive(PartialEq, Clone, Copy, Serialize, Deserialize, NifUnitEnum)]
 pub enum CardQueue {
     // due is the order cards are shown in
     New = 0,

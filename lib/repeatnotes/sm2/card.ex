@@ -1,6 +1,6 @@
 defmodule RepeatNotes.Sm2.Card do
-  defstruct card_type: 0,
-            card_queue: 0,
+  defstruct card_type: :new,
+            card_queue: :new,
             due: 0,
             interval: 0,
             ease_factor: 0,
