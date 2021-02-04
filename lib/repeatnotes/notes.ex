@@ -37,6 +37,7 @@ defmodule RepeatNotes.Notes do
       where: note_tag.user_id == ^user_id and note_tag.tag_id == ^tag_id,
       inner_join: note in Note,
       on: note.id == note_tag.note_id,
+      order_by: [desc: note.inserted_at],
       select: note
     )
     |> limit(@max_return)

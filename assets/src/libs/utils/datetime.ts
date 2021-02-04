@@ -12,3 +12,7 @@ export const formatDateAgo = (value: number) => {
 export const formatDate = (value: number) => {
   return dayjs.utc(value).format('MMMM DD, YYYY');
 };
+
+export const formatDateTime = (value: number) => {
+  return dayjs.utc(value).format('MMM DD, YYYY HH:mm');
+};

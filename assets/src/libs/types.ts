@@ -40,6 +40,7 @@ export type Note = {
   pin: boolean;
   trash: boolean;
   archive: boolean;
+  inserted_at?: number;
 };
 
 export type Card = {

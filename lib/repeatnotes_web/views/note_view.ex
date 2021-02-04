@@ -28,7 +28,7 @@ defmodule RepeatNotesWeb.NoteView do
   def render("expanded.json", %{note: note}) do
     %{
       id: note.id,
-      created_at: note.inserted_at,
+      inserted_at: note.inserted_at,
       content: note.content
     }
   end
@@ -36,7 +36,7 @@ defmodule RepeatNotesWeb.NoteView do
   def render("full.json", %{note: note}) do
     %{
       id: note.id,
-      created_at: note.inserted_at,
+      inserted_at: note.inserted_at,
       updated_at: note.updated_at,
       content: note.content,
       pin: note.pin,
