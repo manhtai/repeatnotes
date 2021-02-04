@@ -1,25 +1,39 @@
+mod srs;
+mod svc;
+
 use rustler::{Encoder, Env, Error, Term};
 
+use crate::srs::card::Card;
+use crate::srs::config::Config;
+use crate::srs::scheduler::{Choice, Sched, Scheduler};
+use crate::svc::timestamp::Timestamp;
+
 mod atoms {
-    rustler::rustler_atoms! {
-        atom ok;
-        //atom error;
-        //atom __true__ = "true";
-        //atom __false__ = "false";
+    rustler::atoms! {
+        ok,
+        error,
     }
 }
 
-rustler::rustler_export_nifs! {
-    "Elixir.RepeatNotes.Sm2",
-    [
-        ("add", 2, add)
-    ],
-    None
+fn load(env: Env, _: Term) -> bool {
+    rustler::resource!(Config, env);
+    true
 }
 
-fn add<'a>(env: Env<'a>, args: &[Term<'a>]) -> Result<Term<'a>, Error> {
-    let num1: i64 = args[0].decode()?;
-    let num2: i64 = args[1].decode()?;
-
-    Ok((atoms::ok(), num1 + num2).encode(env))
+#[rustler::nif]
+fn new(config: Config) -> Result<Scheduler, Error> {
+    let scheduler = Scheduler::new(config, Timestamp::day_cut_off());
+    Ok(scheduler)
 }
+
+#[rustler::nif]
+fn next_interval(
+    env: Env,
+    scheduler: Scheduler,
+    card: Card,
+    choice: Choice,
+) -> Result<Term, Error> {
+    Ok(scheduler.next_interval(&card, choice).encode(env))
+}
+
+rustler::init!("Elixir.RepeatNotes.Sm2", [new, next_interval], load = load);
