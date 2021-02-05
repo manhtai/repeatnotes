@@ -1,7 +1,7 @@
 mod srs;
 mod svc;
 
-use rustler::{Encoder, Env, Error, ResourceArc, Term};
+use rustler::{Env, Error, ResourceArc, Term};
 
 use crate::srs::card::Card;
 use crate::srs::config::Config;
@@ -38,6 +38,15 @@ fn next_interval(
 }
 
 #[rustler::nif]
+fn next_interval_string(
+    scheduler: ResourceArc<Scheduler>,
+    card: Card,
+    choice: Choice,
+) -> Result<String, Error> {
+    Ok(scheduler.next_interval_string(&card, choice))
+}
+
+#[rustler::nif]
 fn answer_card(
     scheduler: ResourceArc<Scheduler>,
     card: Card,
@@ -48,8 +57,55 @@ fn answer_card(
     Ok(card)
 }
 
+#[rustler::nif]
+fn bury_card(scheduler: ResourceArc<Scheduler>, card: Card) -> Result<Card, Error> {
+    let mut card = card.clone();
+    scheduler.bury_card(&mut card);
+    Ok(card)
+}
+
+#[rustler::nif]
+fn unbury_card(scheduler: ResourceArc<Scheduler>, card: Card) -> Result<Card, Error> {
+    let mut card = card.clone();
+    scheduler.unbury_card(&mut card);
+    Ok(card)
+}
+
+#[rustler::nif]
+fn suspend_card(scheduler: ResourceArc<Scheduler>, card: Card) -> Result<Card, Error> {
+    let mut card = card.clone();
+    scheduler.suspend_card(&mut card);
+    Ok(card)
+}
+
+#[rustler::nif]
+fn unsuspend_card(scheduler: ResourceArc<Scheduler>, card: Card) -> Result<Card, Error> {
+    let mut card = card.clone();
+    scheduler.unsuspend_card(&mut card);
+    Ok(card)
+}
+
+#[rustler::nif]
+fn schedule_card_as_new(scheduler: ResourceArc<Scheduler>, card: Card) -> Result<Card, Error> {
+    let mut card = card.clone();
+    scheduler.schedule_card_as_new(&mut card);
+    Ok(card)
+}
+
+#[rustler::nif]
+fn schedule_card_as_review(
+    scheduler: ResourceArc<Scheduler>,
+    card: Card,
+    min_days: i32,
+    max_days: i32,
+) -> Result<Card, Error> {
+    let mut card = card.clone();
+    scheduler.schedule_card_as_review(&mut card, min_days, max_days);
+    Ok(card)
+}
+
 rustler::init!(
     "Elixir.RepeatNotes.Sm2",
-    [new, next_interval, answer_card],
+    [new, next_interval, next_interval_string, answer_card],
     load = load
 );
