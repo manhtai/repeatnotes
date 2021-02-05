@@ -12,13 +12,14 @@ import Login from 'src/components/auth/Login';
 import Signup from 'src/components/auth/Signup';
 import ResetPasswordRequest from 'src/components/auth/ResetPasswordRequest';
 import ResetPasswordConfirm from 'src/components/auth/ResetPasswordConfirm';
+import Loading from 'src/components/common/Loading';
 import {useAuth} from 'src/components/auth/AuthProvider';
 
 function App() {
   const auth = useAuth();
 
   if (auth.loading) {
-    return null;
+    return <Loading />;
   }
 
   if (!auth.isAuthenticated) {

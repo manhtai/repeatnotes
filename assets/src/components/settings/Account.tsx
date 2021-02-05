@@ -2,15 +2,28 @@ import {useState, useEffect} from 'react';
 import * as API from 'src/libs/api';
 import {User} from 'src/libs/types';
 import {formatDate} from 'src/libs/utils/datetime';
+import Loading from 'src/components/common/Loading';
 
 export default function Account() {
   const [user, setUser] = useState<User>();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    API.me().then((u: User) => {
-      setUser(u);
-    });
+    setLoading(true);
+    API.me().then(
+      (u: User) => {
+        setUser(u);
+        setLoading(false);
+      },
+      () => {
+        setLoading(false);
+      }
+    );
   }, []);
+
+  if (loading) {
+    return <Loading />;
+  }
 
   if (!user) {
     return null;

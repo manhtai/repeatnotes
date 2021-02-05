@@ -3,6 +3,7 @@ import {useSrs, SrsProvider} from './SrsProvider';
 import {useGlobal} from 'src/components/global/GlobalProvider';
 import NotePreview from 'src/components/note/NotePreview';
 import NoteEmpty from 'src/components/note/NoteEmpty';
+import Loading from 'src/components/common/Loading';
 
 import {Choice, SyncStatus, SrsConfig, Card} from 'src/libs/types';
 import logger from 'src/libs/logger';
@@ -126,12 +127,8 @@ function CardReview() {
 
   useEffect(fetchAllCards, [sm2]);
 
-  if (loading) {
-    return null;
-  }
-
-  if (fetchingCards) {
-    return null;
+  if (loading || fetchingCards) {
+    return <Loading />;
   }
 
   if (!loading && error) {

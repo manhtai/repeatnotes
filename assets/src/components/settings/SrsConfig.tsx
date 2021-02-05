@@ -5,21 +5,30 @@ import debounce from 'lodash/debounce';
 import logger from 'src/libs/logger';
 import {useGlobal} from 'src/components/global/GlobalProvider';
 import {useSrs, SrsProvider} from 'src/components/card/SrsProvider';
+import Loading from 'src/components/common/Loading';
 
 function SrsConfigPage() {
   const [config, setConfig] = useState<SrsConfig>();
   const [learnSteps, setLearnSteps] = useState('');
   const [relearnSteps, setRelearnSteps] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const {setSync} = useGlobal();
   const {loadSm2} = useSrs();
 
   useEffect(() => {
-    API.fetchSrsConfig().then((config) => {
-      setConfig(config);
-      setLearnSteps(config.learn_steps.join(' '));
-      setRelearnSteps(config.relearn_steps.join(' '));
-    });
+    setLoading(true);
+    API.fetchSrsConfig().then(
+      (config) => {
+        setLoading(false);
+        setConfig(config);
+        setLearnSteps(config.learn_steps.join(' '));
+        setRelearnSteps(config.relearn_steps.join(' '));
+      },
+      () => {
+        setLoading(false);
+      }
+    );
   }, []);
 
   const updateFunc = (srs_config: any) => {
@@ -42,6 +51,10 @@ function SrsConfigPage() {
   useEffect(() => {
     debounceUpdate(config);
   }, [debounceUpdate, config]);
+
+  if (loading) {
+    return <Loading />;
+  }
 
   if (!config) {
     return null;

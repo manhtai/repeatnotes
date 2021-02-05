@@ -5,6 +5,7 @@ import logger from 'src/libs/logger';
 
 import NoteView from './NoteView';
 import NoteEmpty from './NoteEmpty';
+import Loading from 'src/components/common/Loading';
 
 export default function NoteTrash() {
   const [notes, setNotes] = useState<Note[]>([]);
@@ -30,7 +31,7 @@ export default function NoteTrash() {
   };
 
   if (loading) {
-    return null;
+    return <Loading />;
   }
 
   if (!notes.length) {
