@@ -57,6 +57,10 @@ function Login(props: Props) {
                   const val = e.target.value;
                   setEmail(val);
                 }}
+                autoComplete="username"
+                autoCapitalize="none"
+                autoCorrect="off"
+                autoFocus={true}
                 required
               />
             </div>
@@ -74,6 +78,7 @@ function Login(props: Props) {
                   const val = e.target.value;
                   setPassword(val);
                 }}
+                autoComplete="current-password"
                 required
               />
               <div
