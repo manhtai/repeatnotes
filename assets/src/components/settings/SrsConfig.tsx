@@ -107,7 +107,7 @@ export default function SrsConfigPage() {
                   <label className="inline-flex items-center">
                     <input
                       type="checkbox"
-                      className="text-indigo-600 border-gray-300 rounded shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                      className="text-indigo-600 border-gray-300 rounded cursor-not-allowed shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                       checked={false}
                       disabled
                     />
