@@ -1,19 +1,16 @@
 import React, {useEffect, useState} from 'react';
-import {useSrs, SrsProvider} from './SrsProvider';
 import {useGlobal} from 'src/components/global/GlobalProvider';
 import NotePreview from 'src/components/note/NotePreview';
 import NoteEmpty from 'src/components/note/NoteEmpty';
 import Loading from 'src/components/common/Loading';
 
-import {Choice, SyncStatus, SrsConfig, Card} from 'src/libs/types';
+import {Choice, SyncStatus, Card} from 'src/libs/types';
 import logger from 'src/libs/logger';
 import * as API from 'src/libs/api';
 
 type AnswerProps = {
   card: Card;
-  config?: SrsConfig;
   answerCard: (card: Card, choice: Choice) => void;
-  nextInterval: (card: Card, choice: Choice) => string;
 };
 
 const getAnswerButtonClass = (color: string) => {
@@ -23,28 +20,25 @@ const getAnswerButtonClass = (color: string) => {
 type AnswerItemProps = {
   text: string;
   color: string;
-  showDue: boolean;
   card: Card;
   choice: Choice;
   answerCard: (card: Card, choice: Choice) => void;
-  nextInterval: (card: Card, choice: Choice) => string;
 };
 
 function AnswerItem(props: AnswerItemProps) {
-  const {text, showDue, choice, color, answerCard, card, nextInterval} = props;
+  const {text, choice, color, answerCard, card} = props;
   return (
     <button
       className={getAnswerButtonClass(color)}
       onClick={() => answerCard(card, choice)}
     >
       {text}
-      {showDue && ` (${nextInterval(card, choice)})`}
     </button>
   );
 }
 
 function Answers(props: AnswerProps) {
-  const {card, config, answerCard, nextInterval} = props;
+  const {card, answerCard} = props;
 
   const choices = [
     {text: 'Forgot', choice: Choice.Again, color: 'red'},
@@ -63,28 +57,23 @@ function Answers(props: AnswerProps) {
           choice={choice.choice}
           card={card}
           answerCard={answerCard}
-          nextInterval={nextInterval}
-          showDue={config?.show_next_due ? true : false}
         />
       ))}
     </div>
   );
 }
 
-function CardReview() {
-  const {sm2, loadSm2, loading, error, config} = useSrs();
+export default function CardReview() {
   const {setSync} = useGlobal();
 
   const [card, setCard] = useState<Card | null>(null);
   const [cards, setCards] = useState([]);
-  const [fetchingCards, setFetchingCards] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const answerCard = async (card: Card, choice: Choice) => {
-    const newCard = sm2.answer_card(card, choice);
-
     try {
       setSync(SyncStatus.Syncing, null);
-      await API.updateCard(card.id, {card: newCard});
+      await API.answerCard(card.id, {answer: {choice}});
       setSync(SyncStatus.Success);
 
       if (cards.length > 1) {
@@ -99,43 +88,29 @@ function CardReview() {
     }
   };
 
-  const nextInterval = (card: Card, choice: Choice) => {
-    return sm2.next_interval_string(card, choice);
-  };
-
   const fetchAllCards = () => {
-    setFetchingCards(true);
-    sm2 &&
-      API.fetchAllCards(sm2.day_today()).then(
-        (cards) => {
-          setCards(cards);
-          if (cards.length) {
-            setCard(cards[0]);
-          } else {
-            setCard(null);
-          }
-          setFetchingCards(false);
-        },
-        (error) => {
-          logger.error(error);
-          setFetchingCards(false);
+    setLoading(true);
+    API.fetchAllCards().then(
+      (cards) => {
+        setCards(cards);
+        if (cards.length) {
+          setCard(cards[0]);
+        } else {
+          setCard(null);
         }
-      );
+        setLoading(false);
+      },
+      (error) => {
+        logger.error(error);
+        setLoading(false);
+      }
+    );
   };
 
-  useEffect(loadSm2, [loadSm2]);
+  useEffect(fetchAllCards, []);
 
-  useEffect(fetchAllCards, [sm2]);
-
-  if (loading || fetchingCards) {
+  if (loading) {
     return <Loading />;
-  }
-
-  if (!loading && error) {
-    // https://github.com/repeatnotes/repeatnotes/issues/28
-    return (
-      <NoteEmpty text="Your web browser is not supported to run this feature." />
-    );
   }
 
   return (
@@ -146,22 +121,9 @@ function CardReview() {
         <div className="p-2 border rounded shadow-sm">
           <NotePreview content={card.note.content} />
 
-          <Answers
-            card={card}
-            answerCard={answerCard}
-            nextInterval={nextInterval}
-            config={config}
-          />
+          <Answers card={card} answerCard={answerCard} />
         </div>
       )}
     </div>
-  );
-}
-
-export default function CardWithContext() {
-  return (
-    <SrsProvider>
-      <CardReview />
-    </SrsProvider>
   );
 }

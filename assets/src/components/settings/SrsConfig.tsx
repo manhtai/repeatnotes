@@ -4,17 +4,15 @@ import {SrsConfig, SyncStatus} from 'src/libs/types';
 import debounce from 'lodash/debounce';
 import logger from 'src/libs/logger';
 import {useGlobal} from 'src/components/global/GlobalProvider';
-import {useSrs, SrsProvider} from 'src/components/card/SrsProvider';
 import Loading from 'src/components/common/Loading';
 
-function SrsConfigPage() {
+export default function SrsConfigPage() {
   const [config, setConfig] = useState<SrsConfig>();
   const [learnSteps, setLearnSteps] = useState('');
   const [relearnSteps, setRelearnSteps] = useState('');
   const [loading, setLoading] = useState(false);
 
   const {setSync} = useGlobal();
-  const {loadSm2} = useSrs();
 
   useEffect(() => {
     setLoading(true);
@@ -35,7 +33,6 @@ function SrsConfigPage() {
     setSync(SyncStatus.Syncing);
     API.updateSrsConfig({srs_config}).then(
       () => {
-        loadSm2(srs_config);
         setSync(SyncStatus.Success);
       },
       (err) => {
@@ -110,12 +107,9 @@ function SrsConfigPage() {
                   <label className="inline-flex items-center">
                     <input
                       type="checkbox"
-                      className="text-indigo-600 border-gray-300 rounded shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                      checked={config.show_next_due}
-                      onChange={(e) => {
-                        config.show_next_due = e.target.checked;
-                        setConfig({...config});
-                      }}
+                      className="text-indigo-600 border-gray-300 rounded cursor-not-allowed shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                      checked={false}
+                      disabled
                     />
                     <span className="ml-2">Show next due in answer</span>
                   </label>
@@ -372,13 +366,5 @@ function SrsConfigPage() {
         </div>
       </div>
     </div>
-  );
-}
-
-export default function Configuration() {
-  return (
-    <SrsProvider>
-      <SrsConfigPage />
-    </SrsProvider>
   );
 }

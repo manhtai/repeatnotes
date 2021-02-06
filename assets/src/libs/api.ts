@@ -129,17 +129,13 @@ export const updateSrsConfig = async (
 };
 
 // Card APIs
-export const fetchAllCards = async (
-  today: number,
-  token = getAccessToken()
-) => {
+export const fetchAllCards = async (token = getAccessToken()) => {
   if (!token) {
     throw new Error('Invalid token!');
   }
 
   return request
     .get('/api/cards')
-    .query({today})
     .set('Authorization', token)
     .then((res) => res.body.data);
 };
@@ -164,6 +160,22 @@ export const updateCard = async (
     .put(`/api/cards/${id}`)
     .set('Authorization', token)
     .send(updates)
+    .then((res) => res.body.data);
+};
+
+export const answerCard = async (
+  id: string,
+  answer: any,
+  token = getAccessToken()
+) => {
+  if (!token) {
+    throw new Error('Invalid token!');
+  }
+
+  return request
+    .post(`/api/cards/${id}/answer`)
+    .set('Authorization', token)
+    .send(answer)
     .then((res) => res.body.data);
 };
 
