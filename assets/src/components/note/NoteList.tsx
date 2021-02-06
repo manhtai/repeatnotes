@@ -11,9 +11,15 @@ import Loading from 'src/components/common/Loading';
 type ParamsType = {
   tagId: string;
 };
-const params = {archive: false, trash: false};
 
-export default function NoteList() {
+const defaultParams = {archive: false, trash: false};
+
+type Props = {
+  params?: Object;
+};
+
+export default function NoteList(props: Props) {
+  const {params} = props;
   const [notes, setNotes] = useState<Note[]>([]);
   const [loading, setLoading] = useState(true);
   const {tagId} = useParams<ParamsType>();
@@ -22,7 +28,7 @@ export default function NoteList() {
     setLoading(true);
     const fetchNotes = tagId
       ? API.fetchNotesByTag(tagId)
-      : API.fetchAllNotes(params);
+      : API.fetchAllNotes(params || defaultParams);
     fetchNotes.then(
       (notes) => {
         setNotes(notes);
@@ -32,6 +38,7 @@ export default function NoteList() {
         logger.error(error);
       }
     );
+    // eslint-disable-next-line
   }, [tagId]);
 
   const updateNotes = (note: Note) => {
