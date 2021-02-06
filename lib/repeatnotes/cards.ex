@@ -6,6 +6,7 @@ defmodule RepeatNotes.Cards do
 
   alias RepeatNotes.Repo
   alias RepeatNotes.Cards.{Card, Queues}
+  alias RepeatNotes.{Sm2, Srs}
   alias RepeatNotes.Users
   alias RepeatNotes.Encryption.AES
   alias RepeatNotes.Utils.Timestamp
@@ -82,6 +83,29 @@ defmodule RepeatNotes.Cards do
   def update_card(%Card{} = card, attrs) do
     card
     |> Card.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @spec answer_card(Card.t(), map()) :: {:ok, Card.t()} | {:error, Ecto.Changeset.t()}
+  def answer_card(%Card{} = card, params) do
+    choice =
+      case params do
+        %{choice: choice} -> choice
+        _ -> RepeatNotes.Cards.Choices.ok()
+      end
+
+    choice = RepeatNotes.Cards.Choices.to_atom(choice)
+
+    scheduler = Srs.get_scheduler(card.user_id)
+
+    sm2_card =
+      Sm2.Card.from_ecto_card(card)
+      |> Sm2.answer_card(scheduler, choice)
+
+    ecto_card = Map.from_struct(Sm2.Card.to_ecto_card(sm2_card))
+
+    card
+    |> Card.srs_changeset(ecto_card)
     |> Repo.update()
   end
 

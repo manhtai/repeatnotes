@@ -7,12 +7,25 @@ defmodule RepeatNotes.MixProject do
       version: "0.1.0",
       elixir: "~> 1.7",
       elixirc_paths: elixirc_paths(Mix.env()),
-      compilers: [:phoenix, :gettext] ++ Mix.compilers(),
+      compilers: [:phoenix, :gettext, :rustler] ++ Mix.compilers(),
+      rustler_crates: rustler_crates(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       deps: deps()
     ]
   end
+
+  defp rustler_crates do
+    [
+      sm2: [
+        path: "native/sm2",
+        mode: rustc_mode(Mix.env())
+      ]
+    ]
+  end
+
+  defp rustc_mode(:prod), do: :release
+  defp rustc_mode(_), do: :debug
 
   # Configuration for the OTP application.
   #
@@ -56,7 +69,9 @@ defmodule RepeatNotes.MixProject do
       {:waffle, "~> 1.1"},
       {:ex_aws, "~> 2.1"},
       {:ex_aws_s3, "~> 2.1"},
-      {:sweet_xml, "~> 0.6"}
+      {:sweet_xml, "~> 0.6"},
+      # Sm2
+      {:rustler, "~> 0.21.1"}
     ]
   end
 
