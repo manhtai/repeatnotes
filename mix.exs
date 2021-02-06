@@ -7,7 +7,7 @@ defmodule RepeatNotes.MixProject do
       version: "0.1.0",
       elixir: "~> 1.7",
       elixirc_paths: elixirc_paths(Mix.env()),
-      compilers: [:phoenix, :gettext, :rustler] ++ Mix.compilers(),
+      compilers: [:rustler, :phoenix, :gettext] ++ Mix.compilers(),
       rustler_crates: rustler_crates(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
