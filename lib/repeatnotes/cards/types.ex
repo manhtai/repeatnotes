@@ -8,4 +8,22 @@ defmodule RepeatNotes.Cards.Types do
   def learn, do: @learn
   def review, do: @review
   def relearn, do: @relearn
+
+  def from_atom(atom) do
+    case atom do
+      :learn -> @learn
+      :review -> @review
+      :relearn -> @relearn
+      _ -> @new
+    end
+  end
+
+  def to_atom(type) do
+    case type do
+      @learn -> :learn
+      @review -> :review
+      @relearn -> :relearn
+      _ -> :new
+    end
+  end
 end

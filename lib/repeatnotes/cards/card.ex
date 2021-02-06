@@ -41,4 +41,9 @@ defmodule RepeatNotes.Cards.Card do
     |> cast(attrs, @srs_fields ++ @required_fields)
     |> validate_required(@required_fields)
   end
+
+  def srs_changeset(card, attrs) do
+    card
+    |> cast(attrs, @srs_fields)
+  end
 end

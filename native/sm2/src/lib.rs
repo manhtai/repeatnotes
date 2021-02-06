@@ -30,8 +30,8 @@ fn new(config: Config) -> Result<ResourceArc<Scheduler>, Error> {
 
 #[rustler::nif]
 fn next_interval(
-    scheduler: ResourceArc<Scheduler>,
     card: Card,
+    scheduler: ResourceArc<Scheduler>,
     choice: Choice,
 ) -> Result<i64, Error> {
     Ok(scheduler.next_interval(&card, choice))
@@ -39,8 +39,8 @@ fn next_interval(
 
 #[rustler::nif]
 fn next_interval_string(
-    scheduler: ResourceArc<Scheduler>,
     card: Card,
+    scheduler: ResourceArc<Scheduler>,
     choice: Choice,
 ) -> Result<String, Error> {
     Ok(scheduler.next_interval_string(&card, choice))
@@ -48,8 +48,8 @@ fn next_interval_string(
 
 #[rustler::nif]
 fn answer_card(
-    scheduler: ResourceArc<Scheduler>,
     card: Card,
+    scheduler: ResourceArc<Scheduler>,
     choice: Choice,
 ) -> Result<Card, Error> {
     let mut card = card.clone();
@@ -58,35 +58,35 @@ fn answer_card(
 }
 
 #[rustler::nif]
-fn bury_card(scheduler: ResourceArc<Scheduler>, card: Card) -> Result<Card, Error> {
+fn bury_card(card: Card, scheduler: ResourceArc<Scheduler>) -> Result<Card, Error> {
     let mut card = card.clone();
     scheduler.bury_card(&mut card);
     Ok(card)
 }
 
 #[rustler::nif]
-fn unbury_card(scheduler: ResourceArc<Scheduler>, card: Card) -> Result<Card, Error> {
+fn unbury_card(card: Card, scheduler: ResourceArc<Scheduler>) -> Result<Card, Error> {
     let mut card = card.clone();
     scheduler.unbury_card(&mut card);
     Ok(card)
 }
 
 #[rustler::nif]
-fn suspend_card(scheduler: ResourceArc<Scheduler>, card: Card) -> Result<Card, Error> {
+fn suspend_card(card: Card, scheduler: ResourceArc<Scheduler>) -> Result<Card, Error> {
     let mut card = card.clone();
     scheduler.suspend_card(&mut card);
     Ok(card)
 }
 
 #[rustler::nif]
-fn unsuspend_card(scheduler: ResourceArc<Scheduler>, card: Card) -> Result<Card, Error> {
+fn unsuspend_card(card: Card, scheduler: ResourceArc<Scheduler>) -> Result<Card, Error> {
     let mut card = card.clone();
     scheduler.unsuspend_card(&mut card);
     Ok(card)
 }
 
 #[rustler::nif]
-fn schedule_card_as_new(scheduler: ResourceArc<Scheduler>, card: Card) -> Result<Card, Error> {
+fn schedule_card_as_new(card: Card, scheduler: ResourceArc<Scheduler>) -> Result<Card, Error> {
     let mut card = card.clone();
     scheduler.schedule_card_as_new(&mut card);
     Ok(card)
@@ -94,8 +94,8 @@ fn schedule_card_as_new(scheduler: ResourceArc<Scheduler>, card: Card) -> Result
 
 #[rustler::nif]
 fn schedule_card_as_review(
-    scheduler: ResourceArc<Scheduler>,
     card: Card,
+    scheduler: ResourceArc<Scheduler>,
     min_days: i32,
     max_days: i32,
 ) -> Result<Card, Error> {

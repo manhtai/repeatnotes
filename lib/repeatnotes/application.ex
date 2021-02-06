@@ -18,7 +18,8 @@ defmodule RepeatNotes.Application do
       # Start a worker by calling: RepeatNotes.Worker.start_link(arg)
       # {RepeatNotes.Worker, arg}
       # Clean expired token
-      {Pow.Postgres.Store.AutoDeleteExpired, [interval: :timer.hours(1)]}
+      {Pow.Postgres.Store.AutoDeleteExpired, [interval: :timer.hours(1)]},
+      RepeatNotes.EtsCache
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

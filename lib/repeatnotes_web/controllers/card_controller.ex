@@ -65,4 +65,25 @@ defmodule RepeatNotesWeb.CardController do
       end
     end
   end
+
+  @spec answer(Plug.Conn.t(), map) :: Plug.Conn.t()
+  def answer(conn, %{"id" => id, "answer" => answer_params}) do
+    with %User{id: user_id} <- conn.assigns.current_user do
+      card = Cards.get_card!(id, user_id)
+
+      case Cards.answer_card(card, answer_params) do
+        {:ok, %Card{} = card} ->
+          conn
+          |> put_status(:ok)
+          |> render("update.json", card: card)
+
+        {:error, changeset} ->
+          errors = Changeset.traverse_errors(changeset, &ErrorHelpers.translate_error/1)
+
+          conn
+          |> put_status(400)
+          |> json(%{error: %{status: 400, message: "Couldn't update card", errors: errors}})
+      end
+    end
+  end
 end

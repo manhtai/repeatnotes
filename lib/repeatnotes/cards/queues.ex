@@ -12,4 +12,26 @@ defmodule RepeatNotes.Cards.Queues do
   def day_learn, do: @day_learn
   def suspended, do: @suspended
   def buried, do: @buried
+
+  def from_atom(atom) do
+    case atom do
+      :learn -> @learn
+      :review -> @review
+      :day_learn -> @day_learn
+      :suspended -> @suspended
+      :buried -> @buried
+      _ -> @new
+    end
+  end
+
+  def to_atom(queue) do
+    case queue do
+      @learn -> :learn
+      @review -> :review
+      @day_learn -> :day_learn
+      @suspended -> :suspended
+      @buried -> :buried
+      _ -> :new
+    end
+  end
 end
