@@ -108,11 +108,8 @@ export default function SrsConfigPage() {
                     <input
                       type="checkbox"
                       className="text-indigo-600 border-gray-300 rounded shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                      checked={config.show_next_due}
-                      onChange={(e) => {
-                        config.show_next_due = e.target.checked;
-                        setConfig({...config});
-                      }}
+                      checked={false}
+                      disabled
                     />
                     <span className="ml-2">Show next due in answer</span>
                   </label>
