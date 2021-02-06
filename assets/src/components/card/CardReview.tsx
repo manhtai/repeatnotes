@@ -79,7 +79,7 @@ export default function CardReview() {
       if (cards.length > 1) {
         setCard(cards[1]);
       } else {
-        fetchAllCards();
+        setCard(null);
       }
       setCards(cards.slice(1));
     } catch (error) {
