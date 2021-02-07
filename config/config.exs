@@ -16,7 +16,8 @@ config :repeatnotes, RepeatNotesWeb.Endpoint,
   secret_key_base: "Q0SSISGmbqxfkqsDeKQXw6pLaG7BWKAV2ckS4Bkh55UHv0dSsOpJt4ggO8xASw2W",
   render_errors: [view: RepeatNotesWeb.ErrorView, accepts: ~w(html json), layout: false],
   pubsub_server: RepeatNotes.PubSub,
-  live_view: [signing_salt: "Adb2mONG"]
+  live_view: [signing_salt: "Adb2mONG"],
+  instrumenters: [NewRelic.Phoenix.Instrumenter]
 
 config :repeatnotes, :pow,
   user: RepeatNotes.Users.User,
@@ -85,6 +86,12 @@ config :ex_aws,
 config :mime, :types, %{
   "application/wasm" => ["wasm"]
 }
+
+# Sentry
+config :sentry,
+  dsn: System.get_env("SENTRY_DSN"),
+  included_environments: [:prod],
+  environment_name: Mix.env()
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
