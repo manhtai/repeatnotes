@@ -37,5 +37,5 @@ heroku config:set SECRET_KEY_BASE=XXXXXXXXXXXXXXXXXXXX
 git push heroku master
 
 # Migrate
-heroku run "POOL_SIZE=2 mix ecto.migrate"
+heroku run "POOL_SIZE=2 mix ecto.migrate --no-compile"
 ```
