@@ -175,7 +175,7 @@ export default function HomePage() {
                     leaveFrom="opacity-100"
                     leaveTo="opacity-0 absolute inset-0"
                   >
-                    <section className="relative h-screen px-4 mx-auto">
+                    <section className="relative h-screen px-4 pb-10 mx-auto">
                       <Component />
                     </section>
                   </Transition>
