@@ -70,6 +70,8 @@ defmodule RepeatNotes.MixProject do
       {:ex_aws, "~> 2.1"},
       {:ex_aws_s3, "~> 2.1"},
       {:sweet_xml, "~> 0.6"},
+      # ssl
+      {:site_encrypt, "~> 0.4"},
       # Sm2
       {:rustler, "~> 0.21.1"}
     ]

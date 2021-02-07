@@ -14,7 +14,7 @@ defmodule RepeatNotes.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: RepeatNotes.PubSub},
       # Start the Endpoint (http/https)
-      RepeatNotesWeb.Endpoint,
+      {SiteEncrypt.Phoenix, RepeatNotesWeb.Endpoint},
       # Start a worker by calling: RepeatNotes.Worker.start_link(arg)
       # {RepeatNotes.Worker, arg}
       # Clean expired token
