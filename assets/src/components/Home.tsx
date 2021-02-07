@@ -162,7 +162,10 @@ export default function HomePage() {
 
         {/* Middle content */}
         <section className="relative flex flex-col w-full">
-          <div className="overflow-x-hidden overflow-y-auto" id="middle-scroll">
+          <div
+            className="h-full overflow-x-hidden overflow-y-auto"
+            id="middle-scroll"
+          >
             {routes.map(({path, Component}) => (
               <Route key={path} exact path={path}>
                 {({match}) => (
@@ -175,7 +178,7 @@ export default function HomePage() {
                     leaveFrom="opacity-100"
                     leaveTo="opacity-0 absolute inset-0"
                   >
-                    <section className="relative px-4 mx-auto mb-10">
+                    <section className="px-4 mx-auto mb-10">
                       <Component />
                     </section>
                   </Transition>

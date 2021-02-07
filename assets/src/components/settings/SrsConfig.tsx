@@ -4,7 +4,6 @@ import {SrsConfig, SyncStatus} from 'src/libs/types';
 import debounce from 'lodash/debounce';
 import logger from 'src/libs/logger';
 import {useGlobal} from 'src/components/global/GlobalProvider';
-import Loading from 'src/components/common/Loading';
 
 export default function SrsConfigPage() {
   const [config, setConfig] = useState<SrsConfig>();
@@ -50,7 +49,7 @@ export default function SrsConfigPage() {
   }, [debounceUpdate, config]);
 
   if (loading) {
-    return <Loading />;
+    return null;
   }
 
   if (!config) {
@@ -58,7 +57,7 @@ export default function SrsConfigPage() {
   }
 
   return (
-    <div className="max-w-lg mx-auto mb-16">
+    <div className="max-w-lg mx-auto">
       <div className="mt-5">
         <h2 className="px-4 py-3 font-bold text-white bg-gray-700 rounded-t-lg shadow-sm">
           Schedule

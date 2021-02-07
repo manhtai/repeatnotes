@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react';
 import {useGlobal} from 'src/components/global/GlobalProvider';
 import NotePreview from 'src/components/note/NotePreview';
 import NoteEmpty from 'src/components/note/NoteEmpty';
-import Loading from 'src/components/common/Loading';
 
 import {Choice, SyncStatus, Card} from 'src/libs/types';
 import logger from 'src/libs/logger';
@@ -110,7 +109,7 @@ export default function CardReview() {
   useEffect(fetchAllCards, []);
 
   if (loading) {
-    return <Loading />;
+    return null;
   }
 
   return (

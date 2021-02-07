@@ -6,7 +6,6 @@ import {useParams} from 'react-router-dom';
 
 import NoteView from './NoteView';
 import NoteEmpty from './NoteEmpty';
-import Loading from 'src/components/common/Loading';
 
 type ParamsType = {
   tagId: string;
@@ -48,7 +47,7 @@ export default function NoteList(props: Props) {
   };
 
   if (loading) {
-    return <Loading />;
+    return null;
   }
 
   if (!notes.length) {

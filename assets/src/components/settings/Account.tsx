@@ -2,7 +2,6 @@ import {useState, useEffect} from 'react';
 import * as API from 'src/libs/api';
 import {User} from 'src/libs/types';
 import {formatDate} from 'src/libs/utils/datetime';
-import Loading from 'src/components/common/Loading';
 
 export default function Account() {
   const [user, setUser] = useState<User>();
@@ -22,7 +21,7 @@ export default function Account() {
   }, []);
 
   if (loading) {
-    return <Loading />;
+    return null;
   }
 
   if (!user) {
@@ -30,7 +29,7 @@ export default function Account() {
   }
 
   return (
-    <div className="max-w-lg mx-auto mt-5 mb-16">
+    <div className="max-w-lg mx-auto mt-5">
       <h2 className="px-4 py-3 font-bold text-white bg-gray-700 rounded-t-lg shadow-sm">
         Account
       </h2>
