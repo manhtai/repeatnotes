@@ -45,6 +45,17 @@ defmodule RepeatNotesWeb.CardController do
     render(conn, "show.json", card: card)
   end
 
+  @spec stats(Plug.Conn.t(), map) :: Plug.Conn.t()
+  def stats(conn, _params) do
+    with %User{id: user_id} <- conn.assigns.current_user do
+      stats = Cards.stats(user_id)
+
+      conn
+      |> put_status(:ok)
+      |> json(%{data: stats})
+    end
+  end
+
   @spec update(Plug.Conn.t(), map) :: Plug.Conn.t()
   def update(conn, %{"id" => id, "card" => card_params}) do
     with %User{id: user_id} <- conn.assigns.current_user do

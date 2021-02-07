@@ -51,11 +51,28 @@ defmodule RepeatNotes.Cards do
     |> Repo.all()
   end
 
-  @spec count_cards(binary(), map) :: integer
-  def count_cards(user_id, _params \\ %{}) do
-    Card
-    |> where(user_id: ^user_id)
-    |> Repo.aggregate(:count)
+  @spec stats(binary(), map) :: map()
+  def stats(user_id, _params \\ %{}) do
+    stats =
+      from(c in Card,
+        group_by: c.card_queue,
+        where: c.user_id == ^user_id,
+        select: {c.card_queue, count(c.id)}
+      )
+      |> Repo.all()
+
+    stats =
+      stats
+      |> Enum.map(fn {q, c} -> {Queues.to_atom(q), c} end)
+      |> Enum.into(%{})
+
+    total =
+      stats
+      |> Enum.map(fn {_q, c} -> c end)
+      |> Enum.sum()
+
+    stats
+    |> Map.merge(%{total: total})
   end
 
   @spec get_card!(binary()) :: Card.t() | nil

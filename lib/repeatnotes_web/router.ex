@@ -49,6 +49,7 @@ defmodule RepeatNotesWeb.Router do
 
     get("/random", NoteController, :random)
     post("/upload", NoteController, :upload)
+    get("/stats", CardController, :stats)
 
     get("/srs_config", SrsConfigController, :show)
     put("/srs_config", SrsConfigController, :update)

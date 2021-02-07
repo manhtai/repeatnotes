@@ -367,3 +367,11 @@ export const removeTag = async (
     .set('Authorization', token)
     .then(() => {});
 };
+
+// Stats
+export const fetchStats = async (token = getAccessToken()) => {
+  return request
+    .get(`/api/stats`)
+    .set('Authorization', token || '')
+    .then((res) => res.body.data);
+};

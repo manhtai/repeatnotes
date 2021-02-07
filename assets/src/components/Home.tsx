@@ -24,7 +24,7 @@ import NoteArchive from 'src/components/note/NoteArchive';
 import NoteTrash from 'src/components/note/NoteTrash';
 import NoteBookmark from 'src/components/note/NoteBookmark';
 import NoteNew from 'src/components/note/NoteNew';
-import NoteEmpty from 'src/components/note/NoteEmpty';
+import NoteStats from 'src/components/note/NoteStats';
 import NoteDetail from 'src/components/note/NoteDetail';
 
 import SrsConfig from 'src/components/settings/SrsConfig';
@@ -81,7 +81,7 @@ export default function HomePage() {
 
   const routes = [
     {path: '/notes', name: 'Notes', Component: NoteList},
-    {path: '/stats', name: 'Stats', Component: NoteEmpty},
+    {path: '/stats', name: 'Stats', Component: NoteStats},
     {path: '/new', name: 'New', Component: NoteNew},
     {path: '/review', name: 'Review', Component: CardReview},
     {path: '/note/:id', name: 'Note', Component: NoteDetail},
