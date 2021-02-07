@@ -16,7 +16,8 @@ config :repeatnotes, RepeatNotesWeb.Endpoint,
   secret_key_base: "Q0SSISGmbqxfkqsDeKQXw6pLaG7BWKAV2ckS4Bkh55UHv0dSsOpJt4ggO8xASw2W",
   render_errors: [view: RepeatNotesWeb.ErrorView, accepts: ~w(html json), layout: false],
   pubsub_server: RepeatNotes.PubSub,
-  live_view: [signing_salt: "Adb2mONG"]
+  live_view: [signing_salt: "Adb2mONG"],
+  instrumenters: [NewRelic.Phoenix.Instrumenter]
 
 config :repeatnotes, :pow,
   user: RepeatNotes.Users.User,
