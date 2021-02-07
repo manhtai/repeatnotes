@@ -104,13 +104,13 @@ export default function HomePage() {
     {path: '/review', name: 'Review', Icon: LightningBoltOutline},
     {path: '/new', name: 'New', Icon: PlusCircleOutline},
     {path: '/notes', name: 'Notes', Icon: LightBulbOutline},
-    {path: '/settings/config', name: 'Config', Icon: CogOutline},
+    {path: '/stats', name: 'Stats', Icon: ChartBarOutline},
   ];
 
   return (
     <div className="absolute inset-0 flex flex-col overflow-hidden text-sm">
       {/* Top bar nav */}
-      <header className="flex px-4 text-sm bg-gray-100 border-b flex-0 h-14">
+      <header className="flex h-12 px-4 text-sm bg-gray-100 border-b flex-0">
         <ul className="flex items-center px-2">
           <li>
             {globalContext.sync === SyncStatus.Syncing ? (
@@ -224,7 +224,7 @@ export default function HomePage() {
       </aside>
 
       {/* Bottom bar nav */}
-      <section className="bottom-0 flex w-full h-16 text-sm bg-white border flex-0 lg:hidden">
+      <section className="bottom-0 flex w-full text-sm bg-white border h-14 flex-0 lg:hidden">
         <div
           onClick={() => setSideBarOpen(!isSideBarOpen)}
           className={
