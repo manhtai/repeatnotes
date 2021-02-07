@@ -73,7 +73,8 @@ defmodule RepeatNotes.MixProject do
       # Sm2
       {:rustler, "~> 0.21.1"},
       # Monitors
-      {:new_relic_phoenix, "~> 0.3"}
+      {:new_relic_phoenix, "~> 0.3"},
+      {:sentry, "~> 8.0"}
     ]
   end
 
