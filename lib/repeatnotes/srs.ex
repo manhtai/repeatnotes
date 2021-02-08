@@ -9,6 +9,11 @@ defmodule RepeatNotes.Srs do
     EtsCache.read_or_cache_default(cache_key, fn -> get_scheduler_from_db(user_id) end)
   end
 
+  def set_scheduler(user_id, srs_config) do
+    sm2_config = struct(Sm2.Config, Map.from_struct(srs_config))
+    EtsCache.cache(get_cache_key(user_id), Sm2.new(sm2_config))
+  end
+
   defp get_cache_key(user_id) do
     "scheduler_" <> user_id
   end

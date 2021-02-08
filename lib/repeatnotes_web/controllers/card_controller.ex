@@ -77,12 +77,18 @@ defmodule RepeatNotesWeb.CardController do
     end
   end
 
-  @spec answer(Plug.Conn.t(), map) :: Plug.Conn.t()
-  def answer(conn, %{"id" => id, "answer" => answer_params}) do
+  @spec srs_action(Plug.Conn.t(), map) :: Plug.Conn.t()
+  def srs_action(conn, %{"id" => id, "card" => card_params}) do
     with %User{id: user_id} <- conn.assigns.current_user do
       card = Cards.get_card!(id, user_id)
 
-      case Cards.answer_card(card, answer_params) do
+      result =
+        cond do
+          %{"action" => action} = card_params -> Cards.action_card(card, action)
+          %{"answer" => choice} = card_params -> Cards.answer_card(card, choice)
+        end
+
+      case result do
         {:ok, %Card{} = card} ->
           conn
           |> put_status(:ok)
