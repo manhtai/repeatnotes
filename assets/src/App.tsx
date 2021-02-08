@@ -8,6 +8,7 @@ import {
 
 // Components
 import Home from 'src/components/Home';
+import Landing from 'src/components/Landing';
 import Login from 'src/components/auth/Login';
 import Signup from 'src/components/auth/Signup';
 import ResetPasswordRequest from 'src/components/auth/ResetPasswordRequest';
@@ -26,6 +27,8 @@ function App() {
     return (
       <Router>
         <Switch>
+          <Route path={'/'} exact={true} component={Landing} />
+
           <Route path={'/login'} component={Login} />
           <Route path={'/signup'} component={Signup} />
 
