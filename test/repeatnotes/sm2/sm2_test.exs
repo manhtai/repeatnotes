@@ -18,18 +18,27 @@ defmodule RepeatNotes.Sm2.Sm2Test do
   test "bury & unbury card" do
     scheduler = Sm2.new(%Config{})
     card = Sm2.bury_card(%Card{}, scheduler)
-    assert card.queue == -2
+    assert card.card_queue == :buried
 
     card = Sm2.unbury_card(%Card{}, scheduler)
-    assert card.queue == 0
+    assert card.card_queue == :new
   end
 
   test "suspend & unsuspend card" do
     scheduler = Sm2.new(%Config{})
     card = Sm2.suspend_card(%Card{}, scheduler)
-    assert card.queue == -1
+    assert card.card_queue == :suspended
 
     card = Sm2.unsuspend_card(%Card{}, scheduler)
-    assert card.queue == 0
+    assert card.card_queue == :new
+  end
+
+  test "schedule card" do
+    scheduler = Sm2.new(%Config{})
+    card = Sm2.schedule_card_as_review(%Card{}, scheduler, 1, 10)
+    assert card.card_queue == :review
+
+    card = Sm2.schedule_card_as_new(%Card{}, scheduler)
+    assert card.card_queue == :new
   end
 end

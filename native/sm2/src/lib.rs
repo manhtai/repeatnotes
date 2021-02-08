@@ -106,6 +106,8 @@ fn schedule_card_as_review(
 
 rustler::init!(
     "Elixir.RepeatNotes.Sm2",
-    [new, next_interval, next_interval_string, answer_card],
+    [new, next_interval, next_interval_string, answer_card,
+    bury_card, unbury_card, suspend_card, unsuspend_card,
+    schedule_card_as_new, schedule_card_as_review],
     load = load
 );
