@@ -41,6 +41,7 @@ export type Note = {
   trash: boolean;
   archive: boolean;
   inserted_at?: number;
+  card?: Card;
 };
 
 export type Card = {
