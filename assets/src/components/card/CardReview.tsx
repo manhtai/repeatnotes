@@ -72,7 +72,7 @@ export default function CardReview() {
   const answerCard = async (card: Card, choice: Choice) => {
     try {
       setSync(SyncStatus.Syncing, null);
-      await API.answerCard(card.id, {answer: {choice}});
+      await API.actionCard(card.id, {card: {answer: choice}});
       setSync(SyncStatus.Success);
 
       if (cards.length > 1) {

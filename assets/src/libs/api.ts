@@ -163,9 +163,9 @@ export const updateCard = async (
     .then((res) => res.body.data);
 };
 
-export const answerCard = async (
+export const actionCard = async (
   id: string,
-  answer: any,
+  action: any,
   token = getAccessToken()
 ) => {
   if (!token) {
@@ -173,9 +173,9 @@ export const answerCard = async (
   }
 
   return request
-    .post(`/api/cards/${id}/answer`)
+    .post(`/api/cards/${id}/action`)
     .set('Authorization', token)
-    .send(answer)
+    .send(action)
     .then((res) => res.body.data);
 };
 

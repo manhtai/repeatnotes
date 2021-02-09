@@ -1,12 +1,12 @@
 import {
   TagSolid,
   TagOutline,
-  BanOutline,
-  BanSolid,
+  StatusOfflineOutline,
+  StatusOnlineOutline,
   ReplyOutline,
   TrashSolid,
   PauseOutline,
-  PauseSolid,
+  PlayOutline,
   TrashOutline,
   SaveSolid,
   SaveOutline,
@@ -37,6 +37,8 @@ export default function NoteAction(props: Props) {
   const [pin, setPin] = useState(note.pin);
   const [archive, setArchive] = useState(note.archive);
   const [trash, setTrash] = useState(note.trash);
+  const [queue, setQueue] = useState(note.card?.card_queue);
+  const [action, setAction] = useState('');
   const [firstClick, setFirstClick] = useState(false);
 
   useEffect(() => {
@@ -82,12 +84,14 @@ export default function NoteAction(props: Props) {
     API.patchNote(note.id, {note: {pin, trash, archive}}).then(
       () => {
         setSync(SyncStatus.Success);
+        setNote({...note, pin, trash, archive});
       },
       (error) => {
         logger.error(error);
         setSync(SyncStatus.Error);
       }
     );
+    // eslint-disable-next-line
   }, [pin, trash, archive, note.id, setSync, firstClick]);
 
   const deleteNote = (note: Note) => {
@@ -103,21 +107,25 @@ export default function NoteAction(props: Props) {
     );
   };
 
-  const suspendCard = (cardId: string) => {
-    logger.info(cardId);
-  };
+  useEffect(() => {
+    if (!firstClick || !note.card) {
+      return;
+    }
 
-  const unsuspendCard = (cardId: string) => {
-    logger.info(cardId);
-  };
-
-  const buryCard = (cardId: string) => {
-    logger.info(cardId);
-  };
-
-  const unburyCard = (cardId: string) => {
-    logger.info(cardId);
-  };
+    setSync(SyncStatus.Syncing);
+    API.actionCard(note.card.id, {card: {action}}).then(
+      (card) => {
+        setSync(SyncStatus.Success);
+        setQueue(card.card_queue);
+        setNote({...note, card});
+      },
+      (error) => {
+        logger.error(error);
+        setSync(SyncStatus.Error);
+      }
+    );
+    // eslint-disable-next-line
+  }, [action, setSync, firstClick]);
 
   return (
     <>
@@ -182,14 +190,14 @@ export default function NoteAction(props: Props) {
           </span>
         )}
 
-        {note.card ? (
-          note.card.card_queue === CardQueue.Suspended ? (
+        {queue != null ? (
+          queue === CardQueue.Suspended ? (
             <span title="Unsuspend this note">
-              <PauseSolid
+              <PlayOutline
                 className="w-4 h-4 cursor-pointer"
                 onClick={() => {
                   setFirstClick(true);
-                  unsuspendCard(note.card?.id || '');
+                  setAction('unsuspend');
                 }}
               />
             </span>
@@ -199,31 +207,31 @@ export default function NoteAction(props: Props) {
                 className="w-4 h-4 cursor-pointer"
                 onClick={() => {
                   setFirstClick(true);
-                  suspendCard(note.card?.id || '');
+                  setAction('suspend');
                 }}
               />
             </span>
           )
         ) : null}
 
-        {note.card ? (
-          note.card.card_queue === CardQueue.Buried ? (
+        {queue != null ? (
+          queue === CardQueue.Buried ? (
             <span title="Unbury this note">
-              <BanSolid
+              <StatusOfflineOutline
                 className="w-4 h-4 cursor-pointer"
                 onClick={() => {
                   setFirstClick(true);
-                  unburyCard(note.card?.id || '');
+                  setAction('unbury');
                 }}
               />
             </span>
           ) : (
             <span title="Bury this note">
-              <BanOutline
+              <StatusOnlineOutline
                 className="w-4 h-4 cursor-pointer"
                 onClick={() => {
                   setFirstClick(true);
-                  buryCard(note.card?.id || '');
+                  setAction('bury');
                 }}
               />
             </span>

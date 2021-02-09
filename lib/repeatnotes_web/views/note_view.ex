@@ -1,6 +1,6 @@
 defmodule RepeatNotesWeb.NoteView do
   use RepeatNotesWeb, :view
-  alias RepeatNotesWeb.{NoteView, TagView}
+  alias RepeatNotesWeb.{NoteView, TagView, CardView}
 
   def render("index.json", %{notes: notes}) do
     %{data: render_many(notes, NoteView, "full.json")}
@@ -34,6 +34,8 @@ defmodule RepeatNotesWeb.NoteView do
   end
 
   def render("full.json", %{note: note}) do
+    [card] = note.cards
+
     %{
       id: note.id,
       inserted_at: note.inserted_at,
@@ -42,7 +44,8 @@ defmodule RepeatNotesWeb.NoteView do
       pin: note.pin,
       archive: note.archive,
       trash: note.trash,
-      tags: render_many(note.tags, TagView, "basic.json")
+      tags: render_many(note.tags, TagView, "basic.json"),
+      card: render_one(card, CardView, "basic.json")
     }
   end
 end

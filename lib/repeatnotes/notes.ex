@@ -17,7 +17,7 @@ defmodule RepeatNotes.Notes do
     |> order_by(desc: :inserted_at)
     |> limit(@max_return)
     |> Repo.all()
-    |> Repo.preload([:tags])
+    |> Repo.preload([:tags, :cards])
   end
 
   @spec random_notes(binary()) :: [Note.t()]
@@ -27,7 +27,7 @@ defmodule RepeatNotes.Notes do
     |> order_by(fragment("RANDOM()"))
     |> limit(@random_return)
     |> Repo.all()
-    |> Repo.preload([:tags])
+    |> Repo.preload([:tags, :cards])
   end
 
   @spec list_notes_by_tag(binary(), binary()) :: [Note.t()]
@@ -42,21 +42,21 @@ defmodule RepeatNotes.Notes do
     )
     |> limit(@max_return)
     |> Repo.all()
-    |> Repo.preload([:tags])
+    |> Repo.preload([:tags, :cards])
   end
 
   @spec get_note!(binary()) :: Note.t() | nil
   def get_note!(id) do
     Note
     |> Repo.get!(id)
-    |> Repo.preload([:tags])
+    |> Repo.preload([:tags, :cards])
   end
 
   @spec get_note!(binary(), binary()) :: Note.t() | nil
   def get_note!(id, user_id) do
     Note
     |> Repo.get_by!(id: id, user_id: user_id)
-    |> Repo.preload([:tags])
+    |> Repo.preload([:tags, :cards])
   end
 
   @spec create_note(map()) :: {:ok, Note.t()} | {:error, Ecto.Changeset.t()}
