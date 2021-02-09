@@ -7,6 +7,7 @@ import {useGlobal} from 'src/components/global/GlobalProvider';
 import debounce from 'lodash/debounce';
 import TagView from 'src/components/tag/TagView';
 import NoteAction from './NoteAction';
+import SrsAction from './SrsAction';
 
 type Props = {
   note: Note;
@@ -105,6 +106,8 @@ export default function NoteEdit(props: Props) {
       </div>
 
       <TagView tags={note.tags || []} />
+
+      {note.id && <SrsAction note={note} setNote={setNote} />}
 
       {note.id && <NoteAction note={note} setNote={setNote} />}
     </div>

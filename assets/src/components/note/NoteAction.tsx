@@ -1,12 +1,8 @@
 import {
   TagSolid,
   TagOutline,
-  StatusOfflineOutline,
-  StatusOnlineOutline,
   ReplyOutline,
   TrashSolid,
-  PauseOutline,
-  PlayOutline,
   TrashOutline,
   SaveSolid,
   SaveOutline,
@@ -15,7 +11,7 @@ import {
 } from '@graywolfai/react-heroicons';
 import {useState, useEffect} from 'react';
 import TagModal from 'src/components/tag/TagModal';
-import {Note, SyncStatus, CardQueue} from 'src/libs/types';
+import {Note, SyncStatus} from 'src/libs/types';
 import * as API from 'src/libs/api';
 import logger from 'src/libs/logger';
 import {useGlobal} from 'src/components/global/GlobalProvider';
@@ -37,8 +33,6 @@ export default function NoteAction(props: Props) {
   const [pin, setPin] = useState(note.pin);
   const [archive, setArchive] = useState(note.archive);
   const [trash, setTrash] = useState(note.trash);
-  const [queue, setQueue] = useState(note.card?.card_queue);
-  const [action, setAction] = useState('');
   const [firstClick, setFirstClick] = useState(false);
 
   useEffect(() => {
@@ -107,26 +101,6 @@ export default function NoteAction(props: Props) {
     );
   };
 
-  useEffect(() => {
-    if (!firstClick || !note.card) {
-      return;
-    }
-
-    setSync(SyncStatus.Syncing);
-    API.actionCard(note.card.id, {card: {action}}).then(
-      (card) => {
-        setSync(SyncStatus.Success);
-        setQueue(card.card_queue);
-        setNote({...note, card});
-      },
-      (error) => {
-        logger.error(error);
-        setSync(SyncStatus.Error);
-      }
-    );
-    // eslint-disable-next-line
-  }, [action, setSync, firstClick]);
-
   return (
     <>
       <div className="flex justify-between px-3 my-3 opacity-20 hover:opacity-100 transition-opacity duration-100 ease-out">
@@ -190,54 +164,6 @@ export default function NoteAction(props: Props) {
           </span>
         )}
 
-        {queue != null ? (
-          queue === CardQueue.Suspended ? (
-            <span title="Unsuspend this note">
-              <PlayOutline
-                className="w-4 h-4 cursor-pointer"
-                onClick={() => {
-                  setFirstClick(true);
-                  setAction('unsuspend');
-                }}
-              />
-            </span>
-          ) : (
-            <span title="Suspend this note">
-              <PauseOutline
-                className="w-4 h-4 cursor-pointer"
-                onClick={() => {
-                  setFirstClick(true);
-                  setAction('suspend');
-                }}
-              />
-            </span>
-          )
-        ) : null}
-
-        {queue != null ? (
-          queue === CardQueue.Buried ? (
-            <span title="Unbury this note">
-              <StatusOfflineOutline
-                className="w-4 h-4 cursor-pointer"
-                onClick={() => {
-                  setFirstClick(true);
-                  setAction('unbury');
-                }}
-              />
-            </span>
-          ) : (
-            <span title="Bury this note">
-              <StatusOnlineOutline
-                className="w-4 h-4 cursor-pointer"
-                onClick={() => {
-                  setFirstClick(true);
-                  setAction('bury');
-                }}
-              />
-            </span>
-          )
-        ) : null}
-
         {trash ? (
           <span title="Recover this note">
             <ReplyOutline
@@ -259,7 +185,6 @@ export default function NoteAction(props: Props) {
             />
           </span>
         )}
-
         {trash ? (
           <span title="Delete this note permanently">
             <TrashSolid

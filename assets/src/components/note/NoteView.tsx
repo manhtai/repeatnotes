@@ -3,7 +3,7 @@ import TagView from 'src/components/tag/TagView';
 import {useHistory} from 'react-router-dom';
 import {Note} from 'src/libs/types';
 import NoteAction from './NoteAction';
-import {formatDateTime} from 'src/libs/utils/datetime';
+import SrsAction from './SrsAction';
 
 type Props = {
   note: Note;
@@ -33,9 +33,7 @@ export default function NoteView(props: Props) {
         <NotePreview content={note.content} />
       </section>
 
-      <div className="flex flex-wrap items-center justify-start mx-4 mt-8 text-xs italic text-gray-400">
-        {note.inserted_at && formatDateTime(note.inserted_at)}
-      </div>
+      <SrsAction note={note} setNote={setNote} />
 
       <TagView tags={note.tags || []} />
 
