@@ -106,9 +106,7 @@ export default function NoteEdit(props: Props) {
       </div>
 
       <TagView tags={note.tags || []} />
-
       {note.id && <SrsAction note={note} setNote={setNote} />}
-
       {note.id && <NoteAction note={note} setNote={setNote} />}
     </div>
   );

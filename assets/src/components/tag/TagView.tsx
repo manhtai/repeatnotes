@@ -16,7 +16,7 @@ export default function TagView(props: Props) {
   }, [tags, props.tags]);
 
   return (
-    <div className="flex flex-wrap items-center justify-start mx-3 mt-1 text-xs">
+    <div className="flex flex-wrap items-center justify-start mx-3 mt-2 text-xs">
       {noteTags.map((tag) => (
         <NavLink
           className="self-center px-2 py-0 my-1 mr-2 text-gray-400 bg-gray-100 rounded-full hover:bg-gray-200"

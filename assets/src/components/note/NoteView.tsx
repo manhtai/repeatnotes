@@ -33,10 +33,8 @@ export default function NoteView(props: Props) {
         <NotePreview content={note.content} />
       </section>
 
-      <SrsAction note={note} setNote={setNote} />
-
       <TagView tags={note.tags || []} />
-
+      <SrsAction note={note} setNote={setNote} />
       <NoteAction note={note} setNote={setNote} />
     </div>
   );

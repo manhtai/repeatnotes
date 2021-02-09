@@ -47,7 +47,7 @@ export default function NoteAction(props: Props) {
   return (
     <>
       <div className="flex justify-center px-3 my-3 space-x-4 opacity-20 hover:opacity-100 transition-opacity duration-100 ease-out">
-        <span className="w-3/4 ml-1 italic">
+        <span className="w-3/4 italic">
           {note.inserted_at && formatDateTime(note.inserted_at)}
         </span>
 
