@@ -174,7 +174,7 @@ defmodule RepeatNotes.Cards do
     end
   end
 
-  @spec answer_card(Card.t(), map()) :: {:ok, Card.t()} | {:error, Ecto.Changeset.t()}
+  @spec answer_card(Card.t(), integer()) :: {:ok, Card.t()} | {:error, Ecto.Changeset.t()}
   def answer_card(%Card{} = card, choice) do
     choice = RepeatNotes.Cards.Choices.to_atom(choice)
 

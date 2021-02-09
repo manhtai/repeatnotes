@@ -83,9 +83,9 @@ defmodule RepeatNotesWeb.CardController do
       card = Cards.get_card!(id, user_id)
 
       result =
-        cond do
-          %{"action" => action} = card_params -> Cards.action_card(card, action)
-          %{"answer" => choice} = card_params -> Cards.answer_card(card, choice)
+        case card_params do
+          %{"action" => action} -> Cards.action_card(card, action)
+          %{"answer" => choice} -> Cards.answer_card(card, choice)
         end
 
       case result do
