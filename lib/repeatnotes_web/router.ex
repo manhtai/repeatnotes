@@ -47,7 +47,6 @@ defmodule RepeatNotesWeb.Router do
 
     get("/tags/:tag_id/notes", NoteController, :index_by_tag)
 
-    get("/random", NoteController, :random)
     post("/upload", NoteController, :upload)
     get("/stats", CardController, :stats)
 

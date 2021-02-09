@@ -23,6 +23,8 @@ import NoteList from 'src/components/note/NoteList';
 import NoteArchive from 'src/components/note/NoteArchive';
 import NoteTrash from 'src/components/note/NoteTrash';
 import NoteBookmark from 'src/components/note/NoteBookmark';
+import NoteSuspend from 'src/components/note/NoteSuspend';
+import NoteBury from 'src/components/note/NoteBury';
 import NoteNew from 'src/components/note/NoteNew';
 import NoteStats from 'src/components/note/NoteStats';
 import NoteDetail from 'src/components/note/NoteDetail';
@@ -85,10 +87,12 @@ export default function HomePage() {
     {path: '/new', name: 'New', Component: NoteNew},
     {path: '/review', name: 'Review', Component: CardReview},
     {path: '/note/:id', name: 'Note', Component: NoteDetail},
-    {path: '/tag/:tagId', name: 'Note', Component: NoteList},
+    {path: '/tag/:tagId', name: 'Tag', Component: NoteList},
     {path: '/archive', name: 'Archive', Component: NoteArchive},
-    {path: '/trash', name: 'Notes', Component: NoteTrash},
-    {path: '/bookmark', name: 'Notes', Component: NoteBookmark},
+    {path: '/trash', name: 'Trash', Component: NoteTrash},
+    {path: '/bookmark', name: 'Bookmark', Component: NoteBookmark},
+    {path: '/suspend', name: 'Suspend', Component: NoteSuspend},
+    {path: '/bury', name: 'Bury', Component: NoteBury},
     {path: '/', name: 'Notes', Component: NoteList},
     ...settingsRoutes,
   ];
