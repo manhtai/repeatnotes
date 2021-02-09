@@ -4,6 +4,8 @@ import {useAuth} from 'src/components/auth/AuthProvider';
 import {
   TrashOutline,
   BookmarkOutline,
+  PauseOutline,
+  StatusOfflineOutline,
   PencilOutline,
   TagOutline,
   LightBulbOutline,
@@ -82,6 +84,12 @@ export default function MenuItems(props: MenuProps) {
 
       <MenuItem link={'/archive'}>
         <ArchiveOutline className="w-5 h-5 mr-2" /> Archive
+      </MenuItem>
+      <MenuItem link={'/suspend'}>
+        <PauseOutline className="w-5 h-5 mr-2" /> Suspend
+      </MenuItem>
+      <MenuItem link={'/bury'}>
+        <StatusOfflineOutline className="w-5 h-5 mr-2" /> Bury
       </MenuItem>
       <MenuItem link={'/trash'}>
         <TrashOutline className="w-5 h-5 mr-2" /> Trash

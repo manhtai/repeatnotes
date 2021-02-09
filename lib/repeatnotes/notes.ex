@@ -3,31 +3,36 @@ defmodule RepeatNotes.Notes do
 
   alias RepeatNotes.Repo
   alias RepeatNotes.Notes.Note
+  alias RepeatNotes.Cards.Card
   alias RepeatNotes.Tags.NoteTag
   alias RepeatNotes.Encryption.AES
 
   @max_return 100
-  @random_return 10
 
   @spec list_notes(binary(), map) :: [Note.t()]
   def list_notes(user_id, params) do
-    Note
-    |> where(user_id: ^user_id)
-    |> where(^filter_where(params))
-    |> order_by(desc: :inserted_at)
+    notes =
+      case params do
+        %{"card_queue" => queue} ->
+          from(note in Note,
+            where: note.user_id == ^user_id,
+            inner_join: card in Card,
+            on: card.note_id == note.id and card.card_queue == ^queue,
+            order_by: [desc: note.inserted_at],
+            select: note
+          )
+
+        _ ->
+          Note
+          |> where(user_id: ^user_id)
+          |> where(^filter_where(params))
+          |> order_by(desc: :inserted_at)
+      end
+
+    notes
     |> limit(@max_return)
     |> Repo.all()
-    |> Repo.preload([:tags])
-  end
-
-  @spec random_notes(binary()) :: [Note.t()]
-  def random_notes(user_id) do
-    Note
-    |> where(user_id: ^user_id)
-    |> order_by(fragment("RANDOM()"))
-    |> limit(@random_return)
-    |> Repo.all()
-    |> Repo.preload([:tags])
+    |> Repo.preload([:tags, :cards])
   end
 
   @spec list_notes_by_tag(binary(), binary()) :: [Note.t()]
@@ -42,21 +47,21 @@ defmodule RepeatNotes.Notes do
     )
     |> limit(@max_return)
     |> Repo.all()
-    |> Repo.preload([:tags])
+    |> Repo.preload([:tags, :cards])
   end
 
   @spec get_note!(binary()) :: Note.t() | nil
   def get_note!(id) do
     Note
     |> Repo.get!(id)
-    |> Repo.preload([:tags])
+    |> Repo.preload([:tags, :cards])
   end
 
   @spec get_note!(binary(), binary()) :: Note.t() | nil
   def get_note!(id, user_id) do
     Note
     |> Repo.get_by!(id: id, user_id: user_id)
-    |> Repo.preload([:tags])
+    |> Repo.preload([:tags, :cards])
   end
 
   @spec create_note(map()) :: {:ok, Note.t()} | {:error, Ecto.Changeset.t()}

@@ -78,12 +78,14 @@ export default function NoteAction(props: Props) {
     API.patchNote(note.id, {note: {pin, trash, archive}}).then(
       () => {
         setSync(SyncStatus.Success);
+        setNote({...note, pin, trash, archive});
       },
       (error) => {
         logger.error(error);
         setSync(SyncStatus.Error);
       }
     );
+    // eslint-disable-next-line
   }, [pin, trash, archive, note.id, setSync, firstClick]);
 
   const deleteNote = (note: Note) => {
@@ -103,84 +105,101 @@ export default function NoteAction(props: Props) {
     <>
       <div className="flex justify-between px-3 my-3 opacity-20 hover:opacity-100 transition-opacity duration-100 ease-out">
         {pin ? (
-          <BookmarkSolid
-            className="w-4 h-4 cursor-pointer"
-            onClick={() => {
-              setFirstClick(true);
-              setPin(!pin);
-            }}
-          />
+          <span title="Remove from bookmark">
+            <BookmarkSolid
+              className="w-4 h-4 cursor-pointer"
+              onClick={() => {
+                setFirstClick(true);
+                setPin(!pin);
+              }}
+            />
+          </span>
         ) : (
-          <BookmarkOutline
-            className="w-4 h-4 cursor-pointer"
-            onClick={() => {
-              setFirstClick(true);
-              setPin(!pin);
-            }}
-          />
+          <span title="Bookmark this note">
+            <BookmarkOutline
+              className="w-4 h-4 cursor-pointer"
+              onClick={() => {
+                setFirstClick(true);
+                setPin(!pin);
+              }}
+            />
+          </span>
         )}
 
         {note.tags?.length ? (
-          <TagSolid
-            className="w-4 h-4 cursor-pointer"
-            onClick={() => setShowTagModal(!showTagModal)}
-          />
+          <span title="Update tags">
+            <TagSolid
+              className="w-4 h-4 cursor-pointer"
+              onClick={() => setShowTagModal(!showTagModal)}
+            />
+          </span>
         ) : (
-          <TagOutline
-            className="w-4 h-4 cursor-pointer"
-            onClick={() => setShowTagModal(!showTagModal)}
-          />
+          <span title="Add tags to note">
+            <TagOutline
+              className="w-4 h-4 cursor-pointer"
+              onClick={() => setShowTagModal(!showTagModal)}
+            />
+          </span>
         )}
 
         {archive ? (
-          <SaveSolid
-            className="w-4 h-4 cursor-pointer"
-            onClick={() => {
-              setFirstClick(true);
-              setArchive(!archive);
-            }}
-          />
+          <span title="Unarchive this note">
+            <SaveSolid
+              className="w-4 h-4 cursor-pointer"
+              onClick={() => {
+                setFirstClick(true);
+                setArchive(!archive);
+              }}
+            />
+          </span>
         ) : (
-          <SaveOutline
-            className="w-4 h-4 cursor-pointer"
-            onClick={() => {
-              setFirstClick(true);
-              setArchive(!archive);
-            }}
-          />
+          <span title="Archive this note">
+            <SaveOutline
+              className="w-4 h-4 cursor-pointer"
+              onClick={() => {
+                setFirstClick(true);
+                setArchive(!archive);
+              }}
+            />
+          </span>
         )}
 
         {trash ? (
-          <ReplyOutline
-            className="w-4 h-4 cursor-pointer"
-            onClick={() => {
-              setFirstClick(true);
-              setTrash(!trash);
-            }}
-          />
+          <span title="Recover this note">
+            <ReplyOutline
+              className="w-4 h-4 cursor-pointer"
+              onClick={() => {
+                setFirstClick(true);
+                setTrash(!trash);
+              }}
+            />
+          </span>
         ) : (
-          <TrashOutline
-            className="w-4 h-4 cursor-pointer"
-            onClick={() => {
-              setFirstClick(true);
-              setTrash(!trash);
-            }}
-          />
+          <span title="Move this note to trash">
+            <TrashOutline
+              className="w-4 h-4 cursor-pointer"
+              onClick={() => {
+                setFirstClick(true);
+                setTrash(!trash);
+              }}
+            />
+          </span>
         )}
-
         {trash ? (
-          <TrashSolid
-            className="w-4 h-4 text-red-400 cursor-pointer hover:text-red-500"
-            onClick={() => {
-              if (
-                window.confirm(
-                  "Are you sure want to delete this note? No one can't recover it!"
-                )
-              ) {
-                deleteNote(note);
-              }
-            }}
-          />
+          <span title="Delete this note permanently">
+            <TrashSolid
+              className="w-4 h-4 text-red-400 cursor-pointer hover:text-red-500"
+              onClick={() => {
+                if (
+                  window.confirm(
+                    "Are you sure want to delete this note? No one can't recover it!"
+                  )
+                ) {
+                  deleteNote(note);
+                }
+              }}
+            />
+          </span>
         ) : null}
       </div>
 

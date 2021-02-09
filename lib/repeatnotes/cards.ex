@@ -103,14 +103,79 @@ defmodule RepeatNotes.Cards do
     |> Repo.update()
   end
 
-  @spec answer_card(Card.t(), map()) :: {:ok, Card.t()} | {:error, Ecto.Changeset.t()}
-  def answer_card(%Card{} = card, params) do
-    choice =
-      case params do
-        %{choice: choice} -> choice
-        _ -> RepeatNotes.Cards.Choices.ok()
-      end
+  @spec bury_card(Card.t()) :: {:ok, Card.t()} | {:error, Ecto.Changeset.t()}
+  defp bury_card(%Card{} = card) do
+    scheduler = Srs.get_scheduler(card.user_id)
 
+    sm2_card =
+      Sm2.Card.from_ecto_card(card)
+      |> Sm2.bury_card(scheduler)
+
+    ecto_card = Map.from_struct(Sm2.Card.to_ecto_card(sm2_card))
+
+    card
+    |> Card.srs_changeset(ecto_card)
+    |> Repo.update()
+  end
+
+  @spec unbury_card(Card.t()) :: {:ok, Card.t()} | {:error, Ecto.Changeset.t()}
+  defp unbury_card(%Card{} = card) do
+    scheduler = Srs.get_scheduler(card.user_id)
+
+    sm2_card =
+      Sm2.Card.from_ecto_card(card)
+      |> Sm2.unbury_card(scheduler)
+
+    ecto_card = Map.from_struct(Sm2.Card.to_ecto_card(sm2_card))
+
+    card
+    |> Card.srs_changeset(ecto_card)
+    |> Repo.update()
+  end
+
+  @spec suspend_card(Card.t()) :: {:ok, Card.t()} | {:error, Ecto.Changeset.t()}
+  defp suspend_card(%Card{} = card) do
+    scheduler = Srs.get_scheduler(card.user_id)
+
+    sm2_card =
+      Sm2.Card.from_ecto_card(card)
+      |> Sm2.suspend_card(scheduler)
+
+    ecto_card = Map.from_struct(Sm2.Card.to_ecto_card(sm2_card))
+
+    card
+    |> Card.srs_changeset(ecto_card)
+    |> Repo.update()
+  end
+
+  @spec unsuspend_card(Card.t()) :: {:ok, Card.t()} | {:error, Ecto.Changeset.t()}
+  defp unsuspend_card(%Card{} = card) do
+    scheduler = Srs.get_scheduler(card.user_id)
+
+    sm2_card =
+      Sm2.Card.from_ecto_card(card)
+      |> Sm2.unsuspend_card(scheduler)
+
+    ecto_card = Map.from_struct(Sm2.Card.to_ecto_card(sm2_card))
+
+    card
+    |> Card.srs_changeset(ecto_card)
+    |> Repo.update()
+  end
+
+  @spec action_card(Card.t(), map()) :: {:ok, Card.t()} | {:error, Ecto.Changeset.t()}
+  def action_card(%Card{} = card, action) do
+    case action do
+      "suspend" -> suspend_card(card)
+      "unsuspend" -> unsuspend_card(card)
+      "bury" -> bury_card(card)
+      "unbury" -> unbury_card(card)
+      _ -> {:ok, card}
+    end
+  end
+
+  @spec answer_card(Card.t(), map()) :: {:ok, Card.t()} | {:error, Ecto.Changeset.t()}
+  def answer_card(%Card{} = card, choice) do
     choice = RepeatNotes.Cards.Choices.to_atom(choice)
 
     scheduler = Srs.get_scheduler(card.user_id)

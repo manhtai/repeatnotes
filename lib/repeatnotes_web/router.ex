@@ -43,11 +43,10 @@ defmodule RepeatNotesWeb.Router do
     post("/notes/:note_id/tags", NoteController, :add_tag)
     delete("/notes/:note_id/tags/:tag_id", NoteController, :remove_tag)
 
-    post("/cards/:id/answer", CardController, :answer)
+    post("/cards/:id/action", CardController, :srs_action)
 
     get("/tags/:tag_id/notes", NoteController, :index_by_tag)
 
-    get("/random", NoteController, :random)
     post("/upload", NoteController, :upload)
     get("/stats", CardController, :stats)
 
