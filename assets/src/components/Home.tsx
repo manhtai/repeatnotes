@@ -31,7 +31,6 @@ import NoteDetail from 'src/components/note/NoteDetail';
 
 import SrsConfig from 'src/components/settings/SrsConfig';
 import Account from 'src/components/settings/Account';
-import Billing from 'src/components/settings/Billing';
 
 import MenuItems from 'src/components/home/MenuItems';
 import TagModal from 'src/components/tag/TagModal';
@@ -77,7 +76,6 @@ export default function HomePage() {
 
   const settingsRoutes = [
     {path: '/settings/account', name: 'Account', Component: Account},
-    {path: '/settings/billing', name: 'Billing', Component: Billing},
     {path: '/settings/config', name: 'Configuration', Component: SrsConfig},
   ];
 
