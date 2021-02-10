@@ -29,6 +29,25 @@ export default function NoteAction(props: Props) {
       return;
     }
 
+    switch (action) {
+      case 'bury':
+        setQueue(CardQueue.Buried);
+        break;
+
+      case 'unbury':
+        setQueue(CardQueue.New);
+        break;
+
+      case 'suspend':
+        setQueue(CardQueue.Suspended);
+        break;
+
+      // Temporary set to new
+      case 'unsuspend':
+        setQueue(CardQueue.New);
+        break;
+    }
+
     setSync(SyncStatus.Syncing);
     API.actionCard(note.card.id, {card: {action}}).then(
       (card) => {
