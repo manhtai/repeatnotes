@@ -115,7 +115,7 @@ export default function CardReview() {
   return (
     <div className="max-w-xl mx-auto mt-5">
       {!card ? (
-        <NoteEmpty text="No more notes to review for now, come back later ;)" />
+        <NoteEmpty text="No more notes to review for now, come back later 😉" />
       ) : (
         <div className="p-2 border rounded shadow-sm">
           <NotePreview content={card.note.content} />
